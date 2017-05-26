@@ -1,0 +1,37 @@
+{
+	"__comment": "Designed by Elucent with Cubik Studio - https://cubik.studio",
+	"parent":"block/block",
+	"textures": {
+		"particle": "simplytea:blocks/leaves_tea",
+		"bark": "simplytea:blocks/bark_tea",
+		"leaves": "simplytea:blocks/leaves_tea"
+	},
+	"elements": [
+		{
+			"__comment": "Cube3",
+			"from": [ 2, 4, 2 ],
+			"to": [ 14, 16, 14 ],
+			"faces": {
+				"down": { "uv": [ 2, 2, 14, 14 ], "texture": "#leaves" },
+				"up": { "uv": [ 2, 2, 14, 14 ], "texture": "#leaves" },
+				"north": { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves" },
+				"south": { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves" },
+				"west": { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves" },
+				"east": { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves" }
+			}
+		},
+		{
+			"__comment": "Cube2",
+			"from": [ 6.5, 0, 6.5 ],
+			"to": [ 9.5, 16, 9.5 ],
+			"faces": {
+				"down": { "uv": [ 4, 4, 7, 7 ], "texture": "#bark" },
+				"up": { "uv": [ 4, 4, 7, 7 ], "texture": "#bark" },
+				"north": { "uv": [ 0, 16, 3, 0 ], "texture": "#bark" },
+				"south": { "uv": [ 0, 16, 3, 0 ], "texture": "#bark" },
+				"west": { "uv": [ 0, 16, 3, 0 ], "texture": "#bark" },
+				"east": { "uv": [ 0, 16, 3, 0 ], "texture": "#bark" }
+			}
+		}
+	]
+}

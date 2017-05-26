@@ -1,0 +1,16 @@
+[
+{
+  "modid": "simplytea",
+  "name": "Simply Tea",
+  "description": "Simply Tea!",
+  "version": "1.0",
+  "mcversion": "1.11.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Elucent"],
+  "credits": "/u/Pickles256, on r/FTB, for the idea!",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
