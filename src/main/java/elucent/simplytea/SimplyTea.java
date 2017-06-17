@@ -10,6 +10,8 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.Maps;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockGrass;
@@ -25,6 +27,7 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,6 +43,7 @@ import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,8 +61,8 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeHooks;
@@ -72,6 +76,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -80,7 +85,7 @@ public class SimplyTea
 {
     public static final String MODID = "simplytea";
     public static final String NAME = "Simply Tea!";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.3";
     public static Random random = new Random();
     
     @SidedProxy(clientSide = "elucent.simplytea.SimplyTea$ClientProxy",serverSide = "elucent.simplytea.SimplyTea$CommonProxy")
@@ -176,13 +181,13 @@ public class SimplyTea
 		}
 		
 		@Override
-		public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced){
+		public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced){
 			tooltip.add(I18n.format("simplytea.tooltip.boiling"));
 		}
 		
 		@Override
-		public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> stacks){
-			if (item == this){
+		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> stacks){
+			if (tab == this.getCreativeTab()){
 				stacks.add(new ItemStack(this,1,4));
 			}
 		}
@@ -218,7 +223,7 @@ public class SimplyTea
 		}
 		
 		@Override
-		public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced){
+		public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced){
 			if (stack.getMetadata() == 0){
 				tooltip.add(I18n.format("simplytea.tooltip.empty"));
 			}
@@ -228,8 +233,8 @@ public class SimplyTea
 		}
 		
 		@Override
-		public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> stacks){
-			if (item == this){
+		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> stacks){
+			if (tab == this.getCreativeTab()){
 				stacks.add(new ItemStack(this,1));
 				stacks.add(new ItemStack(this,1,1));
 			}
@@ -592,8 +597,8 @@ public class SimplyTea
 		}
 		
 		@Override
-		public void getSubBlocks(Item i, CreativeTabs tab, NonNullList list){
-			
+		public void getSubBlocks(CreativeTabs tab, NonNullList list){
+		
 		}
 		
 		@Override
@@ -622,14 +627,14 @@ public class SimplyTea
 		@Override
 		public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 				IChunkProvider chunkProvider) {
-			if (random.nextInt(12) == 0){
+			if (random.nextInt(20) == 0){
 				int x = chunkX * 16 + 2 + random.nextInt(12);
 				int z = chunkZ * 16 + 2 + random.nextInt(12);
 				BlockPos p = new BlockPos(x,0,z);
 				p = world.getHeight(p);
 				Biome b = world.getBiome(p);
 				if (BiomeDictionary.hasType(b, BiomeDictionary.Type.FOREST) || b == Biomes.FOREST || b == Biomes.FOREST_HILLS){
-					if (world.getBlockState(p.down()).getBlock() instanceof BlockGrass || world.isAirBlock(p)){
+					if (world.getBlockState(p.down()).getBlock() instanceof BlockGrass && world.isAirBlock(p)){
 						BlockTeaSapling.generateTree(world, p, Blocks.AIR.getDefaultState(), random);
 					}
 				}
@@ -662,43 +667,48 @@ public class SimplyTea
     	GameRegistry.registerWorldGenerator(new WorldGenTeaTrees(), 100);
     }
     
+    public static ResourceLocation getRL(String s){
+    	return new ResourceLocation(SimplyTea.MODID+":"+s);
+    }
+    
     public static void registerRecipes(){
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(teabag,4),true,new Object[]{
+    	ResourceLocation RECIPE_GROUP_RL = new ResourceLocation(SimplyTea.MODID+":tea");
+    	GameRegistry.register(new ShapedOreRecipe(getRL("teabag_empty"),new ItemStack(teabag,4),true,new Object[]{
 				"  S",
 				"PP ",
 				"PP ",
 				'S', "string",
-				'P', Items.PAPER}).setMirrored(true));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(teabag_green,1),new Object[]{
-				new ItemStack(teabag, 1), leaf_tea}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(teabag_black,1),new Object[]{
-				new ItemStack(teabag, 1), black_tea}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cup,1),true,new Object[]{
+				'P', new ItemStack(Items.PAPER)}).setMirrored(true).setRegistryName(getRL("teabag_empty")));
+		GameRegistry.register(new ShapelessOreRecipe(getRL("teabag_green"),new ItemStack(teabag_green,1),new Object[]{
+				new ItemStack(teabag, 1), new ItemStack(leaf_tea, 1)}).setRegistryName(getRL("teabag_green")));
+		GameRegistry.register(new ShapelessOreRecipe(getRL("teabag_black"),new ItemStack(teabag_black,1),new Object[]{
+				new ItemStack(teabag, 1), new ItemStack(black_tea, 1)}).setRegistryName(getRL("teabag_black")));
+		GameRegistry.register(new ShapedOreRecipe(getRL("cup"),new ItemStack(cup,1),true,new Object[]{
 				"CBC",
 				" C ",
-				'C', Items.CLAY_BALL,
-				'B', new ItemStack(Items.DYE,1,15)}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(teapot,1),true,new Object[]{
+				'C', new ItemStack(Items.CLAY_BALL, 1),
+				'B', "dyeWhite"}).setRegistryName(getRL("cup")));
+		GameRegistry.register(new ShapedOreRecipe(getRL("teapot"),new ItemStack(teapot,1),true,new Object[]{
 				"CcC",
 				"CC ",
-				'C', Items.CLAY_BALL,
-				'c', new ItemStack(Items.DYE,1,6)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(cup_tea_green,1),new Object[]{
-				teabag_green, new ItemStack(hot_teapot,1,1), cup}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(cup_tea_black,1),new Object[]{
-				teabag_black, new ItemStack(hot_teapot,1,1), cup}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(cup_tea_green,1),new Object[]{
-				teabag_green, new ItemStack(hot_teapot,1,2), cup}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(cup_tea_black,1),new Object[]{
-				teabag_black, new ItemStack(hot_teapot,1,2), cup}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(cup_tea_green,1),new Object[]{
-				teabag_green, new ItemStack(hot_teapot,1,3), cup}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(cup_tea_black,1),new Object[]{
-				teabag_black, new ItemStack(hot_teapot,1,3), cup}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(cup_tea_green,1),new Object[]{
-				teabag_green, new ItemStack(hot_teapot,1,4), cup}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(cup_tea_black,1),new Object[]{
-				teabag_black, new ItemStack(hot_teapot,1,4), cup}));
+				'C', new ItemStack(Items.CLAY_BALL, 1),
+				'c', "dyeCyan"}).setRegistryName(getRL("teapot")));
+		GameRegistry.register(new ShapelessOreRecipe(getRL("green_tea"),new ItemStack(cup_tea_green,1),new Object[]{
+				new ItemStack(teabag_green,1), new ItemStack(hot_teapot,1,1), cup}).setRegistryName(getRL("green_tea_1")));
+		GameRegistry.register(new ShapelessOreRecipe(getRL("black_tea"),new ItemStack(cup_tea_black,1),new Object[]{
+				new ItemStack(teabag_black,1), new ItemStack(hot_teapot,1,1), cup}).setRegistryName(getRL("black_tea_1")));
+		GameRegistry.register(new ShapelessOreRecipe(getRL("green_tea"),new ItemStack(cup_tea_green,1),new Object[]{
+				new ItemStack(teabag_green,1), new ItemStack(hot_teapot,1,2), cup}).setRegistryName(getRL("green_tea_2")));
+		GameRegistry.register(new ShapelessOreRecipe(getRL("black_tea"),new ItemStack(cup_tea_black,1),new Object[]{
+				new ItemStack(teabag_black,1), new ItemStack(hot_teapot,1,2), cup}).setRegistryName(getRL("black_tea_2")));
+		GameRegistry.register(new ShapelessOreRecipe(getRL("green_tea"),new ItemStack(cup_tea_green,1),new Object[]{
+				new ItemStack(teabag_green,1), new ItemStack(hot_teapot,1,3), cup}).setRegistryName(getRL("green_tea_3")));
+		GameRegistry.register(new ShapelessOreRecipe(getRL("black_tea"),new ItemStack(cup_tea_black,1),new Object[]{
+				new ItemStack(teabag_black,1), new ItemStack(hot_teapot,1,3), cup}).setRegistryName(getRL("black_tea_3")));
+		GameRegistry.register(new ShapelessOreRecipe(getRL("green_tea"),new ItemStack(cup_tea_green,1),new Object[]{
+				new ItemStack(teabag_green,1), new ItemStack(hot_teapot,1,4), cup}).setRegistryName(getRL("green_tea_4")));
+		GameRegistry.register(new ShapelessOreRecipe(getRL("black_tea"),new ItemStack(cup_tea_black,1),new Object[]{
+				new ItemStack(teabag_black,1), new ItemStack(hot_teapot,1,4), new ItemStack(cup,1)}).setRegistryName(getRL("black_tea_4")));
 		FurnaceRecipes.instance().addSmelting(leaf_tea, new ItemStack(black_tea,1), 0.1f);
 		FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(teapot,1,1), new ItemStack(hot_teapot,1,4), 0.1f);
 	}
