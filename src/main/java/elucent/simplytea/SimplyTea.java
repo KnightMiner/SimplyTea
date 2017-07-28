@@ -125,36 +125,49 @@ public class SimplyTea {
 				"PP ",
 				'S', "string",
 				'P', new ItemStack(Items.PAPER)}).setMirrored(true).setRegistryName(getRL("teabag_empty")));
+		
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("teabag_green"), new ItemStack(teabag_green, 1), new Object[]{
 				new ItemStack(teabag, 1), new ItemStack(leaf_tea, 1)}).setRegistryName(getRL("teabag_green")));
+
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("teabag_black"), new ItemStack(teabag_black, 1), new Object[]{
 				new ItemStack(teabag, 1), new ItemStack(black_tea, 1)}).setRegistryName(getRL("teabag_black")));
+
 		event.getRegistry().register(new ShapedOreRecipe(getRL("cup"), new ItemStack(cup, 1), true, new Object[]{
 				"CBC",
 				" C ",
 				'C', new ItemStack(Items.CLAY_BALL, 1),
 				'B', "dyeWhite"}).setRegistryName(getRL("cup")));
+
 		event.getRegistry().register(new ShapedOreRecipe(getRL("teapot"), new ItemStack(teapot, 1), true, new Object[]{
 				"CcC",
 				"CC ",
 				'C', new ItemStack(Items.CLAY_BALL, 1),
 				'c', "dyeCyan"}).setRegistryName(getRL("teapot")));
+
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("green_tea"), new ItemStack(cup_tea_green, 1), new Object[]{
 				new ItemStack(teabag_green, 1), new ItemStack(hot_teapot, 1, 1), cup}).setRegistryName(getRL("green_tea_1")));
+
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("black_tea"), new ItemStack(cup_tea_black, 1), new Object[]{
 				new ItemStack(teabag_black, 1), new ItemStack(hot_teapot, 1, 1), cup}).setRegistryName(getRL("black_tea_1")));
+
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("green_tea"), new ItemStack(cup_tea_green, 1), new Object[]{
 				new ItemStack(teabag_green, 1), new ItemStack(hot_teapot, 1, 2), cup}).setRegistryName(getRL("green_tea_2")));
+
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("black_tea"), new ItemStack(cup_tea_black, 1), new Object[]{
 				new ItemStack(teabag_black, 1), new ItemStack(hot_teapot, 1, 2), cup}).setRegistryName(getRL("black_tea_2")));
+
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("green_tea"), new ItemStack(cup_tea_green, 1), new Object[]{
 				new ItemStack(teabag_green, 1), new ItemStack(hot_teapot, 1, 3), cup}).setRegistryName(getRL("green_tea_3")));
+
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("black_tea"), new ItemStack(cup_tea_black, 1), new Object[]{
 				new ItemStack(teabag_black, 1), new ItemStack(hot_teapot, 1, 3), cup}).setRegistryName(getRL("black_tea_3")));
+
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("green_tea"), new ItemStack(cup_tea_green, 1), new Object[]{
 				new ItemStack(teabag_green, 1), new ItemStack(hot_teapot, 1, 4), cup}).setRegistryName(getRL("green_tea_4")));
+
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("black_tea"), new ItemStack(cup_tea_black, 1), new Object[]{
 				new ItemStack(teabag_black, 1), new ItemStack(hot_teapot, 1, 4), new ItemStack(cup, 1)}).setRegistryName(getRL("black_tea_4")));
+
 		FurnaceRecipes.instance().addSmelting(leaf_tea, new ItemStack(black_tea, 1), 0.1f);
 		FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(teapot, 1, 1), new ItemStack(hot_teapot, 1, 4), 0.1f);
 	}
