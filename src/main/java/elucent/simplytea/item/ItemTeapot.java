@@ -10,6 +10,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -18,6 +19,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 public class ItemTeapot extends ItemBase {
 	public ItemTeapot(String name, boolean addToTab) {
@@ -64,5 +66,13 @@ public class ItemTeapot extends ItemBase {
 			stacks.add(new ItemStack(this, 1));
 			stacks.add(new ItemStack(this, 1, 1));
 		}
+	}
+
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		if (stack.getItemDamage() == 0) {
+			return new TeapotFluidHandler(stack);
+		}
+		return null;
 	}
 }
