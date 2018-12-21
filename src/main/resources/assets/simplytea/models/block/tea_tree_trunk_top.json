@@ -22,8 +22,8 @@
 		},
 		{
 			"__comment": "Cube3",
-			"from": [ 2, 0, 2 ],
-			"to": [ 14, 12, 14 ],
+			"from": [ 2, 0.01, 2 ],
+			"to": [ 14, 12.01, 14 ],
 			"faces": {
 				"down": { "uv": [ 2, 2, 14, 14 ], "texture": "#leaves" },
 				"up": { "uv": [ 2, 2, 14, 14 ], "texture": "#leaves" },

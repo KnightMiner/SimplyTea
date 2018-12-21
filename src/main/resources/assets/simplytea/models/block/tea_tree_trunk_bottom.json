@@ -9,8 +9,8 @@
 	"elements": [
 		{
 			"__comment": "Cube3",
-			"from": [ 2, 4, 2 ],
-			"to": [ 14, 16, 14 ],
+			"from": [ 2, 4.01, 2 ],
+			"to": [ 14, 16.01, 14 ],
 			"faces": {
 				"down": { "uv": [ 2, 2, 14, 14 ], "texture": "#leaves" },
 				"up": { "uv": [ 2, 2, 14, 14 ], "texture": "#leaves" },
