@@ -39,6 +39,12 @@ public class ItemTeapot extends ItemBase {
 					playerIn.setHeldItem(handIn, stack);
 					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 				}
+				else if (state.getBlock() == Blocks.CAULDRON && state.getValue(BlockCauldron.LEVEL) == 3) {
+					stack.setItemDamage(1);
+					playerIn.setHeldItem(handIn, stack);
+					Blocks.CAULDRON.setWaterLevel(worldIn, raytraceresult.getBlockPos(), state, 0);
+					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+				}
 			}
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
