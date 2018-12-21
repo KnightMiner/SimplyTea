@@ -59,8 +59,8 @@ public class SimplyTea {
 		items.add(teabag_green = new ItemBase("teabag_green", true));
 		items.add(teabag_black = new ItemBase("teabag_black", true));
 		items.add(cup = new ItemBase("cup", true).setMaxStackSize(1));
-		items.add(cup_tea_black = new ItemTeaCup("cup_tea_black", 4, 8f, true));
-		items.add(cup_tea_green = new ItemTeaCup("cup_tea_green", 3, 5f, true));
+		items.add(cup_tea_black = new ItemTeaCup("cup_tea_black", Config.tea.black_hunger, (float)Config.tea.black_saturation, true));
+		items.add(cup_tea_green = new ItemTeaCup("cup_tea_green", Config.tea.green_hunger, (float)Config.tea.green_saturation, true));
 		items.add(teapot = new ItemTeapot("teapot", true));
 		items.add(hot_teapot = new ItemHotTeapot("hot_teapot", true));
 

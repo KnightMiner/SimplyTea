@@ -4,6 +4,7 @@ import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.RangeDouble;
 import net.minecraftforge.common.config.Config.RangeInt;
+import net.minecraftforge.common.config.Config.RequiresMcRestart;
 
 @net.minecraftforge.common.config.Config(modid = SimplyTea.MODID)
 public class Config {
@@ -11,9 +12,39 @@ public class Config {
 	@LangKey("simplytea.config.teapot_consume_source")
 	public static boolean teapot_consume_source = false;
 
+	@Comment("Hunger restored from tea")
+	@LangKey("simplytea.config.tea")
+	public static TeaCategory tea = new TeaCategory();
+
 	@Comment("Options related to the tea tree")
 	@LangKey("simplytea.config.tree")
 	public static TreeCategory tree = new TreeCategory();
+
+	public static class TeaCategory {
+		@RequiresMcRestart
+		@Comment("Hunger restored when drinking green tea.")
+		@RangeInt(min = 0, max = 20)
+		@LangKey("simplytea.config.tea.green_hunger")
+		public int green_hunger = 3;
+
+		@RequiresMcRestart
+		@Comment("Saturation restored when drinking green tea")
+		@RangeDouble(min = 0, max = 10)
+		@LangKey("simplytea.config.tea.green_saturation")
+		public double green_saturation = 0.5;
+
+		@RequiresMcRestart
+		@Comment("Hunger restored when drinking black tea.")
+		@RangeInt(min = 0, max = 20)
+		@LangKey("simplytea.config.tea.black_hunger")
+		public int black_hunger = 4;
+
+		@RequiresMcRestart
+		@Comment("Saturation restored when drinking black tea")
+		@RangeDouble(min = 0, max = 10)
+		@LangKey("simplytea.config.tea.black_saturation")
+		public double black_saturation = 0.8;
+	}
 
 	public static class TreeCategory {
 		@Comment("Percent chance of leaves to regrow every random tick. Set to 1 to regrow every random tick (old behavior)")

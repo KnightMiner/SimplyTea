@@ -21,6 +21,12 @@ simplytea.tooltip.boiling=Boiling!
 
 simplytea.config.teapot_consume_source=Teapot Comsume Water Source
 
+simplytea.config.tea=Tea
+simplytea.config.tea.green_hunger=Green Tea Hunger
+simplytea.config.tea.green_saturation=Green Tea Saturation
+simplytea.config.tea.black_hunger=Black Tea Hunger
+simplytea.config.tea.black_saturation=Black Tea Saturation
+
 simplytea.config.tree=Tree
 simplytea.config.tree.max_leaves=Maximum Leaves
 simplytea.config.tree.max_sticks=Maximum Sticks
