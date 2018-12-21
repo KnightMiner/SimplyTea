@@ -510,24 +510,20 @@ public class SimplyTea
 		
 		@Override
 		public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ){
+			if (state.getBlock() != this || state.getValue(CLIPPED) || state.getValue(TYPE) == 0) {
+				return false;
+			}
+
 			ItemStack heldItem = player.getHeldItem(hand);
-			if (heldItem.getItem() instanceof ItemShears){
-				if (state.getBlock() == this){
-					if (!state.getValue(CLIPPED) && state.getValue(TYPE) != 0){
-						ItemStack stack = heldItem.copy();
-						((ItemShears)heldItem.getItem()).setDamage(stack, ((ItemShears)heldItem.getItem()).getDamage(stack)+1);
-						if (((ItemShears)heldItem.getItem()).getDamage(stack) > ((ItemShears)heldItem.getItem()).getMaxDamage()){
-							player.setHeldItem(hand, ItemStack.EMPTY);
-						}
-						else {
-							player.setHeldItem(hand, stack);
-						}
-						this.dropBlockAsItem(world, pos, state, 0);
-						world.setBlockState(pos, state.withProperty(CLIPPED, true), 8);
-						world.notifyBlockUpdate(pos, state, state.withProperty(CLIPPED, true), 8);
-						return true;
-					}
-				}
+			Item item = heldItem.getItem();
+			if (item instanceof ItemShears || item.getToolClasses(heldItem).contains("shears")){
+				ItemStack stack = heldItem.copy();
+				stack.damageItem(1, player);
+				player.setHeldItem(hand, stack);
+				this.dropBlockAsItem(world, pos, state, 0);
+				world.setBlockState(pos, state.withProperty(CLIPPED, true), 8);
+				world.notifyBlockUpdate(pos, state, state.withProperty(CLIPPED, true), 8);
+				return true;
 			}
 			return false;
 		}
