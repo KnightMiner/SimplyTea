@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "simplytea:cup"
+  },
+  "group": "simplytea:cup",
+  "pattern": [
+    "CBC",
+    " C "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "C": { "item": "minecraft:clay_ball" },
+    "B": { "type": "forge:ore_dict", "ore": "dyeWhite" }
+  }
+}

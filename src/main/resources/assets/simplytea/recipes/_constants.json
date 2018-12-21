@@ -1,0 +1,11 @@
+[
+  {
+    "name": "HOT_TEAPOT",
+    "ingredient": [
+      {"item": "simplytea:hot_teapot", "data": 1},
+      {"item": "simplytea:hot_teapot", "data": 2},
+      {"item": "simplytea:hot_teapot", "data": 3},
+      {"item": "simplytea:hot_teapot", "data": 4}
+    ]
+  }
+]
