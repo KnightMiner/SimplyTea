@@ -4,6 +4,7 @@ import java.util.Random;
 
 import elucent.simplytea.IModeledObject;
 import elucent.simplytea.SimplyTea;
+import elucent.simplytea.block.BlockTeaTrunk.TrunkType;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
@@ -101,43 +102,38 @@ public class BlockTeaSapling extends BlockBush implements IGrowable, IModeledObj
 	}
 
 	public static void generateTree(World world, BlockPos pos, IBlockState state, Random random) {
-		int height = random.nextInt(3) + 4;
-		world.setBlockState(pos, SimplyTea.tea_trunk.getDefaultState().withProperty(BlockTeaTrunk.TYPE, 0)
-				.withProperty(BlockTeaTrunk.CLIPPED, false));
-		for(int i = 1; i < height; i++) {
-			if(i == 1) {
-				world.setBlockState(pos.up(i), SimplyTea.tea_trunk.getDefaultState().withProperty(BlockTeaTrunk.TYPE, 1)
-						.withProperty(BlockTeaTrunk.CLIPPED, false));
+		IBlockState trunk = SimplyTea.tea_trunk.getDefaultState().withProperty(BlockTeaTrunk.CLIPPED, false);
+		// tree stump
+		world.setBlockState(pos, trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.STUMP));
+		world.setBlockState(pos.up(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.BOTTOM));
+
+		// tree branches
+		int height = random.nextInt(3) + 3;
+		boolean north, south, west, east;
+		BlockPos branch;
+		for(int i = 2; i < height; i++) {
+			north = random.nextBoolean();
+			south = random.nextBoolean();
+			west = random.nextBoolean();
+			east = random.nextBoolean();
+			branch = pos.up(i);
+			if(north) {
+				world.setBlockState(branch.north(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.SOUTH));
 			}
-			else if(i < height - 1) {
-				boolean north = random.nextBoolean();
-				boolean south = random.nextBoolean();
-				boolean west = random.nextBoolean();
-				boolean east = random.nextBoolean();
-				if(north) {
-					world.setBlockState(pos.up(i).north(), SimplyTea.tea_trunk.getDefaultState()
-							.withProperty(BlockTeaTrunk.TYPE, 6).withProperty(BlockTeaTrunk.CLIPPED, false));
-				}
-				if(east) {
-					world.setBlockState(pos.up(i).east(), SimplyTea.tea_trunk.getDefaultState()
-							.withProperty(BlockTeaTrunk.TYPE, 7).withProperty(BlockTeaTrunk.CLIPPED, false));
-				}
-				if(south) {
-					world.setBlockState(pos.up(i).south(), SimplyTea.tea_trunk.getDefaultState()
-							.withProperty(BlockTeaTrunk.TYPE, 4).withProperty(BlockTeaTrunk.CLIPPED, false));
-				}
-				if(west) {
-					world.setBlockState(pos.up(i).west(), SimplyTea.tea_trunk.getDefaultState()
-							.withProperty(BlockTeaTrunk.TYPE, 5).withProperty(BlockTeaTrunk.CLIPPED, false));
-				}
-				world.setBlockState(pos.up(i), SimplyTea.tea_trunk.getDefaultState().withProperty(BlockTeaTrunk.TYPE, 2)
-						.withProperty(BlockTeaTrunk.CLIPPED, false));
+			if(east) {
+				world.setBlockState(branch.east(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.WEST));
 			}
-			else {
-				world.setBlockState(pos.up(i), SimplyTea.tea_trunk.getDefaultState().withProperty(BlockTeaTrunk.TYPE, 3)
-						.withProperty(BlockTeaTrunk.CLIPPED, false));
+			if(south) {
+				world.setBlockState(branch.south(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.NORTH));
 			}
+			if(west) {
+				world.setBlockState(branch.west(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.EAST));
+			}
+			world.setBlockState(branch, trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.MIDDLE));
 		}
+
+		// tree top
+		world.setBlockState(pos.up(height), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.TOP));
 	}
 
 	@Override

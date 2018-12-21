@@ -1,5 +1,6 @@
 package elucent.simplytea.block;
 
+import java.util.Locale;
 import java.util.Random;
 
 import elucent.simplytea.IModeledObject;
@@ -8,7 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -22,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -32,17 +34,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
-	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 7);
+	public static final PropertyEnum<TrunkType> TYPE = PropertyEnum.create("type", TrunkType.class);
 	public static final PropertyBool CLIPPED = PropertyBool.create("clipped");
 
-	public static final AxisAlignedBB AABB_BOTTOM = new AxisAlignedBB(0.375, 0, 0.375, 0.625, 1, 0.625);
-	public static final AxisAlignedBB AABB_BOTTOM_2 = new AxisAlignedBB(0.125, 0, 0.125, 0.875, 1, 0.875);
-	public static final AxisAlignedBB AABB_MID = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
-	public static final AxisAlignedBB AABB_TOP = new AxisAlignedBB(0.125, 0, 0.125, 0.875, 0.75, 0.875);
-	public static final AxisAlignedBB AABB_NORTH = new AxisAlignedBB(0.125, 0.125, 0, 0.875, 0.875, 0.75);
-	public static final AxisAlignedBB AABB_WEST = new AxisAlignedBB(0, 0.125, 0.125, 0.75, 0.875, 0.875);
-	public static final AxisAlignedBB AABB_SOUTH = new AxisAlignedBB(0.125, 0.125, 0.25, 0.875, 0.875, 1.0);
-	public static final AxisAlignedBB AABB_EAST = new AxisAlignedBB(0.25, 0.125, 0.125, 1.0, 0.875, 0.875);
+	public static final AxisAlignedBB[] BOUNDS_UNCLIPPED = {
+			new AxisAlignedBB(0.375, 0, 0.375, 0.625, 1, 0.625), // STUMP
+			new AxisAlignedBB(0.125, 0, 0.125, 0.875, 1, 0.875), // BOTTOM
+			new AxisAlignedBB(0, 0, 0, 1, 1, 1), // MIDDLE
+			new AxisAlignedBB(0.125, 0,     0.125, 0.875, 0.75,  0.875), // TOP
+			new AxisAlignedBB(0.125, 0.125, 0,     0.875, 0.875, 0.75), // NORTH
+			new AxisAlignedBB(0.25,  0.125, 0.125, 1.0,   0.875, 0.875), // EAST
+			new AxisAlignedBB(0.125, 0.125, 0.25,  0.875, 0.875, 1.0  ), // SOUTH
+			new AxisAlignedBB(0,     0.125, 0.125, 0.75,  0.875, 0.875) // WEST
+	};
+
 
 	public Item itemBlock = null;
 
@@ -58,6 +63,7 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 		}
 		this.setTickRandomly(true);
 		itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName()));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, TrunkType.STUMP).withProperty(CLIPPED, false));
 	}
 
 	@Override
@@ -89,7 +95,7 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing face, float hitX, float hitY, float hitZ) {
-		if(state.getBlock() != this || state.getValue(CLIPPED) || state.getValue(TYPE) == 0) {
+		if(state.getBlock() != this || state.getValue(CLIPPED) || state.getValue(TYPE) == TrunkType.STUMP) {
 			return false;
 		}
 
@@ -110,32 +116,9 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		if(state.getBlock() == this) {
-			if(state.getValue(TYPE) == 0) {
-				return AABB_BOTTOM;
-			}
-			if(state.getValue(TYPE) == 1) {
-				return AABB_BOTTOM_2;
-			}
-			if(state.getValue(TYPE) == 2) {
-				return AABB_MID;
-			}
-			if(state.getValue(TYPE) == 3) {
-				return AABB_TOP;
-			}
-			if(state.getValue(TYPE) == 4) {
-				return AABB_NORTH;
-			}
-			if(state.getValue(TYPE) == 5) {
-				return AABB_EAST;
-			}
-			if(state.getValue(TYPE) == 6) {
-				return AABB_SOUTH;
-			}
-			if(state.getValue(TYPE) == 7) {
-				return AABB_WEST;
-			}
+			return BOUNDS_UNCLIPPED[state.getValue(TYPE).getMeta()];
 		}
-		return AABB_MID;
+		return BOUNDS_UNCLIPPED[2];
 	}
 
 	@Override
@@ -145,12 +128,12 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(TYPE) + (state.getValue(CLIPPED) ? 8 : 0);
+		return state.getValue(TYPE).getMeta() + (state.getValue(CLIPPED) ? 8 : 0);
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(TYPE, meta % 8).withProperty(CLIPPED, meta >= 8);
+		return getDefaultState().withProperty(TYPE, TrunkType.fromMeta(meta % 8)).withProperty(CLIPPED, meta >= 8);
 	}
 
 	@Override
@@ -182,7 +165,7 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	public NonNullList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		NonNullList<ItemStack> drops = NonNullList.create();
 		if(state.getBlock() == this) {
-			if(state.getValue(TYPE) > 0 && !state.getValue(CLIPPED)) {
+			if(state.getValue(TYPE) != TrunkType.STUMP && !state.getValue(CLIPPED)) {
 				drops.add(new ItemStack(SimplyTea.leaf_tea, RANDOM.nextInt(3) + 1));
 				if(RANDOM.nextInt(10) == 0) {
 					drops.add(new ItemStack(SimplyTea.tea_sapling, 1));
@@ -202,5 +185,37 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	@Override
 	public Item getItemBlock() {
 		return itemBlock;
+	}
+
+	public static enum TrunkType implements IStringSerializable {
+		STUMP,
+		BOTTOM,
+		MIDDLE,
+		TOP,
+		NORTH,
+		EAST,
+		SOUTH,
+		WEST;
+
+		private int meta;
+		TrunkType() {
+			this.meta = ordinal();
+		}
+
+		public int getMeta() {
+			return meta;
+		}
+
+		@Override
+		public String getName() {
+			return this.name().toLowerCase(Locale.US);
+		}
+
+		public static TrunkType fromMeta(int meta) {
+			if(meta < 0 || meta >= values().length) {
+				meta = 0;
+			}
+			return values()[meta];
+		}
 	}
 }
