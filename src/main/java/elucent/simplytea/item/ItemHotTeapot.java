@@ -60,7 +60,7 @@ public class ItemHotTeapot extends ItemBase {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> stacks) {
-		if(tab == this.getCreativeTab()) {
+		if(this.isInCreativeTab(tab)) {
 			stacks.add(new ItemStack(this, 1, 4));
 		}
 	}
