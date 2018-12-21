@@ -18,3 +18,9 @@ item.hot_teapot.name=Teapot
 simplytea.tooltip.empty=Empty!
 simplytea.tooltip.water=Full of water!
 simplytea.tooltip.boiling=Boiling!
+
+simplytea.config.tree=Tree
+simplytea.config.tree.max_leaves=Maximum Leaves
+simplytea.config.tree.max_sticks=Maximum Sticks
+simplytea.config.tree.leaf_growth_chance=Leaf Growth Chance
+simplytea.config.tree.sapling_chance=Sapling Drop Chance

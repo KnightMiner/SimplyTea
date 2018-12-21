@@ -3,6 +3,7 @@ package elucent.simplytea.block;
 import java.util.Locale;
 import java.util.Random;
 
+import elucent.simplytea.Config;
 import elucent.simplytea.IModeledObject;
 import elucent.simplytea.SimplyTea;
 import net.minecraft.block.Block;
@@ -88,8 +89,8 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 
 	@Override
 	public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if(state.getBlock() == this) {
-			if(state.getValue(CLIPPED)) {
+		if(state.getBlock() == this && state.getValue(CLIPPED)) {
+			if (rand.nextFloat() < Config.tree.leaf_growth_chance) {
 				worldIn.setBlockState(pos, state.withProperty(CLIPPED, false));
 				worldIn.notifyBlockUpdate(pos, state, state.withProperty(CLIPPED, false), 8);
 			}
@@ -181,14 +182,21 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 		NonNullList<ItemStack> drops = NonNullList.create();
 		if(state.getBlock() == this) {
 			if(state.getValue(TYPE) != TrunkType.STUMP && !state.getValue(CLIPPED)) {
-				drops.add(new ItemStack(SimplyTea.leaf_tea, RANDOM.nextInt(3) + 1));
-				if(RANDOM.nextInt(10) == 0) {
+				drops.add(new ItemStack(SimplyTea.leaf_tea, randomCount(Config.tree.max_leaves)));
+				if(RANDOM.nextFloat() < Config.tree.sapling_chance) {
 					drops.add(new ItemStack(SimplyTea.tea_sapling, 1));
 				}
 			}
-			drops.add(new ItemStack(Items.STICK, RANDOM.nextInt(3) + 1));
+			drops.add(new ItemStack(Items.STICK, randomCount(Config.tree.max_sticks)));
 		}
 		return drops;
+	}
+
+	private static int randomCount(int max) {
+		if(max == 1) {
+			return 1;
+		}
+		return 1 + RANDOM.nextInt(max);
 	}
 
 	@Override

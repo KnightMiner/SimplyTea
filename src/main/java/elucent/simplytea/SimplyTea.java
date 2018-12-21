@@ -17,7 +17,10 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Config.Type;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -66,6 +69,13 @@ public class SimplyTea {
 
 		GameRegistry.registerWorldGenerator(new WorldGenTeaTrees(), 100);
 	}
+
+    @SubscribeEvent
+    public void onConfigChangedEvent(OnConfigChangedEvent event) {
+        if (event.getModID().equals(MODID)) {
+            ConfigManager.sync(MODID, Type.INSTANCE);
+        }
+    }
 
 	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
