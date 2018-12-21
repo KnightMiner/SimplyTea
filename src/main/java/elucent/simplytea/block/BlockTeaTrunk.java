@@ -37,8 +37,9 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	public static final PropertyEnum<TrunkType> TYPE = PropertyEnum.create("type", TrunkType.class);
 	public static final PropertyBool CLIPPED = PropertyBool.create("clipped");
 
+
+	public static final AxisAlignedBB BOUNDS_STUMP = new AxisAlignedBB(0.375, 0, 0.375, 0.625, 1, 0.625);
 	public static final AxisAlignedBB[] BOUNDS_UNCLIPPED = {
-			new AxisAlignedBB(0.375, 0, 0.375, 0.625, 1, 0.625), // STUMP
 			new AxisAlignedBB(0.125, 0, 0.125, 0.875, 1, 0.875), // BOTTOM
 			new AxisAlignedBB(0, 0, 0, 1, 1, 1), // MIDDLE
 			new AxisAlignedBB(0.125, 0,     0.125, 0.875, 0.75,  0.875), // TOP
@@ -46,6 +47,15 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 			new AxisAlignedBB(0.25,  0.125, 0.125, 1.0,   0.875, 0.875), // EAST
 			new AxisAlignedBB(0.125, 0.125, 0.25,  0.875, 0.875, 1.0  ), // SOUTH
 			new AxisAlignedBB(0,     0.125, 0.125, 0.75,  0.875, 0.875) // WEST
+	};
+	public static final AxisAlignedBB[] BOUNDS_CLIPPED = {
+			new AxisAlignedBB(0.40625, 0, 0.40625, 0.59375, 1, 0.59375), // BOTTOM
+			new AxisAlignedBB(0.40625, 0, 0.40625, 0.59375, 1, 0.59375), // MIDDLE
+			new AxisAlignedBB(0.40625, 0,       0.40625, 0.59375, 0.5,     0.59375), // TOP
+			new AxisAlignedBB(0.40625, 0.40625, 0,       0.59375, 0.59375, 0.5    ), // NORTH
+			new AxisAlignedBB(0.5,     0.40625, 0.40625, 1.0,     0.59375, 0.59375), // EAST
+			new AxisAlignedBB(0.40625, 0.40625, 0.5,     0.59375, 0.59375, 1.0    ), // SOUTH
+			new AxisAlignedBB(0,       0.40625, 0.40625, 0.5,     0.59375, 0.59375) // WEST
 	};
 
 
@@ -115,10 +125,15 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if(state.getBlock() == this) {
-			return BOUNDS_UNCLIPPED[state.getValue(TYPE).getMeta()];
+		if(state.getBlock() != this) {
+			return BOUNDS_STUMP;
 		}
-		return BOUNDS_UNCLIPPED[2];
+		TrunkType type = state.getValue(TYPE);
+		if (type == TrunkType.STUMP) {
+			return BOUNDS_STUMP;
+		}
+
+		return (state.getValue(CLIPPED) ? BOUNDS_CLIPPED : BOUNDS_UNCLIPPED)[type.getMeta() - 1];
 	}
 
 	@Override
