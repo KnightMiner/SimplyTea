@@ -5,8 +5,11 @@ import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.RangeDouble;
 import net.minecraftforge.common.config.Config.RangeInt;
 
-@net.minecraftforge.common.config.Config(modid = SimplyTea.MODID, category = "")
+@net.minecraftforge.common.config.Config(modid = SimplyTea.MODID)
 public class Config {
+	@Comment("If true, filling a teapot consumes the water source block. Useful for packs with finite water.")
+	@LangKey("simplytea.config.teapot_consume_source")
+	public static boolean teapot_consume_source = false;
 
 	@Comment("Options related to the tea tree")
 	@LangKey("simplytea.config.tree")

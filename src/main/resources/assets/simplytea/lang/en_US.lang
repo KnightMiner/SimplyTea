@@ -19,6 +19,8 @@ simplytea.tooltip.empty=Empty!
 simplytea.tooltip.water=Full of water!
 simplytea.tooltip.boiling=Boiling!
 
+simplytea.config.teapot_consume_source=Teapot Comsume Water Source
+
 simplytea.config.tree=Tree
 simplytea.config.tree.max_leaves=Maximum Leaves
 simplytea.config.tree.max_sticks=Maximum Sticks

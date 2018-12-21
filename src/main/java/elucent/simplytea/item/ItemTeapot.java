@@ -2,6 +2,8 @@ package elucent.simplytea.item;
 
 import java.util.List;
 
+import elucent.simplytea.Config;
+import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -34,9 +36,13 @@ public class ItemTeapot extends ItemBase {
 			RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, true);
 			if(raytraceresult != null && raytraceresult.typeOfHit != null && raytraceresult.typeOfHit == Type.BLOCK) {
 				IBlockState state = worldIn.getBlockState(raytraceresult.getBlockPos());
+				// if consuming source, must be a source
 				if(state.getBlock() == Blocks.WATER) {
 					stack.setItemDamage(1);
 					playerIn.setHeldItem(handIn, stack);
+					if(Config.teapot_consume_source) {
+						worldIn.setBlockToAir(raytraceresult.getBlockPos());
+					}
 					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 				}
 				else if (state.getBlock() == Blocks.CAULDRON && state.getValue(BlockCauldron.LEVEL) == 3) {
