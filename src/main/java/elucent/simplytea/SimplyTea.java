@@ -67,7 +67,9 @@ public class SimplyTea {
 		blocks.add(tea_sapling = new BlockTeaSapling("tea_sapling", true));
 		blocks.add(tea_trunk = new BlockTeaTrunk("tea_trunk", true));
 
-		GameRegistry.registerWorldGenerator(new WorldGenTeaTrees(), 100);
+		if(Config.tree.enable_generation) {
+			GameRegistry.registerWorldGenerator(new WorldGenTeaTrees(), 100);
+		}
 	}
 
     @SubscribeEvent

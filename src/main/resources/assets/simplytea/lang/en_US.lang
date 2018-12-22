@@ -28,6 +28,7 @@ simplytea.config.tea.black_hunger=Black Tea Hunger
 simplytea.config.tea.black_saturation=Black Tea Saturation
 
 simplytea.config.tree=Tree
+simplytea.config.tree.enable_generation=Enable Generation
 simplytea.config.tree.max_leaves=Maximum Leaves
 simplytea.config.tree.max_sticks=Maximum Sticks
 simplytea.config.tree.leaf_growth_chance=Leaf Growth Chance

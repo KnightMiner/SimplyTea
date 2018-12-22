@@ -47,6 +47,11 @@ public class Config {
 	}
 
 	public static class TreeCategory {
+		@RequiresMcRestart
+		@Comment("If true, generates tea trees in forest biomes.")
+		@LangKey("simplytea.config.tree.enable_generation")
+		public boolean enable_generation = true;
+
 		@Comment("Percent chance of leaves to regrow every random tick. Set to 1 to regrow every random tick (old behavior)")
 		@RangeDouble(min = 0, max = 1)
 		@LangKey("simplytea.config.tree.leaf_growth_chance")
