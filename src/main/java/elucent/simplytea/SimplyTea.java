@@ -45,8 +45,8 @@ public class SimplyTea {
 
 	public static Block tea_sapling, tea_trunk;
 	public static Item leaf_tea, black_tea;
-	public static Item teabag, teabag_green, teabag_black;
-	public static Item cup, cup_tea_black, cup_tea_green;
+	public static Item teabag, teabag_green, teabag_black, teabag_floral;
+	public static Item cup, cup_tea_black, cup_tea_green, cup_tea_floral;
 	public static Item teapot, hot_teapot;
 
 	@EventHandler
@@ -58,9 +58,11 @@ public class SimplyTea {
 		items.add(teabag = new ItemBase("teabag", true));
 		items.add(teabag_green = new ItemBase("teabag_green", true));
 		items.add(teabag_black = new ItemBase("teabag_black", true));
+		items.add(teabag_floral = new ItemBase("teabag_floral", true));
 		items.add(cup = new ItemBase("cup", true).setMaxStackSize(1));
 		items.add(cup_tea_black = new ItemTeaCup("cup_tea_black", Config.tea.black_hunger, (float)Config.tea.black_saturation, true));
 		items.add(cup_tea_green = new ItemTeaCup("cup_tea_green", Config.tea.green_hunger, (float)Config.tea.green_saturation, true));
+		items.add(cup_tea_floral = new ItemTeaCup("cup_tea_floral", Config.tea.floral_hunger, (float)Config.tea.floral_saturation, true));
 		items.add(teapot = new ItemTeapot("teapot", true));
 		items.add(hot_teapot = new ItemHotTeapot("hot_teapot", true));
 

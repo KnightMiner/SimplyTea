@@ -44,6 +44,18 @@ public class Config {
 		@RangeDouble(min = 0, max = 10)
 		@LangKey("simplytea.config.tea.black_saturation")
 		public double black_saturation = 0.8;
+
+		@RequiresMcRestart
+		@Comment("Hunger restored when drinking floral tea.")
+		@RangeInt(min = 0, max = 20)
+		@LangKey("simplytea.config.tea.floral_hunger")
+		public int floral_hunger = 2;
+
+		@RequiresMcRestart
+		@Comment("Saturation restored when drinking floral tea")
+		@RangeDouble(min = 0, max = 10)
+		@LangKey("simplytea.config.tea.floral_saturation")
+		public double floral_saturation = 0.4;
 	}
 
 	public static class TreeCategory {

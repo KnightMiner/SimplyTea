@@ -9,10 +9,12 @@ item.cup.name=Tea Cup
 item.cup_water.name=Cup of Water
 item.cup_tea_green.name=Cup of Green Tea
 item.cup_tea_black.name=Cup of Black Tea
+item.cup_tea_floral.name=Cup of Floral Tea
 item.teapot.name=Teapot
 item.teabag.name=Tea Bag
 item.teabag_green.name=Green Tea Bag
 item.teabag_black.name=Black Tea Bag
+item.teabag_floral.name=Floral Tea Bag
 item.hot_teapot.name=Teapot
 
 simplytea.tooltip.empty=Empty!
@@ -26,6 +28,8 @@ simplytea.config.tea.green_hunger=Green Tea Hunger
 simplytea.config.tea.green_saturation=Green Tea Saturation
 simplytea.config.tea.black_hunger=Black Tea Hunger
 simplytea.config.tea.black_saturation=Black Tea Saturation
+simplytea.config.tea.floral_hunger=Floral Tea Hunger
+simplytea.config.tea.floral_saturation=Floral Tea Saturation
 
 simplytea.config.tree=Tree
 simplytea.config.tree.enable_generation=Enable Generation
