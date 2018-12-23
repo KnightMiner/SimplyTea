@@ -108,7 +108,11 @@ public class BlockTeaSapling extends BlockBush implements IGrowable, IModeledObj
 		world.setBlockState(pos.up(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.BOTTOM));
 
 		// tree branches
-		int height = random.nextInt(3) + 3;
+		// tree minimum is 4 blocks tall, but can be up to two blocks taller if space permits
+		int height = 3;
+		if(world.isAirBlock(pos.up(4))) {
+			height += random.nextInt(world.isAirBlock(pos.up(5)) ? 3 : 2);
+		}
 		boolean north, south, west, east;
 		BlockPos branch;
 		for(int i = 2; i < height; i++) {
@@ -118,22 +122,31 @@ public class BlockTeaSapling extends BlockBush implements IGrowable, IModeledObj
 			east = random.nextBoolean();
 			branch = pos.up(i);
 			if(north) {
-				world.setBlockState(branch.north(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.SOUTH));
+				setBlockSafe(world, branch.north(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.SOUTH));
 			}
 			if(east) {
-				world.setBlockState(branch.east(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.WEST));
+				setBlockSafe(world, branch.east(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.WEST));
 			}
 			if(south) {
-				world.setBlockState(branch.south(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.NORTH));
+				setBlockSafe(world, branch.south(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.NORTH));
 			}
 			if(west) {
-				world.setBlockState(branch.west(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.EAST));
+				setBlockSafe(world, branch.west(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.EAST));
 			}
 			world.setBlockState(branch, trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.MIDDLE));
 		}
 
 		// tree top
 		world.setBlockState(pos.up(height), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.TOP));
+	}
+
+	/**
+	 * Sets a block only if the block is replacable
+	 */
+	private static void setBlockSafe(World world, BlockPos pos, IBlockState state) {
+		if(world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
+			world.setBlockState(pos, state);
+		}
 	}
 
 	@Override
@@ -144,8 +157,13 @@ public class BlockTeaSapling extends BlockBush implements IGrowable, IModeledObj
 
 	@Override
 	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
-		return world.isAirBlock(pos.up(1)) && world.isAirBlock(pos.up(2)) && world.isAirBlock(pos.up(3))
-				&& world.isAirBlock(pos.up(4)) && world.isAirBlock(pos.up(5)) && world.isAirBlock(pos.up(6));
+		// tree minimum is 4 blocks tall (sapling position plus 3)
+		for(int i = 1; i <= 3; i++) {
+			if(!world.isAirBlock(pos.up(i))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
