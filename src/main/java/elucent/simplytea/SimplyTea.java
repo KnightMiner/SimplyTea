@@ -25,6 +25,7 @@ import net.minecraftforge.common.config.Config.Type;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -106,7 +107,12 @@ public class SimplyTea {
 
 	@SubscribeEvent
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-		FurnaceRecipes.instance().addSmelting(leaf_tea, new ItemStack(black_tea, 1), 0.1f);
+		// if Tinkers Construct is loaded, register black tea as a drying rack recipe as its more realistic
+		if(Loader.isModLoaded("tconstruct")) {
+			IMCHelper.addTinkersDrying(new ItemStack(leaf_tea), new ItemStack(black_tea), 5*60);
+		} else {
+			FurnaceRecipes.instance().addSmelting(leaf_tea, new ItemStack(black_tea, 1), 0.1f);
+		}
 		FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(teapot, 1, 1), new ItemStack(hot_teapot, 1, 4), 0.1f);
 	}
 
