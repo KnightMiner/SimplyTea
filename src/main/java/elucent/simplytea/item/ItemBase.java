@@ -1,7 +1,7 @@
 package elucent.simplytea.item;
 
-import elucent.simplytea.IModeledObject;
 import elucent.simplytea.SimplyTea;
+import elucent.simplytea.core.IModeledObject;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;

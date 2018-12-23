@@ -1,4 +1,4 @@
-package elucent.simplytea;
+package elucent.simplytea.core;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

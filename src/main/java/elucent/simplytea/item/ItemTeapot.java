@@ -2,7 +2,7 @@ package elucent.simplytea.item;
 
 import java.util.List;
 
-import elucent.simplytea.Config;
+import elucent.simplytea.core.Config;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

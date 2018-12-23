@@ -3,9 +3,9 @@ package elucent.simplytea.block;
 import java.util.Locale;
 import java.util.Random;
 
-import elucent.simplytea.Config;
-import elucent.simplytea.IModeledObject;
 import elucent.simplytea.SimplyTea;
+import elucent.simplytea.core.Config;
+import elucent.simplytea.core.IModeledObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

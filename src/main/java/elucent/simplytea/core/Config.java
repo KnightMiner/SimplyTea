@@ -1,5 +1,6 @@
-package elucent.simplytea;
+package elucent.simplytea.core;
 
+import elucent.simplytea.SimplyTea;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.RangeDouble;

@@ -2,9 +2,9 @@ package elucent.simplytea.block;
 
 import java.util.Random;
 
-import elucent.simplytea.IModeledObject;
 import elucent.simplytea.SimplyTea;
 import elucent.simplytea.block.BlockTeaTrunk.TrunkType;
+import elucent.simplytea.core.IModeledObject;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;

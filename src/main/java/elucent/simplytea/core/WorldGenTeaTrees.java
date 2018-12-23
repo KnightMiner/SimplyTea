@@ -1,4 +1,4 @@
-package elucent.simplytea;
+package elucent.simplytea.core;
 
 import java.util.Random;
 
