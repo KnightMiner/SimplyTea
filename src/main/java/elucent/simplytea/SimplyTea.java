@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 @Mod(modid = SimplyTea.MODID, version = SimplyTea.VERSION, name = SimplyTea.NAME)
 public class SimplyTea {
@@ -114,6 +115,8 @@ public class SimplyTea {
 			FurnaceRecipes.instance().addSmelting(leaf_tea, new ItemStack(black_tea, 1), 0.1f);
 		}
 		FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(teapot, 1, 1), new ItemStack(hot_teapot, 1, 4), 0.1f);
+
+		OreDictionary.registerOre("treeSapling", tea_sapling);
 	}
 
 	@SubscribeEvent
