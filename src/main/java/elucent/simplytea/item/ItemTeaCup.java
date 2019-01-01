@@ -1,6 +1,7 @@
 package elucent.simplytea.item;
 
 import elucent.simplytea.SimplyTea;
+import elucent.simplytea.core.Config;
 import elucent.simplytea.core.IModeledObject;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
@@ -8,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -15,13 +17,27 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemTeaCup extends ItemFood implements IModeledObject {
-	public ItemTeaCup(String name, int food, float sat, boolean addToTab) {
-		super(food, sat, false);
+	public ItemTeaCup(String name, int hunger, float saturation, boolean addToTab) {
+		super(hunger, saturation, false);
 		setMaxStackSize(1);
 		setRegistryName(SimplyTea.MODID + ":" + name);
 		setUnlocalizedName(name);
 		if(addToTab) {
 			setCreativeTab(SimplyTea.tab);
+		}
+	}
+
+	public ItemTeaCup(String name, int hunger, double saturation, boolean addToTab) {
+		this(name, hunger, (float)saturation, addToTab);
+	}
+
+	public ItemTeaCup(String name, Config.Tea stats, boolean addToTab) {
+		this(name, stats.hunger, stats.saturation, addToTab);
+	}
+	public ItemTeaCup(String name, Config.ChamomileTea stats, boolean addToTab) {
+		this(name, stats.hunger, stats.saturation, addToTab);
+		if (stats.hearts > 0) {
+			this.setPotionEffect(new PotionEffect(SimplyTea.restful, 600, stats.hearts - 1), 1.0f);
 		}
 	}
 

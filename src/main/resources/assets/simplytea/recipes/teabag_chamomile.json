@@ -1,0 +1,25 @@
+{
+  "conditions": [{
+    "type": "forge:or",
+    "values": [
+      {
+        "type": "forge:mod_loaded",
+        "modid": "rustic"
+      },
+      {
+        "type": "config",
+        "enabled": "force_chamomile"
+      }
+    ]
+  }],
+  "result": {
+    "item": "simplytea:teabag_chamomile"
+  },
+  "group": "simplytea:teabag_chamomile",
+  "ingredients": [
+    {"item": "simplytea:teabag"},
+    {"item": "#CHAMOMILE"},
+    {"item": "#CHAMOMILE"}
+  ],
+  "type": "forge:ore_shapeless"
+}

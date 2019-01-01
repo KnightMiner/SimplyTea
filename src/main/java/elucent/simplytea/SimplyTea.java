@@ -13,17 +13,22 @@ import elucent.simplytea.item.ItemBase;
 import elucent.simplytea.item.ItemHotTeapot;
 import elucent.simplytea.item.ItemTeaCup;
 import elucent.simplytea.item.ItemTeapot;
+import elucent.simplytea.potion.ModPotion;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config.Type;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -32,6 +37,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod(modid = SimplyTea.MODID, version = SimplyTea.VERSION, name = SimplyTea.NAME)
 public class SimplyTea {
@@ -51,26 +57,38 @@ public class SimplyTea {
 
 	public static Block tea_sapling, tea_trunk;
 	public static Item leaf_tea, black_tea;
-	public static Item teabag, teabag_green, teabag_black, teabag_floral;
-	public static Item cup, cup_tea_black, cup_tea_green, cup_tea_floral;
+	public static Item teabag, teabag_green, teabag_black, teabag_floral, teabag_chamomile;
+	public static Item cup, cup_tea_black, cup_tea_green, cup_tea_floral, cup_tea_chamomile;
 	public static Item teapot, hot_teapot;
+	public static Potion restful;
 
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
 
+		restful = new ModPotion("restful", false, 0xAD601A).setCustomIcon(0, 0);
+
 		items.add(leaf_tea = new ItemBase("leaf_tea", true));
 		items.add(black_tea = new ItemBase("black_tea", true));
+
 		items.add(teabag = new ItemBase("teabag", true));
 		items.add(teabag_green = new ItemBase("teabag_green", true));
 		items.add(teabag_black = new ItemBase("teabag_black", true));
 		items.add(teabag_floral = new ItemBase("teabag_floral", true));
-		items.add(cup = new ItemBase("cup", true).setMaxStackSize(1));
-		items.add(cup_tea_black = new ItemTeaCup("cup_tea_black", Config.tea.black_hunger, (float)Config.tea.black_saturation, true));
-		items.add(cup_tea_green = new ItemTeaCup("cup_tea_green", Config.tea.green_hunger, (float)Config.tea.green_saturation, true));
-		items.add(cup_tea_floral = new ItemTeaCup("cup_tea_floral", Config.tea.floral_hunger, (float)Config.tea.floral_saturation, true));
+
+		items.add(cup = new ItemBase("cup", true).setMaxStackSize(16));
+		items.add(cup_tea_black = new ItemTeaCup("cup_tea_black", Config.tea.black, true));
+		items.add(cup_tea_green = new ItemTeaCup("cup_tea_green", Config.tea.green, true));
+		items.add(cup_tea_floral = new ItemTeaCup("cup_tea_floral", Config.tea.floral, true));
+
 		items.add(teapot = new ItemTeapot("teapot", true));
 		items.add(hot_teapot = new ItemHotTeapot("hot_teapot", true));
+
+		// rustic support: chamomile tea
+		if (Loader.isModLoaded("rustic") || Config.tea.chamomile.force) {
+			items.add(teabag_chamomile = new ItemBase("teabag_chamomile", true));
+			items.add(cup_tea_chamomile = new ItemTeaCup("cup_tea_chamomile", Config.tea.chamomile, true));
+		}
 
 		blocks.add(tea_sapling = new BlockTeaSapling("tea_sapling", true));
 		blocks.add(tea_trunk = new BlockTeaTrunk("tea_trunk", true));
@@ -107,6 +125,12 @@ public class SimplyTea {
 	}
 
 	@SubscribeEvent
+	public void registerPotions(RegistryEvent.Register<Potion> event) {
+		IForgeRegistry<Potion> r = event.getRegistry();
+		r.register(restful);
+	}
+
+	@SubscribeEvent
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
 		// if Tinkers Construct is loaded, register black tea as a drying rack recipe as its more realistic
 		if(Loader.isModLoaded("tconstruct")) {
@@ -130,6 +154,20 @@ public class SimplyTea {
 			if(b instanceof IModeledObject) {
 				((IModeledObject) b).initModel();
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public void playerWakeUp(PlayerWakeUpEvent event) {
+		if (!event.shouldSetSpawn() || event.updateWorld()) {
+			return;
+		}
+
+		EntityPlayer player = event.getEntityPlayer();
+		PotionEffect effect = player.getActivePotionEffect(restful);
+		if (effect != null) {
+			player.heal((effect.getAmplifier()+1)*2);
+			player.removePotionEffect(restful);
 		}
 	}
 }

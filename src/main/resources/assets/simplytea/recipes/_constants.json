@@ -7,5 +7,17 @@
       {"item": "simplytea:hot_teapot", "data": 3},
       {"item": "simplytea:hot_teapot", "data": 4}
     ]
+  },
+  {
+    "name": "CHAMOMILE",
+    "ingredient": {"item": "minecraft:red_flower", "data": 8}
+  },
+  {
+    "conditions": [{
+      "type": "forge:mod_loaded",
+      "modid": "rustic"
+    }],
+    "name": "CHAMOMILE",
+    "ingredient": {"item": "rustic:chamomile"}
   }
 ]

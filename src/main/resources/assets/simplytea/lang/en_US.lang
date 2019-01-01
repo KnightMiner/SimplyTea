@@ -5,31 +5,38 @@ tile.tea_trunk.name=Tea Trunk
 
 item.leaf_tea.name=Tea Leaf
 item.black_tea.name=Black Tea
+
 item.cup.name=Tea Cup
 item.cup_water.name=Cup of Water
 item.cup_tea_green.name=Cup of Green Tea
 item.cup_tea_black.name=Cup of Black Tea
 item.cup_tea_floral.name=Cup of Floral Tea
-item.teapot.name=Teapot
+item.cup_tea_chamomile.name=Cup of Chamomile Tea
 item.teabag.name=Tea Bag
 item.teabag_green.name=Green Tea Bag
 item.teabag_black.name=Black Tea Bag
 item.teabag_floral.name=Floral Tea Bag
-item.hot_teapot.name=Teapot
+item.teabag_chamomile.name=Chamomile Tea Bag
 
+item.teapot.name=Teapot
+item.hot_teapot.name=Teapot
 simplytea.tooltip.empty=Empty!
 simplytea.tooltip.water=Full of water!
 simplytea.tooltip.boiling=Boiling!
 
+simplytea.effect.restful=Restful
+
 simplytea.config.teapot_consume_source=Teapot Comsume Water Source
 
 simplytea.config.tea=Tea
-simplytea.config.tea.green_hunger=Green Tea Hunger
-simplytea.config.tea.green_saturation=Green Tea Saturation
-simplytea.config.tea.black_hunger=Black Tea Hunger
-simplytea.config.tea.black_saturation=Black Tea Saturation
-simplytea.config.tea.floral_hunger=Floral Tea Hunger
-simplytea.config.tea.floral_saturation=Floral Tea Saturation
+simplytea.config.tea.hunger=Hunger
+simplytea.config.tea.saturation=Saturation
+simplytea.config.tea.black=Black Tea
+simplytea.config.tea.green=Green Tea
+simplytea.config.tea.floral=Floral Tea
+simplytea.config.tea.chamomile=Chamomile Tea
+simplytea.config.tea.chamomile.hearts=Hearts
+simplytea.config.tea.chamomile.force=Force Load
 
 simplytea.config.tree=Tree
 simplytea.config.tree.enable_generation=Enable Generation
