@@ -11,9 +11,11 @@ import elucent.simplytea.core.IModeledObject;
 import elucent.simplytea.core.WorldGenTeaTrees;
 import elucent.simplytea.item.ItemBase;
 import elucent.simplytea.item.ItemHotTeapot;
+import elucent.simplytea.item.ItemTeaChamomile;
 import elucent.simplytea.item.ItemTeaCup;
 import elucent.simplytea.item.ItemTeapot;
-import elucent.simplytea.potion.ModPotion;
+import elucent.simplytea.potion.PotionCaffeinated;
+import elucent.simplytea.potion.PotionRestful;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -60,13 +62,14 @@ public class SimplyTea {
 	public static Item teabag, teabag_green, teabag_black, teabag_floral, teabag_chamomile;
 	public static Item cup, cup_tea_black, cup_tea_green, cup_tea_floral, cup_tea_chamomile;
 	public static Item teapot, hot_teapot;
-	public static Potion restful;
+	public static Potion restful, caffeinated;
 
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
 
-		restful = new ModPotion("restful", false, 0xAD601A).setCustomIcon(0, 0);
+		caffeinated = new PotionCaffeinated("caffeinated").setCustomIcon(1, 0);
+		restful = new PotionRestful("restful").setCustomIcon(0, 0);
 
 		items.add(leaf_tea = new ItemBase("leaf_tea", true));
 		items.add(black_tea = new ItemBase("black_tea", true));
@@ -87,7 +90,7 @@ public class SimplyTea {
 		// rustic support: chamomile tea
 		if (Loader.isModLoaded("rustic") || Config.tea.chamomile.force) {
 			items.add(teabag_chamomile = new ItemBase("teabag_chamomile", true));
-			items.add(cup_tea_chamomile = new ItemTeaCup("cup_tea_chamomile", Config.tea.chamomile, true));
+			items.add(cup_tea_chamomile = new ItemTeaChamomile("cup_tea_chamomile", true));
 		}
 
 		blocks.add(tea_sapling = new BlockTeaSapling("tea_sapling", true));
@@ -127,6 +130,7 @@ public class SimplyTea {
 	@SubscribeEvent
 	public void registerPotions(RegistryEvent.Register<Potion> event) {
 		IForgeRegistry<Potion> r = event.getRegistry();
+		r.register(caffeinated);
 		r.register(restful);
 	}
 
@@ -163,7 +167,15 @@ public class SimplyTea {
 			return;
 		}
 
+		// if caffeinated, remove that with no restful benefits
 		EntityPlayer player = event.getEntityPlayer();
+		if (player.isPotionActive(caffeinated)) {
+			player.removePotionEffect(caffeinated);
+			player.removePotionEffect(restful);
+			return;
+		}
+
+		// if restful, heal based on the potion level and remove it
 		PotionEffect effect = player.getActivePotionEffect(restful);
 		if (effect != null) {
 			player.heal((effect.getAmplifier()+1)*2);

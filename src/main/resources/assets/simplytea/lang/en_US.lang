@@ -25,6 +25,8 @@ simplytea.tooltip.water=Full of water!
 simplytea.tooltip.boiling=Boiling!
 
 simplytea.effect.restful=Restful
+simplytea.effect.caffeinated=Caffeinated
+
 
 simplytea.config.teapot_consume_source=Teapot Comsume Water Source
 

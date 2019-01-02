@@ -33,12 +33,18 @@ public class ItemTeaCup extends ItemFood implements IModeledObject {
 
 	public ItemTeaCup(String name, Config.Tea stats, boolean addToTab) {
 		this(name, stats.hunger, stats.saturation, addToTab);
+		if (stats.caffeinated_time > 0) {
+			this.setPotionEffect(new PotionEffect(SimplyTea.caffeinated, stats.caffeinated_time * 20), 1.0f);
+		}
 	}
 	public ItemTeaCup(String name, Config.ChamomileTea stats, boolean addToTab) {
 		this(name, stats.hunger, stats.saturation, addToTab);
 		if (stats.hearts > 0) {
 			this.setPotionEffect(new PotionEffect(SimplyTea.restful, 600, stats.hearts - 1), 1.0f);
 		}
+	}
+	public ItemTeaCup(String name, Config.FloralTea stats, boolean addToTab) {
+		this(name, stats.hunger, stats.saturation, addToTab);
 	}
 
 	@Override
@@ -87,4 +93,13 @@ public class ItemTeaCup extends ItemFood implements IModeledObject {
 		}
 		return s;
 	}
+
+    @Override
+	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
+        if (!worldIn.isRemote) {
+        	// used for tea to "cure" restful
+			player.curePotionEffects(stack);
+			super.onFoodEaten(stack, worldIn, player);
+        }
+    }
 }

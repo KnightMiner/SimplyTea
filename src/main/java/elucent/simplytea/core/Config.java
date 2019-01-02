@@ -32,15 +32,15 @@ public class Config {
 	public static class TeaCategory {
 		@Comment("Stats for floral tea.")
 		@LangKey("simplytea.config.tea.floral")
-		public Tea floral = new Tea(2, 0.4);
+		public FloralTea floral = new FloralTea();
 
 		@Comment("Stats for green tea.")
 		@LangKey("simplytea.config.tea.green")
-		public Tea green = new Tea(3, 0.5);
+		public Tea green = new Tea(3, 0.5, 150);
 
 		@Comment("Stats for black tea.")
 		@LangKey("simplytea.config.tea.black")
-		public Tea black = new Tea(4, 0.8);
+		public Tea black = new Tea(4, 0.8, 210);
 
 		@Comment("Stats and effects for chamomile tea.")
 		@LangKey("simplytea.config.tea.chamomile")
@@ -78,10 +78,25 @@ public class Config {
 		public double sapling_chance = 0.1;
 	}
 
+	public static class FloralTea {
+		@RequiresMcRestart
+		@Comment("Hunger restored when drinking this tea.")
+		@RangeInt(min = 0, max = 20)
+		@LangKey("simplytea.config.tea.hunger")
+		public int hunger = 2;
+
+		@RequiresMcRestart
+		@Comment("Saturation restored when drinking this tea")
+		@RangeDouble(min = 0, max = 10)
+		@LangKey("simplytea.config.tea.saturation")
+		public double saturation = 0.5;
+	}
+
 	public static class Tea {
-		private Tea(int defaultHunger, double defaultSaturation) {
+		private Tea(int defaultHunger, double defaultSaturation, int caffeinatedTime) {
 			this.hunger = defaultHunger;
 			this.saturation = defaultSaturation;
+			this.caffeinated_time = caffeinatedTime;
 		}
 
 		@RequiresMcRestart
@@ -95,6 +110,12 @@ public class Config {
 		@RangeDouble(min = 0, max = 10)
 		@LangKey("simplytea.config.tea.saturation")
 		public double saturation;
+
+		@RequiresMcRestart
+		@Comment("Time in seconds for the caffeinated effect from drinking this tea.")
+		@RangeInt(min = 0, max = 600)
+		@LangKey("simplytea.config.tea.caffeinated_time")
+		public int caffeinated_time;
 	}
 
 	public static class ChamomileTea {
