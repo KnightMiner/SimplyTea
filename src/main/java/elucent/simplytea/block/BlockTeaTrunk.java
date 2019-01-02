@@ -1,5 +1,6 @@
 package elucent.simplytea.block;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemShears;
@@ -27,6 +29,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -116,9 +119,15 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 			ItemStack stack = heldItem.copy();
 			stack.damageItem(1, player);
 			player.setHeldItem(hand, stack);
-			this.dropBlockAsItem(world, pos, state, 0);
+
+			List<ItemStack> drops = getTeaDrops(state);
+            for (ItemStack drop : drops) {
+                spawnAsEntity(world, pos, drop);
+            }
+
 			world.setBlockState(pos, state.withProperty(CLIPPED, true), 8);
 			world.notifyBlockUpdate(pos, state, state.withProperty(CLIPPED, true), 8);
+			world.playSound(player, pos, SoundEvents.ENTITY_SHEEP_SHEAR, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			return true;
 		}
 		return false;
@@ -179,15 +188,18 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 
 	@Override
 	public NonNullList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		NonNullList<ItemStack> drops = getTeaDrops(state);
+		drops.add(new ItemStack(Items.STICK, randomCount(Config.tree.max_sticks)));
+		return drops;
+	}
+
+	private NonNullList<ItemStack> getTeaDrops(IBlockState state) {
 		NonNullList<ItemStack> drops = NonNullList.create();
-		if(state.getBlock() == this) {
-			if(state.getValue(TYPE) != TrunkType.STUMP && !state.getValue(CLIPPED)) {
-				drops.add(new ItemStack(SimplyTea.leaf_tea, randomCount(Config.tree.max_leaves)));
-				if(RANDOM.nextFloat() < Config.tree.sapling_chance) {
-					drops.add(new ItemStack(SimplyTea.tea_sapling, 1));
-				}
+		if(state.getValue(TYPE) != TrunkType.STUMP && !state.getValue(CLIPPED)) {
+			drops.add(new ItemStack(SimplyTea.leaf_tea, randomCount(Config.tree.max_leaves)));
+			if(RANDOM.nextFloat() < Config.tree.sapling_chance) {
+				drops.add(new ItemStack(SimplyTea.tea_sapling, 1));
 			}
-			drops.add(new ItemStack(Items.STICK, randomCount(Config.tree.max_sticks)));
 		}
 		return drops;
 	}
