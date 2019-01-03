@@ -10,11 +10,10 @@ item.cup_water.name=一杯水
 item.cup_tea_green.name=一杯绿茶
 item.cup_tea_black.name=一杯红茶
 item.teapot.name=茶壶
+item.teapot.tooltip.empty=空茶壶！
+item.teapot.tooltip.water=充满了水！
 item.teabag.name=茶包
 item.teabag_green.name=绿茶包
 item.teabag_black.name=红茶包
 item.hot_teapot.name=茶壶
-
-simplytea.tooltip.empty=空茶壶！
-simplytea.tooltip.water=充满了水！
-simplytea.tooltip.boiling=沸腾！
+item.hot_teapot.tooltip=沸腾！

@@ -12,6 +12,8 @@ item.cup_tea_green.name=Cup of Green Tea
 item.cup_tea_black.name=Cup of Black Tea
 item.cup_tea_floral.name=Cup of Floral Tea
 item.cup_tea_chamomile.name=Cup of Chamomile Tea
+item.cup_cocoa.name=Cup of Hot Chocolate
+
 item.teabag.name=Tea Bag
 item.teabag_green.name=Green Tea Bag
 item.teabag_black.name=Black Tea Bag
@@ -19,10 +21,13 @@ item.teabag_floral.name=Floral Tea Bag
 item.teabag_chamomile.name=Chamomile Tea Bag
 
 item.teapot.name=Teapot
+item.teapot.tooltip.empty=Empty!
+item.teapot.tooltip.water=Full of water!
+item.teapot.tooltip.milk=Full of milk!
 item.hot_teapot.name=Teapot
-simplytea.tooltip.empty=Empty!
-simplytea.tooltip.water=Full of water!
-simplytea.tooltip.boiling=Boiling!
+item.hot_teapot.tooltip=Boiling!
+item.frothed_teapot.name=Teapot
+item.frothed_teapot.tooltip=Frothed milk!
 
 simplytea.effect.restful=Restful
 simplytea.effect.caffeinated=Caffeinated

@@ -46,16 +46,14 @@ public class ItemHotTeapot extends ItemBase {
 
 	@Override
 	public void initModel() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(this, 2, new ModelResourceLocation(getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(this, 3, new ModelResourceLocation(getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(this, 4, new ModelResourceLocation(getRegistryName(), "inventory"));
+		for (int i = 0; i <= 4; i++) {
+			ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation(getRegistryName(), "inventory"));
+		}
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(I18n.format("simplytea.tooltip.boiling"));
+		tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip"));
 	}
 
 	@Override

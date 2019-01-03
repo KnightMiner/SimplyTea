@@ -2,6 +2,7 @@ package elucent.simplytea.item;
 
 import java.util.List;
 
+import elucent.simplytea.SimplyTea;
 import elucent.simplytea.core.Config;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
@@ -9,14 +10,18 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
@@ -58,19 +63,38 @@ public class ItemTeapot extends ItemBase {
 	}
 
 	@Override
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+		// only work if the bucket is empty and right clicking a cow
+		if(stack.getMetadata() == 0 && target instanceof EntityCow && !player.capabilities.isCreativeMode) {
+			// sound
+			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+			// fill with milk
+			stack.setItemDamage(2);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
 	public void initModel() {
 		String name = getRegistryName().getResourcePath();
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(new ResourceLocation(SimplyTea.MODID, name + "_water"), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 2, new ModelResourceLocation(new ResourceLocation(SimplyTea.MODID, name + "_milk"), "inventory"));
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		if(stack.getMetadata() == 0) {
-			tooltip.add(I18n.format("simplytea.tooltip.empty"));
-		}
-		if(stack.getMetadata() == 1) {
-			tooltip.add(I18n.format("simplytea.tooltip.water"));
+		switch(stack.getMetadata()) {
+		case 0:
+			tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip.empty"));
+			break;
+		case 1:
+			tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip.water"));
+			break;
+		case 2:
+			tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip.milk"));
+			break;
 		}
 	}
 
@@ -79,6 +103,7 @@ public class ItemTeapot extends ItemBase {
 		if(this.isInCreativeTab(tab)) {
 			stacks.add(new ItemStack(this, 1));
 			stacks.add(new ItemStack(this, 1, 1));
+			stacks.add(new ItemStack(this, 1, 2));
 		}
 	}
 

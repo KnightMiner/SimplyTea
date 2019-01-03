@@ -45,13 +45,19 @@ public class TeapotFluidHandler implements ICapabilityProvider, IFluidHandlerIte
 
     @Override
     public int fill(FluidStack resource, boolean doFill) {
-    	// only fill with water
-        if (stack.getItemDamage() == 1 || resource == null || resource.amount < Fluid.BUCKET_VOLUME || resource.getFluid() != FluidRegistry.WATER) {
+    	// must be empty and bucket amount
+        if (stack.getItemDamage() != 0 || resource == null || resource.amount < Fluid.BUCKET_VOLUME) {
+        	return 0;
+        }
+
+    	// only fill with water or milk
+        Fluid fluid = resource.getFluid();
+        if (fluid != FluidRegistry.WATER && !fluid.getName().equals("milk")) {
         	return 0;
         }
 
         if (doFill) {
-            stack = new ItemStack(SimplyTea.teapot, 1, 1);
+            stack = new ItemStack(SimplyTea.teapot, 1, fluid == FluidRegistry.WATER ? 1 : 2);
         }
 
         return Fluid.BUCKET_VOLUME;

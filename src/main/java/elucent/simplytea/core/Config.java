@@ -118,6 +118,24 @@ public class Config {
 		public int caffeinated_time;
 	}
 
+	public static class Cocoa {
+		@RequiresMcRestart
+		@Comment("Hunger restored when drinking this tea.")
+		@RangeInt(min = 0, max = 20)
+		@LangKey("simplytea.config.tea.hunger")
+		public int hunger = 4;
+
+		@RequiresMcRestart
+		@Comment("Saturation restored when drinking this tea")
+		@RangeDouble(min = 0, max = 10)
+		@LangKey("simplytea.config.tea.saturation")
+		public double saturation = 0.6;
+
+		@Comment("If true, drinking cocoa clears status effects like milk")
+		@LangKey("simplytea.config.tea.cocoa.clear_effects")
+		public boolean clear_effects = true;
+	}
+
 	public static class ChamomileTea {
 		@RequiresMcRestart
 		@Comment("Hunger restored when drinking this tea.")

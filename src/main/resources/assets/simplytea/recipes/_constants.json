@@ -9,6 +9,15 @@
     ]
   },
   {
+    "name": "FROTHED_TEAPOT",
+    "ingredient": [
+      {"item": "simplytea:frothed_teapot", "data": 1},
+      {"item": "simplytea:frothed_teapot", "data": 2},
+      {"item": "simplytea:frothed_teapot", "data": 3},
+      {"item": "simplytea:frothed_teapot", "data": 4}
+    ]
+  },
+  {
     "name": "CHAMOMILE",
     "ingredient": {"item": "minecraft:red_flower", "data": 8}
   },

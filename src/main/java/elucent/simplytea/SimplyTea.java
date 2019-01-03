@@ -10,6 +10,7 @@ import elucent.simplytea.core.IMCHelper;
 import elucent.simplytea.core.IModeledObject;
 import elucent.simplytea.core.WorldGenTeaTrees;
 import elucent.simplytea.item.ItemBase;
+import elucent.simplytea.item.ItemCocoa;
 import elucent.simplytea.item.ItemHotTeapot;
 import elucent.simplytea.item.ItemTeaChamomile;
 import elucent.simplytea.item.ItemTeaCup;
@@ -21,7 +22,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -60,8 +60,8 @@ public class SimplyTea {
 	public static Block tea_sapling, tea_trunk;
 	public static Item leaf_tea, black_tea;
 	public static Item teabag, teabag_green, teabag_black, teabag_floral, teabag_chamomile;
-	public static Item cup, cup_tea_black, cup_tea_green, cup_tea_floral, cup_tea_chamomile;
-	public static Item teapot, hot_teapot;
+	public static Item cup, cup_tea_black, cup_tea_green, cup_tea_floral, cup_tea_chamomile, cup_cocoa;
+	public static Item teapot, hot_teapot, frothed_teapot;
 	public static Potion restful, caffeinated;
 
 	@EventHandler
@@ -83,9 +83,11 @@ public class SimplyTea {
 		items.add(cup_tea_black = new ItemTeaCup("cup_tea_black", Config.tea.black, true));
 		items.add(cup_tea_green = new ItemTeaCup("cup_tea_green", Config.tea.green, true));
 		items.add(cup_tea_floral = new ItemTeaCup("cup_tea_floral", Config.tea.floral, true));
+		items.add(cup_cocoa = new ItemCocoa("cup_cocoa", true));
 
 		items.add(teapot = new ItemTeapot("teapot", true));
 		items.add(hot_teapot = new ItemHotTeapot("hot_teapot", true));
+		items.add(frothed_teapot = new ItemHotTeapot("frothed_teapot", true));
 
 		// rustic support: chamomile tea
 		if (Loader.isModLoaded("rustic") || Config.tea.chamomile.force) {
@@ -140,9 +142,10 @@ public class SimplyTea {
 		if(Loader.isModLoaded("tconstruct")) {
 			IMCHelper.addTinkersDrying(new ItemStack(leaf_tea), new ItemStack(black_tea), 5*60);
 		} else {
-			FurnaceRecipes.instance().addSmelting(leaf_tea, new ItemStack(black_tea, 1), 0.1f);
+			GameRegistry.addSmelting(leaf_tea, new ItemStack(black_tea, 1), 0.1f);
 		}
-		FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(teapot, 1, 1), new ItemStack(hot_teapot, 1, 4), 0.1f);
+		GameRegistry.addSmelting(new ItemStack(teapot, 1, 1), new ItemStack(hot_teapot, 1, 4), 0.1f);
+		GameRegistry.addSmelting(new ItemStack(teapot, 1, 2), new ItemStack(frothed_teapot, 1, 4), 0.1f);
 
 		OreDictionary.registerOre("treeSapling", tea_sapling);
 	}
