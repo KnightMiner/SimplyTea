@@ -27,6 +27,7 @@ public class ItemTeapot extends ItemBase {
 	public ItemTeapot(String name, boolean addToTab) {
 		super(name, addToTab);
 		setMaxStackSize(1);
+		this.hasSubtypes = true;
 	}
 
 	@Override
@@ -58,8 +59,9 @@ public class ItemTeapot extends ItemBase {
 
 	@Override
 	public void initModel() {
+		String name = getRegistryName().getResourcePath();
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(new ResourceLocation(SimplyTea.MODID, name + "_water"), "inventory"));
 	}
 
 	@Override

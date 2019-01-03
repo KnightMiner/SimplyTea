@@ -1,6 +1,7 @@
 {
   "result": {
-    "item": "simplytea:teapot"
+    "item": "simplytea:teapot",
+    "data": 0
   },
   "group": "simplytea:teapot",
   "pattern": [
