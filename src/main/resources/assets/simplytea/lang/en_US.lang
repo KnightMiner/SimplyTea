@@ -5,12 +5,15 @@ tile.tea_trunk.name=Tea Trunk
 
 item.leaf_tea.name=Tea Leaf
 item.black_tea.name=Black Tea
+item.tea_stick.name=Tea Stick
+item.tea_stick.tooltip=Sweet like cinnamon!
 
 item.cup.name=Tea Cup
 item.cup_water.name=Cup of Water
 item.cup_tea_green.name=Cup of Green Tea
 item.cup_tea_black.name=Cup of Black Tea
 item.cup_tea_floral.name=Cup of Floral Tea
+item.cup_tea_chai.name=Cup of Chai Tea
 item.cup_tea_chamomile.name=Cup of Chamomile Tea
 item.cup_cocoa.name=Cup of Hot Chocolate
 

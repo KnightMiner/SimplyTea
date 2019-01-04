@@ -17,7 +17,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -189,7 +188,7 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	@Override
 	public NonNullList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		NonNullList<ItemStack> drops = getTeaDrops(state);
-		drops.add(new ItemStack(Items.STICK, randomCount(Config.tree.max_sticks)));
+		drops.add(new ItemStack(SimplyTea.tea_stick, randomCount(Config.tree.max_sticks)));
 		return drops;
 	}
 

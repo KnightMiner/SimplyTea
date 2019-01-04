@@ -42,6 +42,10 @@ public class Config {
 		@LangKey("simplytea.config.tea.black")
 		public Tea black = new Tea(4, 0.8, 210);
 
+		@Comment("Stats for chai tea.")
+		@LangKey("simplytea.config.tea.green")
+		public Tea chai = new Tea(5, 0.6, 150);
+
 		@Comment("Stats and effects for chamomile tea.")
 		@LangKey("simplytea.config.tea.chamomile")
 		public ChamomileTea chamomile = new ChamomileTea();

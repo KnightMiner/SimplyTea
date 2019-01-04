@@ -31,10 +31,10 @@ public class ItemTeaCup extends ItemFood implements IModeledObject {
 		this(name, hunger, (float)saturation, addToTab);
 	}
 
-	public ItemTeaCup(String name, Config.Tea stats, boolean addToTab) {
+	public ItemTeaCup(String name, Config.Tea stats, int level, boolean addToTab) {
 		this(name, stats.hunger, stats.saturation, addToTab);
 		if (stats.caffeinated_time > 0) {
-			this.setPotionEffect(new PotionEffect(SimplyTea.caffeinated, stats.caffeinated_time * 20), 1.0f);
+			this.setPotionEffect(new PotionEffect(SimplyTea.caffeinated, stats.caffeinated_time * 20, level), 1.0f);
 		}
 	}
 	public ItemTeaCup(String name, Config.ChamomileTea stats, boolean addToTab) {
