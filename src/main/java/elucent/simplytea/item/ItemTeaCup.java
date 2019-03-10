@@ -17,11 +17,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemTeaCup extends ItemFood implements IModeledObject {
+	private boolean isRestful;
 	public ItemTeaCup(String name, int hunger, float saturation, boolean addToTab) {
 		super(hunger, saturation, false);
 		setMaxStackSize(1);
 		setRegistryName(SimplyTea.MODID + ":" + name);
 		setUnlocalizedName(name);
+		isRestful = false;
 		if(addToTab) {
 			setCreativeTab(SimplyTea.tab);
 		}
@@ -31,20 +33,18 @@ public class ItemTeaCup extends ItemFood implements IModeledObject {
 		this(name, hunger, (float)saturation, addToTab);
 	}
 
-	public ItemTeaCup(String name, Config.Tea stats, int level, boolean addToTab) {
+	public ItemTeaCup(String name, Config.CaffeineTea stats, int level, boolean addToTab) {
 		this(name, stats.hunger, stats.saturation, addToTab);
 		if (stats.caffeinated_time > 0) {
 			this.setPotionEffect(new PotionEffect(SimplyTea.caffeinated, stats.caffeinated_time * 20, level), 1.0f);
 		}
 	}
-	public ItemTeaCup(String name, Config.ChamomileTea stats, boolean addToTab) {
+	public ItemTeaCup(String name, Config.HerbalTea stats, int seconds, boolean addToTab) {
 		this(name, stats.hunger, stats.saturation, addToTab);
 		if (stats.hearts > 0) {
-			this.setPotionEffect(new PotionEffect(SimplyTea.restful, 600, stats.hearts - 1), 1.0f);
+			isRestful = true;
+			this.setPotionEffect(new PotionEffect(SimplyTea.restful, seconds*20, stats.hearts - 1), 1.0f);
 		}
-	}
-	public ItemTeaCup(String name, Config.FloralTea stats, boolean addToTab) {
-		this(name, stats.hunger, stats.saturation, addToTab);
 	}
 
 	@Override
@@ -97,9 +97,13 @@ public class ItemTeaCup extends ItemFood implements IModeledObject {
     @Override
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
         if (!worldIn.isRemote) {
-        	// used for tea to "cure" restful
+        	// used for caffeinated tea to "cure" restful
 			player.curePotionEffects(stack);
-			super.onFoodEaten(stack, worldIn, player);
+
+	    	// skip restful effect if caffeinated
+	        if (!isRestful || !player.isPotionActive(SimplyTea.caffeinated)) {
+	        	super.onFoodEaten(stack, worldIn, player);
+	        }
         }
     }
 }

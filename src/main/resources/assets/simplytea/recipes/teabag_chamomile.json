@@ -1,16 +1,7 @@
 {
   "conditions": [{
-    "type": "forge:or",
-    "values": [
-      {
-        "type": "forge:mod_loaded",
-        "modid": "rustic"
-      },
-      {
-        "type": "config",
-        "enabled": "force_chamomile"
-      }
-    ]
+    "type": "forge:mod_loaded",
+    "modid": "rustic"
   }],
   "result": {
     "item": "simplytea:teabag_chamomile"

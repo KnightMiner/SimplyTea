@@ -45,8 +45,8 @@ simplytea.config.tea.black=Black Tea
 simplytea.config.tea.green=Green Tea
 simplytea.config.tea.floral=Dandelion Tea
 simplytea.config.tea.chamomile=Chamomile Tea
-simplytea.config.tea.chamomile.hearts=Hearts
-simplytea.config.tea.chamomile.force=Force Load
+simplytea.config.tea.caffeinated_time=Caffeinated Time
+simplytea.config.tea.hearts=Hearts
 
 simplytea.config.tree=Tree
 simplytea.config.tree.enable_generation=Enable Generation

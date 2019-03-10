@@ -12,7 +12,6 @@ import elucent.simplytea.core.WorldGenTeaTrees;
 import elucent.simplytea.item.ItemBase;
 import elucent.simplytea.item.ItemCocoa;
 import elucent.simplytea.item.ItemHotTeapot;
-import elucent.simplytea.item.ItemTeaChamomile;
 import elucent.simplytea.item.ItemTeaCup;
 import elucent.simplytea.item.ItemTeaStick;
 import elucent.simplytea.item.ItemTeapot;
@@ -84,7 +83,7 @@ public class SimplyTea {
 		items.add(cup = new ItemBase("cup", true).setMaxStackSize(16));
 		items.add(cup_tea_black = new ItemTeaCup("cup_tea_black", Config.tea.black, 1, true));
 		items.add(cup_tea_green = new ItemTeaCup("cup_tea_green", Config.tea.green, 1, true));
-		items.add(cup_tea_floral = new ItemTeaCup("cup_tea_floral", Config.tea.floral, true));
+		items.add(cup_tea_floral = new ItemTeaCup("cup_tea_floral", Config.tea.floral, 20, true));
 		items.add(cup_tea_chai = new ItemTeaCup("cup_tea_chai", Config.tea.chai, 2, true));
 		items.add(cup_cocoa = new ItemCocoa("cup_cocoa", true));
 
@@ -92,10 +91,10 @@ public class SimplyTea {
 		items.add(hot_teapot = new ItemHotTeapot("hot_teapot", true));
 		items.add(frothed_teapot = new ItemHotTeapot("frothed_teapot", true));
 
-		// rustic support: chamomile tea
-		if (Loader.isModLoaded("rustic") || Config.tea.chamomile.force) {
+		// rustic support: chamomile tea, better version of floral
+		if (Loader.isModLoaded("rustic")) {
 			items.add(teabag_chamomile = new ItemBase("teabag_chamomile", true));
-			items.add(cup_tea_chamomile = new ItemTeaChamomile("cup_tea_chamomile", true));
+			items.add(cup_tea_chamomile = new ItemTeaCup("cup_tea_chamomile", Config.tea.chamomile, 30, true));
 		}
 
 		blocks.add(tea_sapling = new BlockTeaSapling("tea_sapling", true));

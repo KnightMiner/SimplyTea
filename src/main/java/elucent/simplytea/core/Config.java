@@ -1,19 +1,11 @@
 package elucent.simplytea.core;
 
-import java.util.function.BooleanSupplier;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-
 import elucent.simplytea.SimplyTea;
-import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.RangeDouble;
 import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
-import net.minecraftforge.common.crafting.IConditionFactory;
-import net.minecraftforge.common.crafting.JsonContext;
 
 @net.minecraftforge.common.config.Config(modid = SimplyTea.MODID)
 public class Config {
@@ -32,23 +24,23 @@ public class Config {
 	public static class TeaCategory {
 		@Comment("Stats for floral tea.")
 		@LangKey("simplytea.config.tea.floral")
-		public FloralTea floral = new FloralTea();
+		public HerbalTea floral = new HerbalTea(2, 0.5, 1);
 
 		@Comment("Stats for green tea.")
 		@LangKey("simplytea.config.tea.green")
-		public Tea green = new Tea(3, 0.5, 150);
+		public CaffeineTea green = new CaffeineTea(3, 0.5, 150);
 
 		@Comment("Stats for black tea.")
 		@LangKey("simplytea.config.tea.black")
-		public Tea black = new Tea(4, 0.8, 210);
+		public CaffeineTea black = new CaffeineTea(4, 0.8, 210);
 
 		@Comment("Stats for chai tea.")
 		@LangKey("simplytea.config.tea.green")
-		public Tea chai = new Tea(5, 0.6, 150);
+		public CaffeineTea chai = new CaffeineTea(5, 0.6, 150);
 
-		@Comment("Stats and effects for chamomile tea.")
+		@Comment("Stats and effects for chamomile tea, added when Rustic is loaded.")
 		@LangKey("simplytea.config.tea.chamomile")
-		public ChamomileTea chamomile = new ChamomileTea();
+		public HerbalTea chamomile = new HerbalTea(2, 0.5, 2);
 
 		@Comment("Stats and effects for cocoa.")
 		@LangKey("simplytea.config.tea.cocoa")
@@ -82,22 +74,8 @@ public class Config {
 		public double sapling_chance = 0.1;
 	}
 
-	public static class FloralTea {
-		@RequiresMcRestart
-		@Comment("Hunger restored when drinking this tea.")
-		@RangeInt(min = 0, max = 20)
-		@LangKey("simplytea.config.tea.hunger")
-		public int hunger = 2;
-
-		@RequiresMcRestart
-		@Comment("Saturation restored when drinking this tea")
-		@RangeDouble(min = 0, max = 10)
-		@LangKey("simplytea.config.tea.saturation")
-		public double saturation = 0.5;
-	}
-
-	public static class Tea {
-		private Tea(int defaultHunger, double defaultSaturation, int caffeinatedTime) {
+	public static class CaffeineTea {
+		private CaffeineTea(int defaultHunger, double defaultSaturation, int caffeinatedTime) {
 			this.hunger = defaultHunger;
 			this.saturation = defaultSaturation;
 			this.caffeinated_time = caffeinatedTime;
@@ -122,6 +100,32 @@ public class Config {
 		public int caffeinated_time;
 	}
 
+	public static class HerbalTea {
+		private HerbalTea(int defaultHunger, double defaultSaturation, int hearts) {
+			this.hunger = defaultHunger;
+			this.saturation = defaultSaturation;
+			this.hearts = hearts;
+		}
+
+		@RequiresMcRestart
+		@Comment("Hunger restored when drinking this tea.")
+		@RangeInt(min = 0, max = 20)
+		@LangKey("simplytea.config.tea.hunger")
+		public int hunger;
+
+		@RequiresMcRestart
+		@Comment("Saturation restored when drinking this tea")
+		@RangeDouble(min = 0, max = 10)
+		@LangKey("simplytea.config.tea.saturation")
+		public double saturation;
+
+		@RequiresMcRestart
+		@Comment("Hearts restored when sleeping after drinking this tea.")
+		@RangeInt(min = 0, max = 10)
+		@LangKey("simplytea.config.tea.herbal.hearts")
+		public int hearts;
+	}
+
 	public static class Cocoa {
 		@RequiresMcRestart
 		@Comment("Hunger restored when drinking this tea.")
@@ -138,48 +142,5 @@ public class Config {
 		@Comment("If true, drinking cocoa clears status effects like milk")
 		@LangKey("simplytea.config.tea.cocoa.clear_effects")
 		public boolean clear_effects = true;
-	}
-
-	public static class ChamomileTea {
-		@RequiresMcRestart
-		@Comment("Hunger restored when drinking this tea.")
-		@RangeInt(min = 0, max = 20)
-		@LangKey("simplytea.config.tea.hunger")
-		public int hunger = 2;
-
-		@RequiresMcRestart
-		@Comment("Saturation restored when drinking this tea")
-		@RangeDouble(min = 0, max = 10)
-		@LangKey("simplytea.config.tea.saturation")
-		public double saturation = 0.5;
-
-		@RequiresMcRestart
-		@Comment("Hearts restored when sleeping after drinking chamomile tea.")
-		@RangeInt(min = 0, max = 10)
-		@LangKey("simplytea.config.tea.chamomile.hearts")
-		public int hearts = 2;
-
-		@RequiresMcRestart
-		@Comment("Loads chamomile tea regardless of if Rustic is loaded. Uses oxeye daisy to craft if Rustic is missing")
-		@LangKey("simplytea.config.tea.chamomile.force")
-		public boolean force = false;
-	}
-
-	public static class ConditionConfig implements IConditionFactory {
-		@Override
-		public BooleanSupplier parse(JsonContext context, JsonObject json) {
-			String enabled = JsonUtils.getString(json, "enabled");
-			return () -> configEnabled(enabled);
-		}
-
-		// this is just so I am not doing () -> each time really, I'm lazy :)
-		private static boolean configEnabled(String config) {
-			switch(config) {
-				case "force_chamomile":
-					return tea.chamomile.force;
-			}
-
-			throw new JsonSyntaxException("Config option '" + config + "' does not exist");
-		}
 	}
 }
