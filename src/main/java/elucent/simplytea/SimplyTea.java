@@ -140,14 +140,15 @@ public class SimplyTea {
 
 	@SubscribeEvent
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-		// if Tinkers Construct is loaded, register black tea as a drying rack recipe as its more realistic
-		if(Loader.isModLoaded("tconstruct")) {
-			IMCHelper.addTinkersDrying(new ItemStack(leaf_tea), new ItemStack(black_tea), 5*60);
-		} else {
-			GameRegistry.addSmelting(leaf_tea, new ItemStack(black_tea, 1), 0.1f);
-		}
+
 		GameRegistry.addSmelting(new ItemStack(teapot, 1, 1), new ItemStack(hot_teapot, 1, 4), 0.1f);
 		GameRegistry.addSmelting(new ItemStack(teapot, 1, 2), new ItemStack(frothed_teapot, 1, 4), 0.1f);
+
+		GameRegistry.addSmelting(leaf_tea, new ItemStack(black_tea, 1), 0.1f);
+		// if Tinkers Construct is loaded, allow drying tea on a drying rack as well
+		if(Loader.isModLoaded("tconstruct")) {
+			IMCHelper.addTinkersDrying(new ItemStack(leaf_tea), new ItemStack(black_tea), 5*60);
+		}
 
 		OreDictionary.registerOre("treeSapling", tea_sapling);
 		OreDictionary.registerOre("stickWood", tea_stick);
