@@ -22,6 +22,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
@@ -32,7 +33,7 @@ public class ItemTeapot extends ItemBase {
 	public ItemTeapot(String name, boolean addToTab) {
 		super(name, addToTab);
 		setMaxStackSize(1);
-		this.hasSubtypes = true;
+        this.setHasSubtypes(true);
 	}
 
 	@Override
@@ -109,9 +110,6 @@ public class ItemTeapot extends ItemBase {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		if (stack.getItemDamage() == 0) {
-			return new TeapotFluidHandler(stack);
-		}
-		return null;
+		return new TeapotFluidHandler(stack);
 	}
 }

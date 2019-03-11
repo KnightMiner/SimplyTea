@@ -25,14 +25,13 @@ public class TeapotFluidHandler implements ICapabilityProvider, IFluidHandlerIte
 
 	@Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-		// full pots do not have a fluid handler, the pot can only be filled
-        return stack.getItemDamage() == 0 && capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
     }
 
     @Override
     @Nullable
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(stack.getItemDamage() == 0 && capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY) {
+        if(capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY) {
             return CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY.cast(this);
         }
         return null;
@@ -40,7 +39,17 @@ public class TeapotFluidHandler implements ICapabilityProvider, IFluidHandlerIte
 
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
-		return new IFluidTankProperties[] {new FluidTankProperties(null, Fluid.BUCKET_VOLUME)};
+		FluidStack fluid = null;
+		int meta = stack.getMetadata();
+		if (meta == 1) {
+			fluid = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
+		} else if (meta == 2) {
+			Fluid milk = FluidRegistry.getFluid("milk");
+			if (milk != null) {
+				fluid = new FluidStack(milk, Fluid.BUCKET_VOLUME);
+			}
+		}
+		return new IFluidTankProperties[] {new FluidTankProperties(fluid, Fluid.BUCKET_VOLUME)};
 	}
 
     @Override
@@ -75,6 +84,6 @@ public class TeapotFluidHandler implements ICapabilityProvider, IFluidHandlerIte
 
 	@Override
 	public ItemStack getContainer() {
-		return stack;
+		return new ItemStack(SimplyTea.teapot);
 	}
 }
