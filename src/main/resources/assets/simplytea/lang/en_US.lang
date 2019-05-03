@@ -7,6 +7,7 @@ item.leaf_tea.name=Tea Leaf
 item.black_tea.name=Black Tea
 item.tea_stick.name=Tea Stick
 item.tea_stick.tooltip=Sweet like cinnamon!
+item.chorus_petal.name=Chorus Petal
 
 item.cup.name=Tea Cup
 item.cup_water.name=Cup of Water
@@ -15,6 +16,7 @@ item.cup_tea_black.name=Cup of Black Tea
 item.cup_tea_floral.name=Cup of Dandelion Tea
 item.cup_tea_chai.name=Cup of Chai Tea
 item.cup_tea_chamomile.name=Cup of Chamomile Tea
+item.cup_tea_chorus.name=Cup of Chorus Tea
 item.cup_cocoa.name=Cup of Hot Chocolate
 
 item.teabag.name=Tea Bag
@@ -22,6 +24,7 @@ item.teabag_green.name=Green Tea Bag
 item.teabag_black.name=Black Tea Bag
 item.teabag_floral.name=Dandelion Tea Bag
 item.teabag_chamomile.name=Chamomile Tea Bag
+item.teabag_chorus.name=Chorus Tea Bag
 
 item.teapot.name=Teapot
 item.teapot.tooltip.empty=Empty!
@@ -34,6 +37,7 @@ item.frothed_teapot.tooltip=Frothed milk!
 
 simplytea.effect.restful=Restful
 simplytea.effect.caffeinated=Caffeinated
+simplytea.effect.enderfalling=Enderfalling
 
 
 simplytea.config.teapot_consume_source=Teapot Comsume Water Source
@@ -46,6 +50,7 @@ simplytea.config.tea.green=Green Tea
 simplytea.config.tea.floral=Dandelion Tea
 simplytea.config.tea.chamomile=Chamomile Tea
 simplytea.config.tea.caffeinated_time=Caffeinated Time
+simplytea.config.tea.enderfalling=Enderfalling Time
 simplytea.config.tea.hearts=Hearts
 
 simplytea.config.tree=Tree

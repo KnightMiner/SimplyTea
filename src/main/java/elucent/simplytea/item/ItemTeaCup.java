@@ -2,6 +2,7 @@ package elucent.simplytea.item;
 
 import elucent.simplytea.SimplyTea;
 import elucent.simplytea.core.Config;
+import elucent.simplytea.core.Config.ChorusTea;
 import elucent.simplytea.core.IModeledObject;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
@@ -44,6 +45,13 @@ public class ItemTeaCup extends ItemFood implements IModeledObject {
 		if (stats.hearts > 0) {
 			isRestful = true;
 			this.setPotionEffect(new PotionEffect(SimplyTea.restful, seconds*20, stats.hearts - 1), 1.0f);
+		}
+	}
+
+	public ItemTeaCup(String name, ChorusTea stats, boolean addToTab) {
+		this(name, stats.hunger, stats.saturation, addToTab);
+		if (stats.enderfalling_time > 0) {
+			this.setPotionEffect(new PotionEffect(SimplyTea.enderfalling, stats.enderfalling_time*20, 0), 1.0f);
 		}
 	}
 

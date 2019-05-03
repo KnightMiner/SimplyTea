@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "simplytea:teabag_chorus"
+  },
+  "group": "simplytea:teabag_chorus",
+  "ingredients": [
+    {"item": "simplytea:teabag"},
+    {"item": "simplytea:chorus_petal"},
+    {"item": "simplytea:chorus_petal"}
+  ],
+  "type": "forge:ore_shapeless"
+}
