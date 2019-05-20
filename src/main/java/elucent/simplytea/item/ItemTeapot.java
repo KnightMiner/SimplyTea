@@ -30,6 +30,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -103,6 +105,7 @@ public class ItemTeapot extends ItemBase {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		String name = getRegistryName().getPath();
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));

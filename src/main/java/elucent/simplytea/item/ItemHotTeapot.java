@@ -9,6 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -45,6 +47,7 @@ public class ItemHotTeapot extends ItemBase {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		for (int i = 0; i <= 4; i++) {
 			ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation(getRegistryName(), "inventory"));
