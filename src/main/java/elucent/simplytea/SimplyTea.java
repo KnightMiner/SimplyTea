@@ -2,6 +2,9 @@ package elucent.simplytea;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import elucent.simplytea.block.BlockTeaFence;
+import elucent.simplytea.block.BlockTeaFenceGate;
 import elucent.simplytea.block.BlockTeaSapling;
 import elucent.simplytea.block.BlockTeaTrunk;
 import elucent.simplytea.block.IItemBlock;
@@ -64,7 +67,7 @@ public class SimplyTea {
 	private static List<Item> items = new ArrayList<Item>();
 	private static List<Block> blocks = new ArrayList<Block>();
 
-	public static Block tea_sapling, tea_trunk;
+	public static Block tea_sapling, tea_trunk, tea_fence, tea_fence_gate;
 	public static Item leaf_tea, black_tea, tea_stick, chorus_petal;
 	public static Item teabag, teabag_green, teabag_black, teabag_floral, teabag_chorus, teabag_chamomile;
 	public static Item cup, cup_tea_black, cup_tea_green, cup_tea_floral, cup_tea_chai, cup_tea_chorus, cup_tea_chamomile, cup_cocoa;
@@ -110,7 +113,8 @@ public class SimplyTea {
 
 		blocks.add(tea_sapling = new BlockTeaSapling("tea_sapling", true));
 		blocks.add(tea_trunk = new BlockTeaTrunk("tea_trunk", false));
-
+		blocks.add(tea_fence = new BlockTeaFence("tea_fence"));
+		blocks.add(tea_fence_gate = new BlockTeaFenceGate("tea_fence_gate"));
 		if(Config.tree.enable_generation) {
 			GameRegistry.registerWorldGenerator(new WorldGenTeaTrees(), 100);
 		}

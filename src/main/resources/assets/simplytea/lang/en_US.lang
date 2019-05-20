@@ -2,6 +2,8 @@ itemGroup.simplytea=Simply Tea!
 
 tile.tea_sapling.name=Tea Sapling
 tile.tea_trunk.name=Tea Trunk
+tile.tea_fence.name=Tea Fence
+tile.tea_fence_gate.name=Tea Fence Gate
 
 item.leaf_tea.name=Tea Leaf
 item.black_tea.name=Black Tea

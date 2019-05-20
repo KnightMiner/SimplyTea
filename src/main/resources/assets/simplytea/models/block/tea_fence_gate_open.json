@@ -1,0 +1,95 @@
+{ "textures": {
+    "particle": "simplytea:blocks/tea_fence_gate",
+    "texture": "simplytea:blocks/tea_fence_gate"
+  },
+  "elements": [
+    { "name": "Left-hand post",
+      "from": [0, 5, 7],
+      "to": [2, 16, 9],
+      "faces": {
+        "north": {"uv": [14,  0, 16, 11], "texture": "#texture"},
+        "east":  {"uv": [14,  0, 16, 11], "texture": "#texture"},
+        "south": {"uv": [ 0,  0,  2, 11], "texture": "#texture"},
+        "west":  {"uv": [ 0,  0,  2, 11], "texture": "#texture", "cullface": "west"},
+        "up":    {"uv": [ 0, 11,  2, 13], "texture": "#texture"},
+        "down":  {"uv": [ 0, 14,  2, 16], "texture": "#texture"}
+      }
+    },
+    { "name": "Right-hand post",
+      "from": [14, 5, 7],
+      "to": [16, 16, 9],
+      "faces": {
+        "north": {"uv": [ 0,  0,  2, 11], "texture": "#texture"},
+        "east":  {"uv": [14,  0, 16, 11], "texture": "#texture"},
+        "south": {"uv": [14,  0, 16, 11], "texture": "#texture"},
+        "west":  {"uv": [ 0,  0,  2, 11], "texture": "#texture"},
+        "up":    {"uv": [14, 11, 16, 13], "texture": "#texture"},
+        "down":  {"uv": [14, 14, 16, 16], "texture": "#texture"}
+      }
+    },
+    { "name": "Inner vertical post of left-hand gate door",
+      "from": [0, 6, 13],
+      "to": [2, 15, 15],
+      "faces": {
+        "north": {"uv": [8,  1, 10, 10], "texture": "#texture"},
+        "east":  {"uv": [8,  1, 10, 10], "texture": "#texture"},
+        "south": {"uv": [7,  1,  9, 10], "texture": "#texture"},
+        "west":  {"uv": [6,  1,  8, 10], "texture": "#texture"},
+        "up":    {"uv": [6, 11,  8, 13], "texture": "#texture", "rotation":  90},
+        "down":  {"uv": [6, 14,  8, 16], "texture": "#texture", "rotation": 270}
+      }
+    },
+    { "name": "Inner vertical post of right-hand gate door",
+      "from": [14, 6, 13],
+      "to": [16, 15, 15],
+      "faces": {
+        "north": {"uv": [6,  1,  8, 10], "texture": "#texture"},
+        "east":  {"uv": [8,  1, 10, 10], "texture": "#texture"},
+        "south": {"uv": [7,  1,  9, 10], "texture": "#texture"},
+        "west":  {"uv": [6,  1,  8, 10], "texture": "#texture"},
+        "up":    {"uv": [8, 11, 10, 13], "texture": "#texture", "rotation": 270},
+        "down":  {"uv": [8, 14, 10, 16], "texture": "#texture", "rotation":  90}
+      }
+    },
+    { "name": "Lower horizontal bar of left-hand gate door",
+      "from": [0, 6, 9],
+      "to": [2, 9, 13],
+      "faces": {
+        "east": {"uv": [10,  7, 14, 10], "texture": "#texture"},
+        "west": {"uv": [ 2,  7,  6, 10], "texture": "#texture"},
+        "up":   {"uv": [ 2, 11,  6, 13], "texture": "#texture", "rotation":  90},
+        "down": {"uv": [ 2, 14,  6, 16], "texture": "#texture", "rotation": 270}
+      }
+    },
+    { "name": "Upper horizontal bar of left-hand gate door",
+      "from": [0, 12, 9],
+      "to": [2, 15, 13],
+      "faces": {
+        "east": {"uv": [10,  1, 14,  4], "texture": "#texture"},
+        "west": {"uv": [ 2,  1,  6,  4], "texture": "#texture"},
+        "up":   {"uv": [ 2, 11,  6, 13], "texture": "#texture", "rotation":  90},
+        "down": {"uv": [ 2, 14,  6, 16], "texture": "#texture", "rotation": 270}
+      }
+    },
+    { "name": "Lower horizontal bar of left-hand gate door",
+      "from": [14, 6, 9],
+      "to": [16, 9, 13],
+      "faces": {
+        "east": {"uv": [10,  7, 14, 10], "texture": "#texture"},
+        "west": {"uv": [ 2,  7,  6, 10], "texture": "#texture"},
+        "up":   {"uv": [10, 11, 14, 13], "texture": "#texture", "rotation": 270},
+        "down": {"uv": [10, 14, 14, 16], "texture": "#texture", "rotation":  90}
+      }
+    },
+    { "name": "Upper horizontal bar of left-hand gate door",
+      "from": [14, 12, 9],
+      "to": [16, 15, 13],
+      "faces": {
+        "east": {"uv": [10,  1, 14,  4], "texture": "#texture"},
+        "west": {"uv": [ 2,  1,  6,  4], "texture": "#texture"},
+        "up":   {"uv": [10, 11, 14, 13], "texture": "#texture", "rotation": 270},
+        "down": {"uv": [10, 14, 14, 16], "texture": "#texture", "rotation":  90}
+      }
+    }
+  ]
+}

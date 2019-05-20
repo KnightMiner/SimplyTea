@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "simplytea:tea_fence",
+    "data": 0,
+    "count": 2
+  },
+  "group": "simplytea:tea_fence",
+  "pattern": [
+    "sss",
+    "sss"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "s": { "item": "simplytea:tea_stick" }
+  }
+}
