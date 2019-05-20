@@ -81,11 +81,13 @@ public class BlockTeaSapling extends BlockBush implements IGrowable, IModeledObj
 	}
 
 	@Override
+	@Deprecated
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}

@@ -77,7 +77,7 @@ public class ItemTeapot extends ItemBase {
 
 	@Override
 	public void initModel() {
-		String name = getRegistryName().getResourcePath();
+		String name = getRegistryName().getPath();
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(new ResourceLocation(SimplyTea.MODID, name + "_water"), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(this, 2, new ModelResourceLocation(new ResourceLocation(SimplyTea.MODID, name + "_milk"), "inventory"));
@@ -87,13 +87,13 @@ public class ItemTeapot extends ItemBase {
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		switch(stack.getMetadata()) {
 		case 0:
-			tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip.empty"));
+			tooltip.add(I18n.format(this.getTranslationKey() + ".tooltip.empty"));
 			break;
 		case 1:
-			tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip.water"));
+			tooltip.add(I18n.format(this.getTranslationKey() + ".tooltip.water"));
 			break;
 		case 2:
-			tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip.milk"));
+			tooltip.add(I18n.format(this.getTranslationKey() + ".tooltip.milk"));
 			break;
 		}
 	}

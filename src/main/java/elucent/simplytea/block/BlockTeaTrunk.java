@@ -29,6 +29,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Locale;
 import java.util.Random;
@@ -186,14 +188,13 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-
-	}
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {}
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {

@@ -20,6 +20,6 @@ public class ItemTeaStick extends ItemBase {
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip"));
+		tooltip.add(I18n.format(this.getTranslationKey() + ".tooltip"));
 	}
 }

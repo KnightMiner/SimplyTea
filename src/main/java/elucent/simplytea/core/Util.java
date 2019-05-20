@@ -19,7 +19,7 @@ public final class Util {
     public static Item init(Block block, String name, boolean addToTab) {
         ResourceLocation loc = new ResourceLocation(SimplyTea.MODID, name);
         block.setRegistryName(loc);
-        block.setUnlocalizedName(name);
+        block.setTranslationKey(name);
         if(addToTab) {
             block.setCreativeTab(SimplyTea.tab);
         }
@@ -35,7 +35,7 @@ public final class Util {
      */
     public static void init(Item item, String name, boolean addToTab) {
         item.setRegistryName(new ResourceLocation(SimplyTea.MODID, name));
-        item.setUnlocalizedName(name);
+        item.setTranslationKey(name);
         if(addToTab) {
             item.setCreativeTab(SimplyTea.tab);
         }

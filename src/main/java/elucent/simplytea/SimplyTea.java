@@ -59,7 +59,7 @@ public class SimplyTea {
 
 	public static CreativeTabs tab = new CreativeTabs("simplytea") {
 		@Override
-		public ItemStack getTabIconItem() {
+		public ItemStack createIcon() {
 			return new ItemStack(SimplyTea.leaf_tea);
 		}
 	};
