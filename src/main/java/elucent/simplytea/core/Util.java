@@ -2,9 +2,15 @@ package elucent.simplytea.core;
 
 import elucent.simplytea.SimplyTea;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.IFluidBlock;
 
 public final class Util {
     private Util () {}
@@ -39,5 +45,26 @@ public final class Util {
         if(addToTab) {
             item.setCreativeTab(SimplyTea.tab);
         }
+    }
+
+    /**
+     * Gets a fluid from a block state liquid
+     * @param state  State to check for fluid
+     * @return  Fluid from this block state, or null if none
+     */
+    public static Fluid getFluid(IBlockState state) {
+        Block block = state.getBlock();
+        if(block instanceof IFluidBlock) {
+            return ((IFluidBlock)block).getFluid();
+        } else if(block instanceof BlockLiquid && state.getValue(BlockLiquid.LEVEL) == 0) {
+            Material material = state.getMaterial();
+            if(material == Material.WATER) {
+                return FluidRegistry.WATER;
+            }
+            if(material == Material.LAVA) {
+                return FluidRegistry.LAVA;
+            }
+        }
+        return null;
     }
 }

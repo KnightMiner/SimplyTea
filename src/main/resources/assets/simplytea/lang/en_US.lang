@@ -41,9 +41,6 @@ simplytea.effect.restful=Restful
 simplytea.effect.caffeinated=Caffeinated
 simplytea.effect.enderfalling=Enderfalling
 
-
-simplytea.config.teapot_consume_source=Teapot Comsume Water Source
-
 simplytea.config.tea=Tea
 simplytea.config.tea.hunger=Hunger
 simplytea.config.tea.saturation=Saturation
@@ -54,6 +51,13 @@ simplytea.config.tea.chamomile=Chamomile Tea
 simplytea.config.tea.caffeinated_time=Caffeinated Time
 simplytea.config.tea.enderfalling=Enderfalling Time
 simplytea.config.tea.hearts=Hearts
+
+simplytea.config.teapot=Teapot
+simplytea.config.teapot.infinite_water=Infinite Water
+simplytea.config.teapot.fill_from_cauldron=Fill From Cauldrons
+simplytea.config.teapot.milk_cows=Milk Cows
+simplytea.config.teapot.waters=Waters
+simplytea.config.teapot.milks=Milks
 
 simplytea.config.tree=Tree
 simplytea.config.tree.enable_generation=Enable Generation

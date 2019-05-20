@@ -42,6 +42,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEve
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -75,7 +76,7 @@ public class SimplyTea {
 	public static Potion restful, caffeinated, enderfalling;
 
 	@EventHandler
-	public void preinit(FMLPreInitializationEvent event) {
+	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
 
 		caffeinated = new PotionCaffeinated("caffeinated").setCustomIcon(1, 0);
@@ -120,10 +121,16 @@ public class SimplyTea {
 		}
 	}
 
+	@EventHandler
+	public void init(FMLInitializationEvent event) {
+		Config.parse();
+	}
+
     @SubscribeEvent
     public void onConfigChangedEvent(OnConfigChangedEvent event) {
         if (event.getModID().equals(MODID)) {
             ConfigManager.sync(MODID, Type.INSTANCE);
+			Config.parse();
         }
     }
 

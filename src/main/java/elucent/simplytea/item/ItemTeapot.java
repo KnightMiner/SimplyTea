@@ -2,6 +2,8 @@ package elucent.simplytea.item;
 
 import elucent.simplytea.SimplyTea;
 import elucent.simplytea.core.Config;
+import elucent.simplytea.core.Util;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,11 +22,14 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import java.util.List;
 
@@ -36,26 +41,48 @@ public class ItemTeapot extends ItemBase {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 		if(stack.getMetadata() == 0) {
-			RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, true);
-			if(raytraceresult != null && raytraceresult.typeOfHit == Type.BLOCK) {
-				IBlockState state = worldIn.getBlockState(raytraceresult.getBlockPos());
-				// if consuming source, must be a source
-				if(state.getBlock() == Blocks.WATER) {
+			RayTraceResult trace = this.rayTrace(world, player, true);
+			if (trace != null && trace.typeOfHit == Type.BLOCK) {
+				BlockPos pos = trace.getBlockPos();
+				IBlockState state = world.getBlockState(pos);
+				Block block = state.getBlock();
+
+				// try filling from the cauldron
+				if (Config.teapot.fill_from_cauldron && block == Blocks.CAULDRON && state.getValue(BlockCauldron.LEVEL) == 3) {
 					stack.setItemDamage(1);
-					playerIn.setHeldItem(handIn, stack);
-					if(Config.teapot_consume_source) {
-						worldIn.setBlockToAir(raytraceresult.getBlockPos());
-					}
+					player.setHeldItem(hand, stack);
+					Blocks.CAULDRON.setWaterLevel(world, pos, state, 0);
 					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 				}
-				else if (state.getBlock() == Blocks.CAULDRON && state.getValue(BlockCauldron.LEVEL) == 3) {
-					stack.setItemDamage(1);
-					playerIn.setHeldItem(handIn, stack);
-					Blocks.CAULDRON.setWaterLevel(worldIn, raytraceresult.getBlockPos(), state, 0);
-					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+
+				// we use name for lookup to prevent default fluid conflicts
+				Fluid fluid = Util.getFluid(state);
+				if(fluid != null) {
+					// try for water or milk using the config lists
+					String name = fluid.getName();
+					int meta = 0;
+					if (Config.teapot.waterSet.contains(name)) {
+						meta = 1;
+					} else if(Config.teapot.milkSet.contains(name)) {
+						meta = 2;
+					}
+
+					// if either one is found, update the stack
+					if(meta > 0) {
+						// water is considered infinite unless disabled in the config
+						if(!(Config.teapot.infinite_water && fluid == FluidRegistry.WATER)) {
+							world.setBlockToAir(pos);
+						}
+
+						// update the item
+						stack.setItemDamage(meta);
+						player.setHeldItem(hand, stack);
+						player.playSound(fluid.getFillSound(), 1.0f, 1.0f);
+						return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+					}
 				}
 			}
 		}
@@ -64,8 +91,8 @@ public class ItemTeapot extends ItemBase {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-		// only work if the bucket is empty and right clicking a cow
-		if(stack.getMetadata() == 0 && target instanceof EntityCow && !player.capabilities.isCreativeMode) {
+		// only work if the teapot is empty and right clicking a cow
+		if(Config.teapot.milk_cow && stack.getMetadata() == 0 && target instanceof EntityCow && !player.capabilities.isCreativeMode) {
 			// sound
 			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
 			// fill with milk

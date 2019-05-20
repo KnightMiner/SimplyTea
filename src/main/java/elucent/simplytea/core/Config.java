@@ -2,20 +2,25 @@ package elucent.simplytea.core;
 
 import elucent.simplytea.SimplyTea;
 import net.minecraftforge.common.config.Config.Comment;
+import net.minecraftforge.common.config.Config.Ignore;
 import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.RangeDouble;
 import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 @net.minecraftforge.common.config.Config(modid = SimplyTea.MODID)
 public class Config {
-	@Comment("If true, filling a teapot consumes the water source block. Useful for packs with finite water.")
-	@LangKey("simplytea.config.teapot_consume_source")
-	public static boolean teapot_consume_source = false;
-
 	@Comment("Hunger restored from tea")
 	@LangKey("simplytea.config.tea")
 	public static TeaCategory tea = new TeaCategory();
+
+	@Comment("Options related to filling the teapot")
+	@LangKey("simplytea.config.teapot")
+	public static TeapotCategory teapot = new TeapotCategory();
 
 	@Comment("Options related to the tea tree")
 	@LangKey("simplytea.config.tree")
@@ -172,5 +177,43 @@ public class Config {
 		@Comment("If true, drinking cocoa clears status effects like milk")
 		@LangKey("simplytea.config.tea.cocoa.clear_effects")
 		public boolean clear_effects = true;
+	}
+
+	public static class TeapotCategory {
+		@Comment("If true, the teapot will not consume water source blocks when filling. It will still consume water from tank and cauldrons")
+		@LangKey("simplytea.config.teapot.infinite_water")
+		public boolean infinite_water = true;
+
+		@Comment("If true, the teapot can be filled with water from a cauldron")
+		@LangKey("simplytea.config.teapot.fill_from_cauldron")
+		public boolean fill_from_cauldron = true;
+
+		@Comment("If true, the teapot can be filled with milk using a cow")
+		@LangKey("simplytea.config.teapot.milk_cow")
+		public boolean milk_cow = true;
+
+		@Comment("List of fluid IDs treated as water for filling the teapot")
+		@LangKey("simplytea.config.teapot.waters")
+		public String[] waters = {"water"};
+
+		@Ignore
+		public final Set<String> waterSet = new HashSet<>();
+
+		@Comment("List of fluid IDs treated as milk for filling the teapot")
+		@LangKey("simplytea.config.teapot.milks")
+		public String[] milks = {"milk"};
+
+		@Ignore
+		public final Set<String> milkSet = new HashSet<>();
+	}
+
+	/**
+	 * Called to convert some config members into more efficient Java objects
+	 */
+	public static void parse() {
+		teapot.waterSet.clear();
+		teapot.waterSet.addAll(Arrays.asList(teapot.waters));
+		teapot.milkSet.clear();
+		teapot.milkSet.addAll(Arrays.asList(teapot.milks));
 	}
 }

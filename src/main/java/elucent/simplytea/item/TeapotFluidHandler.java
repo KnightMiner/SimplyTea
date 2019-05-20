@@ -1,9 +1,7 @@
 package elucent.simplytea.item;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import elucent.simplytea.SimplyTea;
+import elucent.simplytea.core.Config;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -15,6 +13,9 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TeapotFluidHandler implements ICapabilityProvider, IFluidHandlerItem {
 
@@ -40,33 +41,42 @@ public class TeapotFluidHandler implements ICapabilityProvider, IFluidHandlerIte
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
 		FluidStack fluid = null;
+
+		// Check contained fluid if meta not 0
 		int meta = stack.getMetadata();
-		if (meta == 1) {
-			fluid = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
-		} else if (meta == 2) {
-			Fluid milk = FluidRegistry.getFluid("milk");
-			if (milk != null) {
-				fluid = new FluidStack(milk, Fluid.BUCKET_VOLUME);
+		if(meta > 0) {
+			// determine what fluids we ha
+			String[] fluidNames = meta == 2 ? Config.teapot.milks : Config.teapot.waters;
+			if (fluidNames.length != 0) {
+				// if we find the fluid, return that
+				Fluid registered = FluidRegistry.getFluid(fluidNames[0]);
+				if(registered != null) {
+					fluid = new FluidStack(registered, Fluid.BUCKET_VOLUME);
+				}
 			}
 		}
+
 		return new IFluidTankProperties[] {new FluidTankProperties(fluid, Fluid.BUCKET_VOLUME)};
 	}
 
     @Override
     public int fill(FluidStack resource, boolean doFill) {
     	// must be empty and bucket amount
-        if (stack.getItemDamage() != 0 || resource == null || resource.amount < Fluid.BUCKET_VOLUME) {
+        if (stack.getItemDamage() != 0 || resource == null || resource.getFluid() == null || resource.amount < Fluid.BUCKET_VOLUME) {
         	return 0;
         }
 
     	// only fill with water or milk
-        Fluid fluid = resource.getFluid();
-        if (fluid != FluidRegistry.WATER && !fluid.getName().equals("milk")) {
+        String fluid = resource.getFluid().getName();
+        int meta = 2; // assume milk to start, we still end up allowing water past first
+        if (Config.teapot.waterSet.contains(fluid)) {
+			meta = 1;
+        } else if(!Config.teapot.milkSet.contains(fluid)) {
         	return 0;
-        }
+		}
 
         if (doFill) {
-            stack = new ItemStack(SimplyTea.teapot, 1, fluid == FluidRegistry.WATER ? 1 : 2);
+            stack = new ItemStack(SimplyTea.teapot, 1, meta);
         }
 
         return Fluid.BUCKET_VOLUME;
@@ -84,6 +94,6 @@ public class TeapotFluidHandler implements ICapabilityProvider, IFluidHandlerIte
 
 	@Override
 	public ItemStack getContainer() {
-		return new ItemStack(SimplyTea.teapot);
+		return stack;
 	}
 }
