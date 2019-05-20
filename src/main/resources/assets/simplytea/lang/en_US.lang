@@ -6,10 +6,13 @@ tile.tea_fence.name=Tea Fence
 tile.tea_fence_gate.name=Tea Fence Gate
 
 item.leaf_tea.name=Tea Leaf
+item.leaf_tea.tooltip=Pleasant aroma!
 item.black_tea.name=Black Tea
+item.black_tea.tooltip=Fermented!
 item.tea_stick.name=Tea Stick
 item.tea_stick.tooltip=Sweet like cinnamon!
 item.chorus_petal.name=Chorus Petal
+item.chorus_petal.tooltip=Mystical!
 
 item.cup.name=Tea Cup
 item.cup_water.name=Cup of Water

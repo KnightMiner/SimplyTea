@@ -15,6 +15,7 @@ import elucent.simplytea.item.ItemHotTeapot;
 import elucent.simplytea.item.ItemTeaCup;
 import elucent.simplytea.item.ItemTeaStick;
 import elucent.simplytea.item.ItemTeapot;
+import elucent.simplytea.item.ItemTooltip;
 import elucent.simplytea.potion.PotionCaffeinated;
 import elucent.simplytea.potion.PotionEnderfalling;
 import elucent.simplytea.potion.PotionRestful;
@@ -83,10 +84,10 @@ public class SimplyTea {
 		restful = new PotionRestful("restful").setCustomIcon(0, 0);
 		enderfalling = new PotionEnderfalling("enderfalling").setCustomIcon(2, 0);
 
-		items.add(leaf_tea = new ItemBase("leaf_tea", true));
-		items.add(black_tea = new ItemBase("black_tea", true));
+		items.add(leaf_tea = new ItemTooltip("leaf_tea"));
+		items.add(black_tea = new ItemTooltip("black_tea"));
 		items.add(tea_stick = new ItemTeaStick("tea_stick"));
-		items.add(chorus_petal = new ItemBase("chorus_petal", true));
+		items.add(chorus_petal = new ItemTooltip("chorus_petal"));
 
 		items.add(teabag = new ItemBase("teabag", true));
 		items.add(teabag_green = new ItemBase("teabag_green", true));
