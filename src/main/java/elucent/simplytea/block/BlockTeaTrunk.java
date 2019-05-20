@@ -199,24 +199,17 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		addTeaDrops(drops, state);
-		drops.add(new ItemStack(SimplyTea.tea_stick, randomCount(Config.tree.max_sticks)));
+		drops.add(new ItemStack(SimplyTea.tea_stick, Util.randomCount(RANDOM, Config.tree.max_sticks)));
 	}
 
 	private NonNullList<ItemStack> addTeaDrops(NonNullList<ItemStack> drops, IBlockState state) {
 		if(state.getValue(TYPE) != TrunkType.STUMP && !state.getValue(CLIPPED)) {
-			drops.add(new ItemStack(SimplyTea.leaf_tea, randomCount(Config.tree.max_leaves)));
+			drops.add(new ItemStack(SimplyTea.leaf_tea, Util.randomCount(RANDOM, Config.tree.max_leaves)));
 			if(RANDOM.nextFloat() < Config.tree.sapling_chance) {
 				drops.add(new ItemStack(SimplyTea.tea_sapling, 1));
 			}
 		}
 		return drops;
-	}
-
-	private static int randomCount(int max) {
-		if(max == 1) {
-			return 1;
-		}
-		return 1 + RANDOM.nextInt(max);
 	}
 
 	@Override

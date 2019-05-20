@@ -8,6 +8,7 @@ import elucent.simplytea.block.IItemBlock;
 import elucent.simplytea.core.Config;
 import elucent.simplytea.core.IMCHelper;
 import elucent.simplytea.core.IModeledObject;
+import elucent.simplytea.core.Util;
 import elucent.simplytea.core.WorldGenTeaTrees;
 import elucent.simplytea.item.ItemBase;
 import elucent.simplytea.item.ItemCocoa;
@@ -244,6 +245,6 @@ public class SimplyTea {
 			return;
 		}
 
-		event.getDrops().add(new ItemStack(chorus_petal, 1 + event.getWorld().rand.nextInt(2)));
+		event.getDrops().add(new ItemStack(chorus_petal, Util.randomCount(event.getWorld().rand, Config.tree.max_petals)));
 	}
 }

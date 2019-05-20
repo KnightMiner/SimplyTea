@@ -81,6 +81,11 @@ public class Config {
 		@RangeDouble(min = 0, max = 1)
 		@LangKey("simplytea.config.tree.sapling_chance")
 		public double sapling_chance = 0.1;
+
+		@Comment("Maximum number of chorus petals dropped from a chorus flower when the plant below is broken.")
+		@RangeInt(min = 1, max = 64)
+		@LangKey("simplytea.config.tree.max_petals")
+		public int max_petals = 3;
 	}
 
 	public static class CaffeineTea {

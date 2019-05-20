@@ -12,6 +12,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidBlock;
 
+import java.util.Random;
+
 public final class Util {
     private Util () {}
 
@@ -66,5 +68,18 @@ public final class Util {
             }
         }
         return null;
+    }
+
+    /**
+     * Gets a random number between 1 and max for random drops
+     * @param rand  Random instance
+     * @param max   Maximum value
+     * @return  Random number between 1 and max
+     */
+    public static int randomCount(Random rand, int max) {
+        if(max == 1) {
+            return 1;
+        }
+        return 1 + rand.nextInt(max);
     }
 }

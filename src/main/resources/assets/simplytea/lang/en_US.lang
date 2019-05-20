@@ -68,3 +68,4 @@ simplytea.config.tree.max_leaves=Maximum Leaves
 simplytea.config.tree.max_sticks=Maximum Sticks
 simplytea.config.tree.leaf_growth_chance=Leaf Growth Chance
 simplytea.config.tree.sapling_chance=Sapling Drop Chance
+simplytea.config.tree.max_petals=Max Chorus Petals
