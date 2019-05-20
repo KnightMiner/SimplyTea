@@ -12,6 +12,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -143,6 +144,19 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 		}
 
 		return (state.getValue(CLIPPED) ? BOUNDS_CLIPPED : BOUNDS_UNCLIPPED)[type.getMeta() - 1];
+	}
+
+	@Deprecated
+	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing side) {
+		TrunkType type = state.getValue(TYPE);
+		if(side == EnumFacing.DOWN && type == TrunkType.TOP) {
+			return BlockFaceShape.CENTER;
+		}
+		if(side.getAxis().isVertical() && (type == TrunkType.BOTTOM || type == TrunkType.MIDDLE || type == TrunkType.STUMP)) {
+			return BlockFaceShape.CENTER;
+		}
+
+		return BlockFaceShape.UNDEFINED;
 	}
 
 	@Override
