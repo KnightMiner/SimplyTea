@@ -1,16 +1,16 @@
 package elucent.simplytea.item;
 
-import java.util.List;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemTeaStick extends ItemBase {
 
-	public ItemTeaStick(String name, boolean addToTab) {
-		super(name, addToTab);
+	public ItemTeaStick(String name) {
+		super(name, true);
 	}
 
 	@Override

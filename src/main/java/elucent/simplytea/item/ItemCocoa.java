@@ -9,8 +9,9 @@ import net.minecraft.world.World;
 public class ItemCocoa extends ItemTeaCup {
 
 	private static final ItemStack MILK_BUCKET = new ItemStack(Items.MILK_BUCKET);
-	public ItemCocoa(String name, boolean addToTab) {
-		super(name, Config.tea.cocoa.hunger, Config.tea.cocoa.saturation, addToTab);
+
+	public ItemCocoa(String name) {
+		super(name, Config.tea.cocoa.hunger, Config.tea.cocoa.saturation);
 	}
 
     @Override

@@ -1,7 +1,5 @@
 package elucent.simplytea.item;
 
-import java.util.List;
-
 import elucent.simplytea.SimplyTea;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -12,11 +10,13 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
+import java.util.List;
+
 public class ItemHotTeapot extends ItemBase {
-	public ItemHotTeapot(String name, boolean addToTab) {
-		super(name, addToTab);
+	public ItemHotTeapot(String name) {
+		super(name, true);
 		this.setContainerItem(this);
-		setMaxStackSize(1);
+		this.setMaxStackSize(1);
 	}
 
 	@Override

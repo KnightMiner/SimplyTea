@@ -1,22 +1,56 @@
-# eclipse
-bin
+#ant stuff
+/bin/
+/download/
+
+#Remove OS generated garbage
+*/.DS_Store
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+#gradle stuff
+/.gradle
+/build/
+/libs/
+/sources/
+/run*/
+/ui/
 *.launch
-.settings
-.metadata
-.classpath
-.project
+gradle-app.setting
 
-# idea
-out
-*.ipr
-*.iws
-*.iml
-.idea
+#IDEA files from Gradle
+.idea/
+/*.iml
+/*.ipr
+/*.iws
+/out
+/classes/
 
-# gradle
-build
-.gradle
+#Vim backups
+*~
 
-# other
-eclipse
-run
+#manual version override
+version.properties
+
+#eclipse stuffs
+/.classpath
+/.project
+/.settings/
+/eclipse/
+/debug/
+*.lock
+/.metadata/
+/config/
+/logs/
+options.txt
+/saves/
+/src_old
+/resources_old
+/resources/assets/tinker
+/resources/assets/unused
+/design
+/*.launch

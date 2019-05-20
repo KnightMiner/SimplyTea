@@ -1,8 +1,5 @@
 package elucent.simplytea;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import elucent.simplytea.block.BlockTeaFence;
 import elucent.simplytea.block.BlockTeaFenceGate;
 import elucent.simplytea.block.BlockTeaSapling;
@@ -51,6 +48,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mod(modid = SimplyTea.MODID, version = SimplyTea.VERSION, name = SimplyTea.NAME)
 public class SimplyTea {
 	public static final String MODID = "simplytea";
@@ -84,7 +84,7 @@ public class SimplyTea {
 
 		items.add(leaf_tea = new ItemBase("leaf_tea", true));
 		items.add(black_tea = new ItemBase("black_tea", true));
-		items.add(tea_stick = new ItemTeaStick("tea_stick", true));
+		items.add(tea_stick = new ItemTeaStick("tea_stick"));
 		items.add(chorus_petal = new ItemBase("chorus_petal", true));
 
 		items.add(teabag = new ItemBase("teabag", true));
@@ -94,25 +94,25 @@ public class SimplyTea {
 		items.add(teabag_chorus = new ItemBase("teabag_chorus", true));
 
 		items.add(cup = new ItemBase("cup", true).setMaxStackSize(16));
-		items.add(cup_tea_black = new ItemTeaCup("cup_tea_black", Config.tea.black, 1, true));
-		items.add(cup_tea_green = new ItemTeaCup("cup_tea_green", Config.tea.green, 1, true));
-		items.add(cup_tea_floral = new ItemTeaCup("cup_tea_floral", Config.tea.floral, 20, true));
-		items.add(cup_tea_chai = new ItemTeaCup("cup_tea_chai", Config.tea.chai, 2, true));
-		items.add(cup_tea_chorus = new ItemTeaCup("cup_tea_chorus", Config.tea.chorus, true));
-		items.add(cup_cocoa = new ItemCocoa("cup_cocoa", true));
+		items.add(cup_tea_black = new ItemTeaCup("cup_tea_black", Config.tea.black, 1));
+		items.add(cup_tea_green = new ItemTeaCup("cup_tea_green", Config.tea.green, 1));
+		items.add(cup_tea_floral = new ItemTeaCup("cup_tea_floral", Config.tea.floral, 20));
+		items.add(cup_tea_chai = new ItemTeaCup("cup_tea_chai", Config.tea.chai, 2));
+		items.add(cup_tea_chorus = new ItemTeaCup("cup_tea_chorus", Config.tea.chorus));
+		items.add(cup_cocoa = new ItemCocoa("cup_cocoa"));
 
-		items.add(teapot = new ItemTeapot("teapot", true));
-		items.add(hot_teapot = new ItemHotTeapot("hot_teapot", true));
-		items.add(frothed_teapot = new ItemHotTeapot("frothed_teapot", true));
+		items.add(teapot = new ItemTeapot("teapot"));
+		items.add(hot_teapot = new ItemHotTeapot("hot_teapot"));
+		items.add(frothed_teapot = new ItemHotTeapot("frothed_teapot"));
 
 		// rustic support: chamomile tea, better version of floral
 		if (Loader.isModLoaded("rustic")) {
 			items.add(teabag_chamomile = new ItemBase("teabag_chamomile", true));
-			items.add(cup_tea_chamomile = new ItemTeaCup("cup_tea_chamomile", Config.tea.chamomile, 30, true));
+			items.add(cup_tea_chamomile = new ItemTeaCup("cup_tea_chamomile", Config.tea.chamomile, 30));
 		}
 
-		blocks.add(tea_sapling = new BlockTeaSapling("tea_sapling", true));
-		blocks.add(tea_trunk = new BlockTeaTrunk("tea_trunk", false));
+		blocks.add(tea_sapling = new BlockTeaSapling("tea_sapling"));
+		blocks.add(tea_trunk = new BlockTeaTrunk("tea_trunk"));
 		blocks.add(tea_fence = new BlockTeaFence("tea_fence"));
 		blocks.add(tea_fence_gate = new BlockTeaFenceGate("tea_fence_gate"));
 		if(Config.tree.enable_generation) {

@@ -1,38 +1,31 @@
 package elucent.simplytea.block;
 
-import java.util.Random;
-
 import elucent.simplytea.SimplyTea;
 import elucent.simplytea.block.BlockTeaTrunk.TrunkType;
 import elucent.simplytea.core.IModeledObject;
+import elucent.simplytea.core.Util;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
+
+import java.util.Random;
 
 public class BlockTeaSapling extends BlockBush implements IGrowable, IModeledObject, IItemBlock {
-	public Item itemBlock = null;
+	private Item itemBlock = null;
 	public static final PropertyInteger STAGE = PropertyInteger.create("stage", 0, 1);
 
-	public BlockTeaSapling(String name, boolean addToTab) {
+	public BlockTeaSapling(String name) {
 		super();
+		itemBlock = Util.init(this, name, true);
+
 		this.setSoundType(SoundType.PLANT);
-		setUnlocalizedName(name);
-		setRegistryName(new ResourceLocation(SimplyTea.MODID, name));
-		if(addToTab) {
-			setCreativeTab(SimplyTea.tab);
-		}
 		this.setTickRandomly(true);
-		itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName()));
 	}
 
 	@Override
@@ -46,6 +39,7 @@ public class BlockTeaSapling extends BlockBush implements IGrowable, IModeledObj
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(STAGE, meta);
 	}
@@ -97,6 +91,7 @@ public class BlockTeaSapling extends BlockBush implements IGrowable, IModeledObj
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullBlock(IBlockState state) {
 		return false;
 	}
@@ -121,18 +116,12 @@ public class BlockTeaSapling extends BlockBush implements IGrowable, IModeledObj
 			west = random.nextBoolean();
 			east = random.nextBoolean();
 			branch = pos.up(i);
-			if(north) {
-				setBlockSafe(world, branch.north(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.SOUTH));
-			}
-			if(east) {
-				setBlockSafe(world, branch.east(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.WEST));
-			}
-			if(south) {
-				setBlockSafe(world, branch.south(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.NORTH));
-			}
-			if(west) {
-				setBlockSafe(world, branch.west(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.EAST));
-			}
+
+			if (north) setBlockSafe(world, branch.north(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.SOUTH));
+			if (east)  setBlockSafe(world, branch.east(),  trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.WEST));
+			if (south) setBlockSafe(world, branch.south(), trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.NORTH));
+			if (west)  setBlockSafe(world, branch.west(),  trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.EAST));
+
 			world.setBlockState(branch, trunk.withProperty(BlockTeaTrunk.TYPE, TrunkType.MIDDLE));
 		}
 
@@ -147,12 +136,6 @@ public class BlockTeaSapling extends BlockBush implements IGrowable, IModeledObj
 		if(world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
 			world.setBlockState(pos, state);
 		}
-	}
-
-	@Override
-	public void initModel() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
-				new ModelResourceLocation(getRegistryName().toString(), "inventory"));
 	}
 
 	@Override

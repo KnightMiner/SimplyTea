@@ -1,7 +1,5 @@
 package elucent.simplytea.item;
 
-import java.util.List;
-
 import elucent.simplytea.SimplyTea;
 import elucent.simplytea.core.Config;
 import net.minecraft.block.BlockCauldron;
@@ -28,9 +26,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
+import java.util.List;
+
 public class ItemTeapot extends ItemBase {
-	public ItemTeapot(String name, boolean addToTab) {
-		super(name, addToTab);
+	public ItemTeapot(String name) {
+		super(name, true);
 		setMaxStackSize(1);
         this.setHasSubtypes(true);
 	}
@@ -40,7 +40,7 @@ public class ItemTeapot extends ItemBase {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		if(stack.getMetadata() == 0) {
 			RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, true);
-			if(raytraceresult != null && raytraceresult.typeOfHit != null && raytraceresult.typeOfHit == Type.BLOCK) {
+			if(raytraceresult != null && raytraceresult.typeOfHit == Type.BLOCK) {
 				IBlockState state = worldIn.getBlockState(raytraceresult.getBlockPos());
 				// if consuming source, must be a source
 				if(state.getBlock() == Blocks.WATER) {

@@ -4,6 +4,7 @@ import elucent.simplytea.SimplyTea;
 import elucent.simplytea.core.Config;
 import elucent.simplytea.core.Config.ChorusTea;
 import elucent.simplytea.core.IModeledObject;
+import elucent.simplytea.core.Util;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,37 +20,35 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemTeaCup extends ItemFood implements IModeledObject {
 	private boolean isRestful;
-	public ItemTeaCup(String name, int hunger, float saturation, boolean addToTab) {
+
+	public ItemTeaCup(String name, int hunger, float saturation) {
 		super(hunger, saturation, false);
+		Util.init(this, name, true);
 		setMaxStackSize(1);
-		setRegistryName(SimplyTea.MODID + ":" + name);
-		setUnlocalizedName(name);
 		isRestful = false;
-		if(addToTab) {
-			setCreativeTab(SimplyTea.tab);
-		}
 	}
 
-	public ItemTeaCup(String name, int hunger, double saturation, boolean addToTab) {
-		this(name, hunger, (float)saturation, addToTab);
+	public ItemTeaCup(String name, int hunger, double saturation) {
+		this(name, hunger, (float) saturation);
 	}
 
-	public ItemTeaCup(String name, Config.CaffeineTea stats, int level, boolean addToTab) {
-		this(name, stats.hunger, stats.saturation, addToTab);
+	public ItemTeaCup(String name, Config.CaffeineTea stats, int level) {
+		this(name, stats.hunger, stats.saturation);
 		if (stats.caffeinated_time > 0) {
 			this.setPotionEffect(new PotionEffect(SimplyTea.caffeinated, stats.caffeinated_time * 20, level), 1.0f);
 		}
 	}
-	public ItemTeaCup(String name, Config.HerbalTea stats, int seconds, boolean addToTab) {
-		this(name, stats.hunger, stats.saturation, addToTab);
+
+	public ItemTeaCup(String name, Config.HerbalTea stats, int seconds) {
+		this(name, stats.hunger, stats.saturation);
 		if (stats.hearts > 0) {
 			isRestful = true;
 			this.setPotionEffect(new PotionEffect(SimplyTea.restful, seconds*20, stats.hearts - 1), 1.0f);
 		}
 	}
 
-	public ItemTeaCup(String name, ChorusTea stats, boolean addToTab) {
-		this(name, stats.hunger, stats.saturation, addToTab);
+	public ItemTeaCup(String name, ChorusTea stats) {
+		this(name, stats.hunger, stats.saturation);
 		if (stats.enderfalling_time > 0) {
 			this.setPotionEffect(new PotionEffect(SimplyTea.enderfalling, stats.enderfalling_time*20, 0), 1.0f);
 		}

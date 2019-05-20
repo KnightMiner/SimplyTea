@@ -1,12 +1,9 @@
 package elucent.simplytea.block;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-
 import elucent.simplytea.SimplyTea;
 import elucent.simplytea.core.Config;
 import elucent.simplytea.core.IModeledObject;
+import elucent.simplytea.core.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -15,12 +12,10 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -28,33 +23,33 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
+
+import java.util.Locale;
+import java.util.Random;
 
 public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	public static final PropertyEnum<TrunkType> TYPE = PropertyEnum.create("type", TrunkType.class);
 	public static final PropertyBool CLIPPED = PropertyBool.create("clipped");
 
-
 	public static final AxisAlignedBB BOUNDS_STUMP = new AxisAlignedBB(0.375, 0, 0.375, 0.625, 1, 0.625);
 	public static final AxisAlignedBB[] BOUNDS_UNCLIPPED = {
-			new AxisAlignedBB(0.125, 0, 0.125, 0.875, 1, 0.875), // BOTTOM
-			new AxisAlignedBB(0, 0, 0, 1, 1, 1), // MIDDLE
+			new AxisAlignedBB(0.125, 0,     0.125, 0.875, 1,     0.875), // BOTTOM
+			new AxisAlignedBB(0,     0,     0,     1,     1,     1    ), // MIDDLE
 			new AxisAlignedBB(0.125, 0,     0.125, 0.875, 0.75,  0.875), // TOP
-			new AxisAlignedBB(0.125, 0.125, 0,     0.875, 0.875, 0.75), // NORTH
+			new AxisAlignedBB(0.125, 0.125, 0,     0.875, 0.875, 0.75 ), // NORTH
 			new AxisAlignedBB(0.25,  0.125, 0.125, 1.0,   0.875, 0.875), // EAST
 			new AxisAlignedBB(0.125, 0.125, 0.25,  0.875, 0.875, 1.0  ), // SOUTH
 			new AxisAlignedBB(0,     0.125, 0.125, 0.75,  0.875, 0.875) // WEST
 	};
 	public static final AxisAlignedBB[] BOUNDS_CLIPPED = {
-			new AxisAlignedBB(0.40625, 0, 0.40625, 0.59375, 1, 0.59375), // BOTTOM
-			new AxisAlignedBB(0.40625, 0, 0.40625, 0.59375, 1, 0.59375), // MIDDLE
+			new AxisAlignedBB(0.40625, 0,       0.40625, 0.59375, 1,       0.59375), // BOTTOM
+			new AxisAlignedBB(0.40625, 0,       0.40625, 0.59375, 1,       0.59375), // MIDDLE
 			new AxisAlignedBB(0.40625, 0,       0.40625, 0.59375, 0.5,     0.59375), // TOP
 			new AxisAlignedBB(0.40625, 0.40625, 0,       0.59375, 0.59375, 0.5    ), // NORTH
 			new AxisAlignedBB(0.5,     0.40625, 0.40625, 1.0,     0.59375, 0.59375), // EAST
@@ -62,21 +57,16 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 			new AxisAlignedBB(0,       0.40625, 0.40625, 0.5,     0.59375, 0.59375) // WEST
 	};
 
+	private Item itemBlock = null;
 
-	public Item itemBlock = null;
-
-	public BlockTeaTrunk(String name, boolean addToTab) {
+	public BlockTeaTrunk(String name) {
 		super(Material.WOOD);
+		itemBlock = Util.init(this, name, false);
+
 		this.setSoundType(SoundType.WOOD);
-		setHarvestLevel("axe", -1);
-		setHardness(1.8f);
-		setUnlocalizedName(name);
-		setRegistryName(new ResourceLocation(SimplyTea.MODID, name));
-		if(addToTab) {
-			setCreativeTab(SimplyTea.tab);
-		}
+		this.setHarvestLevel("axe", -1);
+		this.setHardness(1.8f);
 		this.setTickRandomly(true);
-		itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName()));
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, TrunkType.STUMP).withProperty(CLIPPED, false));
 	}
 
@@ -120,7 +110,7 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 			stack.damageItem(1, player);
 			player.setHeldItem(hand, stack);
 
-			List<ItemStack> drops = getTeaDrops(state);
+			NonNullList<ItemStack> drops = addTeaDrops(NonNullList.create(), state);
             for (ItemStack drop : drops) {
                 spawnAsEntity(world, pos, drop);
             }
@@ -134,6 +124,7 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	}
 
 	@Override
+	@Deprecated
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		if(state.getBlock() != this) {
 			return BOUNDS_STUMP;
@@ -146,13 +137,14 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 		return (state.getValue(CLIPPED) ? BOUNDS_CLIPPED : BOUNDS_UNCLIPPED)[type.getMeta() - 1];
 	}
 
+	@Override
 	@Deprecated
 	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing side) {
 		TrunkType type = state.getValue(TYPE);
-		if(side == EnumFacing.DOWN && type == TrunkType.TOP) {
+		if (side == EnumFacing.DOWN && type == TrunkType.TOP) {
 			return BlockFaceShape.CENTER;
 		}
-		if(side.getAxis().isVertical() && (type == TrunkType.BOTTOM || type == TrunkType.MIDDLE || type == TrunkType.STUMP)) {
+		if (side.getAxis().isVertical() && (type == TrunkType.BOTTOM || type == TrunkType.MIDDLE || type == TrunkType.STUMP)) {
 			return BlockFaceShape.CENTER;
 		}
 
@@ -160,7 +152,7 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	}
 
 	@Override
-	public BlockStateContainer createBlockState() {
+	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, TYPE, CLIPPED);
 	}
 
@@ -170,21 +162,25 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(TYPE, TrunkType.fromMeta(meta % 8)).withProperty(CLIPPED, meta >= 8);
 	}
 
 	@Override
+	@Deprecated
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
+	@Deprecated
 	public boolean isFullBlock(IBlockState state) {
 		return false;
 	}
@@ -200,14 +196,12 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		NonNullList<ItemStack> drops = getTeaDrops(state);
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		addTeaDrops(drops, state);
 		drops.add(new ItemStack(SimplyTea.tea_stick, randomCount(Config.tree.max_sticks)));
-		return drops;
 	}
 
-	private NonNullList<ItemStack> getTeaDrops(IBlockState state) {
-		NonNullList<ItemStack> drops = NonNullList.create();
+	private NonNullList<ItemStack> addTeaDrops(NonNullList<ItemStack> drops, IBlockState state) {
 		if(state.getValue(TYPE) != TrunkType.STUMP && !state.getValue(CLIPPED)) {
 			drops.add(new ItemStack(SimplyTea.leaf_tea, randomCount(Config.tree.max_leaves)));
 			if(RANDOM.nextFloat() < Config.tree.sapling_chance) {
@@ -222,12 +216,6 @@ public class BlockTeaTrunk extends Block implements IModeledObject, IItemBlock {
 			return 1;
 		}
 		return 1 + RANDOM.nextInt(max);
-	}
-
-	@Override
-	public void initModel() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
-				new ModelResourceLocation(getRegistryName().toString(), "inventory"));
 	}
 
 	@Override
