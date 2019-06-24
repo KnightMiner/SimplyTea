@@ -1,6 +1,6 @@
 { "textures": {
-    "particle": "simplytea:blocks/tea_fence_gate",
-    "texture": "simplytea:blocks/tea_fence_gate"
+    "particle": "simplytea:block/tea_fence_gate",
+    "texture": "simplytea:block/tea_fence_gate"
   },
   "elements": [
     { "name": "Left-hand post",

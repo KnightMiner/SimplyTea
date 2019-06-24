@@ -1,6 +1,6 @@
 {
 	"parent":"item/generated",
 	"textures": {
-		"layer0":"simplytea:items/chorus_petal"
+		"layer0":"simplytea:item/chorus_petal"
 	}
 }

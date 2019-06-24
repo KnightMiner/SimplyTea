@@ -1,7 +1,7 @@
 { "parent": "block/fence_inventory",
   "ambientocclusion": false,
   "textures": {
-    "texture": "simplytea:blocks/tea_fence"
+    "texture": "simplytea:block/tea_fence"
   },
   "elements": [
     { "__comment": "Left post",
@@ -45,7 +45,8 @@
       "faces": {
           "down":  { "uv": [ 6, 10, 14, 12 ], "texture": "#texture", "rotation": 90 },
           "up":    { "uv": [ 6,  0, 14,  2 ], "texture": "#texture", "rotation": 90 },
-          "west":  { "uv": [ 6,  8, 14, 10 ], "texture": "#texture" },
+          "west":  { "uv": [ 6,  8, 14, 10
+          ], "texture": "#texture" },
           "east":  { "uv": [ 6,  8, 14, 10 ], "texture": "#texture" }
       }
     },

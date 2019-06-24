@@ -4,8 +4,6 @@
     "model": "simplytea:tea_fence_gate_closed"
   },
   "variants": {    
-    "inventory": [{}],
-    
     "facing=south,in_wall=false,open=false": [{}],
     "facing=west,in_wall=false,open=false":  {"y":  90},
     "facing=north,in_wall=false,open=false": {"y": 180},

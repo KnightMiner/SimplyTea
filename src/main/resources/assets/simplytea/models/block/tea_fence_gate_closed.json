@@ -1,6 +1,6 @@
-{ "parent": "block/fence_gate_closed",
+{ "parent": "block/template_fence_gate",
   "textures": {
-    "texture": "simplytea:blocks/tea_fence_gate"
+    "texture": "simplytea:block/tea_fence_gate"
   },
   "elements": [
     {

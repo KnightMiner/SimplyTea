@@ -1,7 +1,7 @@
 {
   "textures": {
-    "particle": "simplytea:blocks/tea_fence",
-    "texture": "simplytea:blocks/tea_fence"
+    "particle": "simplytea:block/tea_fence",
+    "texture": "simplytea:block/tea_fence"
   },
   "elements": [
     { "__comment": "top bar",

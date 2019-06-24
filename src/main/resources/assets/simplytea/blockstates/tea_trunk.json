@@ -1,20 +1,20 @@
 {
     "variants":{
-        "clipped=false,type=stump":  {"model": "simplytea:tea_tree_trunk_stump"},
-        "clipped=false,type=bottom": {"model": "simplytea:tea_tree_trunk_bottom"},
-        "clipped=false,type=middle": {"model": "simplytea:tea_tree_trunk_middle"},
-        "clipped=false,type=top":    {"model": "simplytea:tea_tree_trunk_top"},
-        "clipped=false,type=north":  {"model": "simplytea:tea_tree_branch"},
-        "clipped=false,type=east":   {"model": "simplytea:tea_tree_branch", "y":90},
-        "clipped=false,type=south":  {"model": "simplytea:tea_tree_branch", "y":180},
-        "clipped=false,type=west":   {"model": "simplytea:tea_tree_branch", "y":270},
-        "clipped=true,type=stump":  {"model": "simplytea:tea_tree_trunk_stump"},
-        "clipped=true,type=bottom": {"model": "simplytea:tea_tree_trunk_bottom_clipped"},
-        "clipped=true,type=middle": {"model": "simplytea:tea_tree_trunk_middle_clipped"},
-        "clipped=true,type=top":    {"model": "simplytea:tea_tree_trunk_top_clipped"},
-        "clipped=true,type=north":  {"model": "simplytea:tea_tree_branch_clipped"},
-        "clipped=true,type=east":   {"model": "simplytea:tea_tree_branch_clipped", "y":90},
-        "clipped=true,type=south":  {"model": "simplytea:tea_tree_branch_clipped", "y":180},
-        "clipped=true,type=west":   {"model": "simplytea:tea_tree_branch_clipped", "y":270}
+        "clipped=false,type=stump":  {"model": "simplytea:block/tea_tree_trunk_stump"},
+        "clipped=false,type=bottom": {"model": "simplytea:block/tea_tree_trunk_bottom"},
+        "clipped=false,type=middle": {"model": "simplytea:block/tea_tree_trunk_middle"},
+        "clipped=false,type=top":    {"model": "simplytea:block/tea_tree_trunk_top"},
+        "clipped=false,type=north":  {"model": "simplytea:block/tea_tree_branch"},
+        "clipped=false,type=east":   {"model": "simplytea:block/tea_tree_branch", "y":90},
+        "clipped=false,type=south":  {"model": "simplytea:block/tea_tree_branch", "y":180},
+        "clipped=false,type=west":   {"model": "simplytea:block/tea_tree_branch", "y":270},
+        "clipped=true,type=stump":  {"model": "simplytea:block/tea_tree_trunk_stump"},
+        "clipped=true,type=bottom": {"model": "simplytea:block/tea_tree_trunk_bottom_clipped"},
+        "clipped=true,type=middle": {"model": "simplytea:block/tea_tree_trunk_middle_clipped"},
+        "clipped=true,type=top":    {"model": "simplytea:block/tea_tree_trunk_top_clipped"},
+        "clipped=true,type=north":  {"model": "simplytea:block/tea_tree_branch_clipped"},
+        "clipped=true,type=east":   {"model": "simplytea:block/tea_tree_branch_clipped", "y":90},
+        "clipped=true,type=south":  {"model": "simplytea:block/tea_tree_branch_clipped", "y":180},
+        "clipped=true,type=west":   {"model": "simplytea:block/tea_tree_branch_clipped", "y":270}
     }
 }

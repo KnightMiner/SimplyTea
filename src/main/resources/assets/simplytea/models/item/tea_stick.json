@@ -1,6 +1,6 @@
 {
 	"parent":"item/generated",
 	"textures": {
-		"layer0":"simplytea:items/tea_stick"
+		"layer0":"simplytea:item/tea_stick"
 	}
 }

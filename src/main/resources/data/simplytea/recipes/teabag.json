@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "simplytea:teabag_empty",
+  "result": {
+    "item": "simplytea:teabag",
+    "count": 4
+  },
+  "pattern": [
+    "  S",
+    "PP ",
+    "PP "
+  ],
+  "key": {
+    "S": { "item": "minecraft:string" },
+    "P": { "item": "minecraft:paper" }
+  }
+}

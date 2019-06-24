@@ -2,8 +2,8 @@
 	"__comment": "Designed by Elucent with Cubik Studio - https://cubik.studio",
 	"parent":"block/block",
 	"textures": {
-		"particle": "simplytea:blocks/leaves_tea",
-		"leaves": "simplytea:blocks/leaves_tea"
+		"particle": "simplytea:block/leaves_tea",
+		"leaves": "simplytea:block/leaves_tea"
 	},
 	"elements": [
 		{

@@ -1,0 +1,24 @@
+{
+  "itemGroup.simplytea": "简单的茶！",
+
+  "block.simplytea.tea_sapling": "茶树苗",
+  "block.simplytea.tea_trunk": "茶枝",
+
+  "item.simplytea.tea_leaf": "茶叶",
+  "item.simplytea.black_tea": "红茶",
+  "item.simplytea.cup": "茶杯",
+  "item.simplytea.cup_water": "一杯水",
+  "item.simplytea.cup_tea_green": "一杯绿茶",
+  "item.simplytea.cup_tea_black": "一杯红茶",
+  "item.simplytea.teapot": "茶壶",
+  "item.simplytea.teapot.tooltip.empty": "空茶壶！",
+  "item.simplytea.teapot_water": "茶壶",
+  "item.simplytea.teapot_water.tooltip": "充满了水！",
+  "item.simplytea.teapot_milk": "茶壶",
+  "item.simplytea.teabag": "茶包",
+  "item.simplytea.teabag_green": "绿茶包",
+  "item.simplytea.teabag_black": "红茶包",
+  "item.simplytea.teapot_hot": "茶壶",
+  "item.simplytea.teapot_hot.tooltip": "沸腾！",
+  "item.simplytea.teapot_frothed": "茶壶"
+}

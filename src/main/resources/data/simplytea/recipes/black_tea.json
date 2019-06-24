@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": {
+    "item": "simplytea:tea_leaf"
+  },
+  "result": "simplytea:black_tea",
+  "experience": 0.35,
+  "cookingtime": 200
+}
