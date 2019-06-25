@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
   "ingredient": {
-    "item": "minecraft:beef"
+    "item": "simplytea:teapot_water"
   },
-  "result": "minecraft:cooked_beef",
+  "result": "simplytea:teapot_hot",
   "experience": 0.35,
   "cookingtime": 300
 }
