@@ -113,7 +113,7 @@ public class Registration {
     props = Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT);
     register(r, new TeaSaplingBlock(props), "tea_sapling");
 
-    props = Block.Properties.create(Material.WOOD, MaterialColor.BROWN).hardnessAndResistance(2.0F).sound(SoundType.WOOD);
+    props = Block.Properties.create(Material.WOOD, MaterialColor.BROWN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).tickRandomly();
     register(r, new TeaTrunkBlock(props), "tea_trunk");
   }
 
