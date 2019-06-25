@@ -1,6 +1,5 @@
 package knightminer.simplytea;
 
-import knightminer.simplytea.core.Config;
 import knightminer.simplytea.core.Registration;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -24,9 +23,7 @@ public class SimplyTea {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
-	public void init(final FMLCommonSetupEvent event) {
-		Config.parse();
-
+	private void init(final FMLCommonSetupEvent event) {
 		if (Registration.tea_tree != null) {
 			BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST).forEach((biome) -> {
 				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Registration.tea_tree, IFeatureConfig.NO_FEATURE_CONFIG, Placement.DARK_OAK_TREE, IPlacementConfig.NO_PLACEMENT_CONFIG));
