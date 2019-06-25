@@ -39,4 +39,24 @@ public final class Util {
         LootTable table = serverworld.getServer().getLootTableManager().getLootTableFromLocation(location);
         return table.generate(lootcontext);
     }
+
+    /**
+     * Fills a stack of containers, shrinking it by 1
+     * @param player     Player to give the item to and for creative checks
+     * @param container  Container stack, may contain more than 1
+     * @param filled     Filled container stack
+     * @return  Filled stack if 1 container, leftover container if more than 1, dropping the filled
+     */
+    public static ItemStack fillContainer(PlayerEntity player, ItemStack container, ItemStack filled) {
+        if (!player.isCreative()) {
+            container.shrink(1);
+            if (container.isEmpty()) {
+                return filled;
+            }
+        }
+        if (!player.inventory.addItemStackToInventory(filled)) {
+            player.dropItem(filled, false);
+        }
+        return container;
+    }
 }

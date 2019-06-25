@@ -2,6 +2,7 @@ package knightminer.simplytea.item;
 
 import knightminer.simplytea.core.Config;
 import knightminer.simplytea.core.Registration;
+import knightminer.simplytea.core.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -43,7 +44,7 @@ public class TeapotItem extends TooltipItem {
 			// try filling from the cauldron
 			if (Config.teapot.fill_from_cauldron && block == Blocks.CAULDRON && state.get(CauldronBlock.LEVEL) == 3) {
 				((CauldronBlock)Blocks.CAULDRON).setWaterLevel(world, pos, state, 0);
-				stack = new ItemStack(Registration.teapot_water);
+				stack = Util.fillContainer(player, stack, new ItemStack(Registration.teapot_water));
 				return new ActionResult<ItemStack>(ActionResultType.SUCCESS, stack);
 			}
 
@@ -63,9 +64,9 @@ public class TeapotItem extends TooltipItem {
 						world.setBlockState(pos, Blocks.AIR.getDefaultState());
 					}
 
-					// update the item
-					stack = new ItemStack(item);
-					// TODO: fluid sound
+					stack = Util.fillContainer(player, stack, new ItemStack(item));
+
+					// TODO: fluid sound based on fluid
 					player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0f, 1.0f);
 					return new ActionResult<ItemStack>(ActionResultType.SUCCESS, stack);
 				}
@@ -80,8 +81,9 @@ public class TeapotItem extends TooltipItem {
 		if(Config.teapot.milk_cow && target instanceof CowEntity && !player.isCreative()) {
 			// sound
 			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+
 			// fill with milk
-			player.setHeldItem(hand, new ItemStack(Registration.teapot_milk));
+			player.setHeldItem(hand, Util.fillContainer(player, stack, new ItemStack(Registration.teapot_milk)));
 			return true;
 		}
 		return false;
