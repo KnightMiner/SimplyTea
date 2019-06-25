@@ -89,14 +89,20 @@ public class Registration {
   /* World Gen */
   public static final Feature<NoFeatureConfig> tea_tree = null;
 
+  // TODO: remove once Forge fixes #5859
+  public static class HackRegistryOrder {
+    public static Effect restful = null;
+    public static Effect caffeinated = null;
+    public static Effect enderfalling = null;
+  }
 
   @SubscribeEvent
   public static void registerEffects(final RegistryEvent.Register<Effect> event) {
     IForgeRegistry<Effect> r = event.getRegistry();
 
-    register(r, new CaffeinatedEffect(), "caffeinated");
-    register(r, new RestfulEffect(), "restful");
-    register(r, new EnderfallingEffect(), "enderfalling");
+    register(r, HackRegistryOrder.caffeinated, "caffeinated");
+    register(r, HackRegistryOrder.restful, "restful");
+    register(r, HackRegistryOrder.enderfalling, "enderfalling");
   }
 
 
@@ -149,13 +155,16 @@ public class Registration {
 
     // drinks
     props = new Item.Properties().group(group).maxStackSize(16);
-    register(r, new Item(props), "cup");
-    register(r, new TeaCupItem(makeTea(4, 0.8f, new EffectInstance(caffeinated, 150, 1))), "cup_tea_black");
-    register(r, new TeaCupItem(makeTea(3, 0.5f, new EffectInstance(caffeinated, 150, 1))), "cup_tea_green");
-    register(r, new TeaCupItem(makeTea(2, 0.5f, new EffectInstance(restful, 20*20, 1))), "cup_tea_floral");
-    register(r, new TeaCupItem(makeTea(5, 0.6f, new EffectInstance(caffeinated, 150, 2))), "cup_tea_chai");
-    register(r, new TeaCupItem(makeTea(3, 0.8f, new EffectInstance(enderfalling, 150))), "cup_tea_chorus");
-    register(r, new CocoaItem(makeTea(4, 0.6f, null)), "cup_cocoa");
+    Item cup = register(r, new Item(props), "cup");
+    HackRegistryOrder.caffeinated = new CaffeinatedEffect();
+    HackRegistryOrder.restful = new RestfulEffect();
+    HackRegistryOrder.enderfalling = new EnderfallingEffect();
+    register(r, new TeaCupItem(makeTea(4, 0.8f, new EffectInstance(HackRegistryOrder.caffeinated, 150*20, 1)).containerItem(cup)), "cup_tea_black");
+    register(r, new TeaCupItem(makeTea(3, 0.5f, new EffectInstance(HackRegistryOrder.caffeinated, 150*20, 1)).containerItem(cup)), "cup_tea_green");
+    register(r, new TeaCupItem(makeTea(2, 0.5f, new EffectInstance(HackRegistryOrder.restful, 20*20, 1)).containerItem(cup)), "cup_tea_floral");
+    register(r, new TeaCupItem(makeTea(5, 0.6f, new EffectInstance(HackRegistryOrder.caffeinated, 150*20, 2)).containerItem(cup)), "cup_tea_chai");
+    register(r, new TeaCupItem(makeTea(3, 0.8f, new EffectInstance(HackRegistryOrder.enderfalling, 150*20)).containerItem(cup)), "cup_tea_chorus");
+    register(r, new CocoaItem(makeTea(4, 0.6f, null).containerItem(cup)), "cup_cocoa");
 
     // blocks
     registerBlockItem(r, tea_fence);
@@ -177,13 +186,11 @@ public class Registration {
     props.maxStackSize(1);
     props.maxDamage(2);
     props.group(group);
-    props.containerItem(cup);
     props.setNoRepair();
 
     Food.Builder food = new Food.Builder().hunger(hunger).saturation(saturation).fastToEat().setAlwaysEdible();
     if (effect != null) {
-      // TODO: uncomment once Forge fixes #5859
-      //food.effect(effect, 1.0F);
+      food.effect(effect, 1.0F);
     }
     props.food(food.build());
     return props;
