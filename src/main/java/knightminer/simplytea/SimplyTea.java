@@ -27,8 +27,10 @@ public class SimplyTea {
 	public void init(final FMLCommonSetupEvent event) {
 		Config.parse();
 
-		BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST).forEach((biome) -> {
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Registration.tea_tree, IFeatureConfig.NO_FEATURE_CONFIG, Placement.DARK_OAK_TREE, IPlacementConfig.NO_PLACEMENT_CONFIG));
-		});
+		if (Registration.tea_tree != null) {
+			BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST).forEach((biome) -> {
+				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Registration.tea_tree, IFeatureConfig.NO_FEATURE_CONFIG, Placement.DARK_OAK_TREE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+			});
+		}
 	}
 }
