@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "simplytea:chorus_petal",
+  "result": {
+    "item": "simplytea:chorus_petal",
+    "count": 3
+  },
+  "ingredients": [
+    {"item": "minecraft:chorus_flower"}
+  ]
+}
