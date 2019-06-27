@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[26,)"
+loaderVersion="[27,)"
 issueTrackerURL="https://github.com/elucent/SimplyTea/issues"
 
 [[mods]]
@@ -34,6 +34,6 @@ Contains:
 [[dependencies.simplytea]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.2]"
+    versionRange="[1.14.3]"
     ordering="NONE"
     side="BOTH"

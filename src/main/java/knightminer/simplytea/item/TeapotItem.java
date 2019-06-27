@@ -53,7 +53,7 @@ public class TeapotItem extends TooltipItem {
 			if(fluid != Fluids.EMPTY) {
 				// try for water or milk using the config lists
 				Item item = null;
-				if (FluidTags.WATER.contains(fluid)) {
+				if (fluid.isIn(FluidTags.WATER)) {
 					item = Registration.teapot_water;
 				} // TODO: milk when mods make a standard
 

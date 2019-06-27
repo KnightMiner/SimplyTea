@@ -82,6 +82,7 @@ public class TeaTrunkBlock extends Block {
 	}
 
 	@Override
+	@Deprecated
 	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult face) {
 		if(state.getBlock() != this || state.get(CLIPPED) || state.get(TYPE) == TrunkType.STUMP) {
 			return false;
