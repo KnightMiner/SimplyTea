@@ -1,5 +1,6 @@
 package knightminer.simplytea;
 
+import knightminer.simplytea.core.Config;
 import knightminer.simplytea.core.Registration;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -8,7 +9,9 @@ import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -19,6 +22,8 @@ public class SimplyTea {
 
 	public SimplyTea() {
 		instance = this;
+
+		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
 		MinecraftForge.EVENT_BUS.register(this);
 	}

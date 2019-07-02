@@ -42,7 +42,7 @@ public class TeapotItem extends TooltipItem {
 			Block block = state.getBlock();
 
 			// try filling from the cauldron
-			if (Config.teapot.fill_from_cauldron && block == Blocks.CAULDRON && state.get(CauldronBlock.LEVEL) == 3) {
+			if (Config.SERVER.teapot.fillFromCauldron() && block == Blocks.CAULDRON && state.get(CauldronBlock.LEVEL) == 3) {
 				((CauldronBlock)Blocks.CAULDRON).setWaterLevel(world, pos, state, 0);
 				stack = Util.fillContainer(player, stack, new ItemStack(Registration.teapot_water));
 				return new ActionResult<ItemStack>(ActionResultType.SUCCESS, stack);
@@ -60,7 +60,7 @@ public class TeapotItem extends TooltipItem {
 				// if either one is found, update the stack
 				if(item != null) {
 					// water is considered infinite unless disabled in the config
-					if(!Config.teapot.infinite_water) {
+					if(!Config.SERVER.teapot.infiniteWater()) {
 						world.setBlockState(pos, Blocks.AIR.getDefaultState());
 					}
 
@@ -78,7 +78,7 @@ public class TeapotItem extends TooltipItem {
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
 		// only work if the teapot is empty and right clicking a cow
-		if(Config.teapot.milk_cow && target instanceof CowEntity && !player.isCreative()) {
+		if(Config.SERVER.teapot.canMilkCows() && target instanceof CowEntity && !player.isCreative()) {
 			// sound
 			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
 

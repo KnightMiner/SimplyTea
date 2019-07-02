@@ -69,7 +69,7 @@ public class TeaTrunkBlock extends Block {
 	@Override
 	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
 		if(state.getBlock() == this && state.get(CLIPPED)) {
-			if (rand.nextFloat() < Config.tree.leaf_growth_chance) {
+			if (rand.nextFloat() < Config.SERVER.tree.regrowthChance()) {
 				world.setBlockState(pos, state.with(CLIPPED, false));
 				world.notifyBlockUpdate(pos, state, state.with(CLIPPED, false), 8);
 			}

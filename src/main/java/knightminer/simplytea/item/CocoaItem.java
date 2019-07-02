@@ -1,5 +1,6 @@
 package knightminer.simplytea.item;
 
+import knightminer.simplytea.core.Config;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -18,7 +19,9 @@ public class CocoaItem extends TeaCupItem {
 		if(this.isFood()) {
 			living.onFoodEaten(worldIn, stack.copy());
 			stack = getContainerItem(stack);
-			living.curePotionEffects(MILK_BUCKET);
+			if (Config.SERVER.cocoa.clearsEffects()) {
+				living.curePotionEffects(MILK_BUCKET);
+			}
 		}
 		return stack;
 	}

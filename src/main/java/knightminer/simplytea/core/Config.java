@@ -1,71 +1,64 @@
 package knightminer.simplytea.core;
 
-// TODO: TOML
+import knightminer.simplytea.SimplyTea;
+import knightminer.simplytea.core.config.CocoaDrink;
+import knightminer.simplytea.core.config.TeaDrink;
+import knightminer.simplytea.core.config.TeaDrink.TeaEffect;
+import knightminer.simplytea.core.config.Teapot;
+import knightminer.simplytea.core.config.Tree;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.Builder;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import org.apache.commons.lang3.tuple.Pair;
+
+@Mod.EventBusSubscriber(modid=SimplyTea.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
-	public static TeaCategory tea = new TeaCategory();
-	public static TeapotCategory teapot = new TeapotCategory();
-	public static TreeCategory tree = new TreeCategory();
 
-	public static class TeaCategory {
-		public HerbalTea floral = new HerbalTea(2, 0.5, 1);
-		public CaffeineTea green = new CaffeineTea(3, 0.5, 150);
-		public CaffeineTea black = new CaffeineTea(4, 0.8, 210);
-		public CaffeineTea chai = new CaffeineTea(5, 0.6, 150);
-		public HerbalTea chamomile = new HerbalTea(2, 0.5, 2);
-		public ChorusTea chorus = new ChorusTea(3, 0.8, 150);
-		public Cocoa cocoa = new Cocoa();
-	}
+	public static class Server {
+		public TeaDrink black_tea, green_tea, floral_tea, chai_tea, chorus_tea;
+		public CocoaDrink cocoa;
+		public Teapot teapot;
+		public Tree tree;
+		public Server(Builder builder) {
 
-	public static class TreeCategory {
-		public boolean enable_generation = true;
-		public double leaf_growth_chance = 0.05;
-	}
+			// drinks
+			builder.comment("Stats for each available drink type").push("drinks");
+			floral_tea = new TeaDrink("floral", builder, TeaEffect.HERBAL, 2, 0.5, 20, 2);
+			green_tea  = new TeaDrink("green", builder, TeaEffect.CAFFEINE, 3, 0.5, 150, 2);
+			black_tea  = new TeaDrink("black", builder, TeaEffect.CAFFEINE, 4, 0.8, 210, 2);
+			chai_tea   = new TeaDrink("chai", builder, TeaEffect.CAFFEINE, 5, 0.6, 150, 3);
+			chorus_tea = new TeaDrink("chorus", builder, TeaEffect.ENDERFALLING, 3, 0.9, 150, 1);
+			cocoa = new CocoaDrink(builder, 4, 0.6);
+			builder.pop();
 
-	public static class CaffeineTea {
-		private CaffeineTea(int defaultHunger, double defaultSaturation, int caffeinatedTime) {
-			this.hunger = defaultHunger;
-			this.saturation = defaultSaturation;
-			this.caffeinated_time = caffeinatedTime;
+			// other categories
+			teapot = new Teapot(builder);
+			tree = new Tree(builder);
 		}
-
-		public int hunger;
-		public double saturation;
-		public int caffeinated_time;
 	}
 
-	public static class HerbalTea {
-		private HerbalTea(int defaultHunger, double defaultSaturation, int hearts) {
-			this.hunger = defaultHunger;
-			this.saturation = defaultSaturation;
-			this.hearts = hearts;
+
+	/* Initialize */
+
+	public static final ForgeConfigSpec serverSpec;
+	public static final Server SERVER;
+	static {
+		final Pair<Server,ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
+		serverSpec = specPair.getRight();
+		SERVER = specPair.getLeft();
+	}
+
+	@SubscribeEvent
+	public static void onFileChange(final ModConfig.ConfigReloading event) {
+		// clear the effect cache so we get the new version of the config
+		if (event.getConfig().getType() == ModConfig.Type.SERVER) {
+			SERVER.floral_tea.invalidEffects();
+			SERVER.green_tea.invalidEffects();
+			SERVER.black_tea.invalidEffects();
+			SERVER.chai_tea.invalidEffects();
+			SERVER.chorus_tea.invalidEffects();
 		}
-
-		public int hunger;
-		public double saturation;
-		public int hearts;
-	}
-
-	public static class ChorusTea {
-		private ChorusTea(int defaultHunger, double defaultSaturation, int enderfallingTime) {
-			this.hunger = defaultHunger;
-			this.saturation = defaultSaturation;
-			this.enderfalling_time = enderfallingTime;
-		}
-
-		public int hunger;
-		public double saturation;
-		public int enderfalling_time;
-	}
-
-	public static class Cocoa {
-		public int hunger = 4;
-		public double saturation = 0.6;
-		public boolean clear_effects = true;
-	}
-
-	public static class TeapotCategory {
-		public boolean infinite_water = true;
-		public boolean fill_from_cauldron = true;
-		public boolean milk_cow = true;
 	}
 }

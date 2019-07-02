@@ -2,6 +2,7 @@ package knightminer.simplytea.worldgen;
 
 import com.mojang.datafixers.Dynamic;
 import knightminer.simplytea.block.TeaSaplingBlock;
+import knightminer.simplytea.core.Config;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -20,7 +21,7 @@ public class TeaTreeFeature extends Feature<NoFeatureConfig> {
 
 	@Override
 	public boolean place(IWorld world, ChunkGenerator<? extends GenerationSettings> generator, Random random, BlockPos pos, NoFeatureConfig config) {
-		if (random.nextInt(100) != 0) {
+		if (!Config.SERVER.tree.generate() || random.nextInt(100) != 0) {
 			return false;
 		}
 		if(world.getBlockState(pos.down()).getBlock().isIn(BlockTags.DIRT_LIKE) && world.getBlockState(pos).isAir(world, pos)) {

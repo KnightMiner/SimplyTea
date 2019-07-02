@@ -19,12 +19,10 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -89,20 +87,13 @@ public class Registration {
   /* World Gen */
   public static final Feature<NoFeatureConfig> tea_tree = null;
 
-  // TODO: remove once Forge fixes #5859
-  public static class HackRegistryOrder {
-    public static Effect restful = null;
-    public static Effect caffeinated = null;
-    public static Effect enderfalling = null;
-  }
-
   @SubscribeEvent
   public static void registerEffects(final RegistryEvent.Register<Effect> event) {
     IForgeRegistry<Effect> r = event.getRegistry();
 
-    register(r, HackRegistryOrder.caffeinated, "caffeinated");
-    register(r, HackRegistryOrder.restful, "restful");
-    register(r, HackRegistryOrder.enderfalling, "enderfalling");
+    register(r, new CaffeinatedEffect(), "caffeinated");
+    register(r, new RestfulEffect(), "restful");
+    register(r, new EnderfallingEffect(), "enderfalling");
   }
 
 
@@ -156,15 +147,13 @@ public class Registration {
     // drinks
     props = new Item.Properties().group(group).maxStackSize(16);
     Item cup = register(r, new Item(props), "cup");
-    HackRegistryOrder.caffeinated = new CaffeinatedEffect();
-    HackRegistryOrder.restful = new RestfulEffect();
-    HackRegistryOrder.enderfalling = new EnderfallingEffect();
-    register(r, new TeaCupItem(makeTea(4, 0.8f, new EffectInstance(HackRegistryOrder.caffeinated, 150*20, 1)).containerItem(cup)), "cup_tea_black");
-    register(r, new TeaCupItem(makeTea(3, 0.5f, new EffectInstance(HackRegistryOrder.caffeinated, 150*20, 1)).containerItem(cup)), "cup_tea_green");
-    register(r, new TeaCupItem(makeTea(2, 0.5f, new EffectInstance(HackRegistryOrder.restful, 20*20, 1)).containerItem(cup)), "cup_tea_floral");
-    register(r, new TeaCupItem(makeTea(5, 0.6f, new EffectInstance(HackRegistryOrder.caffeinated, 150*20, 2)).containerItem(cup)), "cup_tea_chai");
-    register(r, new TeaCupItem(makeTea(3, 0.8f, new EffectInstance(HackRegistryOrder.enderfalling, 150*20)).containerItem(cup)), "cup_tea_chorus");
-    register(r, new CocoaItem(makeTea(4, 0.6f, null).containerItem(cup)), "cup_cocoa");
+    props = new Item.Properties().group(group).maxStackSize(1).maxDamage(2).setNoRepair().containerItem(cup);
+    register(r, new TeaCupItem(props.food(Config.SERVER.black_tea)), "cup_tea_black");
+    register(r, new TeaCupItem(props.food(Config.SERVER.green_tea)), "cup_tea_green");
+    register(r, new TeaCupItem(props.food(Config.SERVER.floral_tea)), "cup_tea_floral");
+    register(r, new TeaCupItem(props.food(Config.SERVER.chai_tea)), "cup_tea_chai");
+    register(r, new TeaCupItem(props.food(Config.SERVER.chorus_tea)), "cup_tea_chorus");
+    register(r, new CocoaItem(props.food(Config.SERVER.cocoa)), "cup_cocoa");
 
     // blocks
     registerBlockItem(r, tea_fence);
@@ -180,21 +169,6 @@ public class Registration {
   }
 
   /* Helper methods */
-
-  public static Item.Properties makeTea(int hunger, float saturation, EffectInstance effect) {
-    Item.Properties props = new Item.Properties();
-    props.maxStackSize(1);
-    props.maxDamage(2);
-    props.group(group);
-    props.setNoRepair();
-
-    Food.Builder food = new Food.Builder().hunger(hunger).saturation(saturation).fastToEat().setAlwaysEdible();
-    if (effect != null) {
-      food.effect(effect, 1.0F);
-    }
-    props.food(food.build());
-    return props;
-  }
 
   private static <V extends R, R extends IForgeRegistryEntry<R>> V register(IForgeRegistry<R> registry, V value, ResourceLocation location) {
     value.setRegistryName(location);
