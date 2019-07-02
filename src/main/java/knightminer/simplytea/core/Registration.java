@@ -6,8 +6,10 @@ import knightminer.simplytea.block.TeaTrunkBlock;
 import knightminer.simplytea.item.CocoaItem;
 import knightminer.simplytea.item.HotTeapotItem;
 import knightminer.simplytea.item.TeaCupItem;
+import knightminer.simplytea.item.TeaStickItem;
 import knightminer.simplytea.item.TeapotItem;
 import knightminer.simplytea.item.TooltipItem;
+import knightminer.simplytea.item.WoodBlockItem;
 import knightminer.simplytea.potion.CaffeinatedEffect;
 import knightminer.simplytea.potion.EnderfallingEffect;
 import knightminer.simplytea.potion.RestfulEffect;
@@ -118,21 +120,25 @@ public class Registration {
   public static void registerItems(final RegistryEvent.Register<Item> event) {
     IForgeRegistry<Item> r = event.getRegistry();
 
-    Item.Properties base = new Item.Properties().group(group);
-    Item.Properties props;
+    Item.Properties props = new Item.Properties().group(group);
 
     // crafting
-    register(r, new TooltipItem(base), "tea_leaf");
-    register(r, new TooltipItem(base), "black_tea");
-    register(r, new TooltipItem(base), "tea_stick");
-    register(r, new TooltipItem(base), "chorus_petal");
+    register(r, new TooltipItem(props), "tea_leaf");
+    register(r, new TooltipItem(props), "black_tea");
+    register(r, new TeaStickItem(props), "tea_stick");
+    register(r, new TooltipItem(props), "chorus_petal");
 
     // tea bags
-    register(r, new Item(base), "teabag");
-    register(r, new Item(base), "teabag_black");
-    register(r, new Item(base), "teabag_floral");
-    register(r, new Item(base), "teabag_chorus");
-    register(r, new Item(base), "teabag_green");
+    register(r, new Item(props), "teabag");
+    register(r, new Item(props), "teabag_black");
+    register(r, new Item(props), "teabag_floral");
+    register(r, new Item(props), "teabag_chorus");
+    register(r, new Item(props), "teabag_green");
+
+    // blocks
+    registerBlockItem(r, new WoodBlockItem(tea_fence, props));
+    registerBlockItem(r, new WoodBlockItem(tea_fence_gate, props));
+    registerBlockItem(r, tea_sapling);
 
     // teapots
     props = new Item.Properties().group(group).maxStackSize(16);
@@ -154,11 +160,6 @@ public class Registration {
     register(r, new TeaCupItem(props.food(Config.SERVER.chai_tea)), "cup_tea_chai");
     register(r, new TeaCupItem(props.food(Config.SERVER.chorus_tea)), "cup_tea_chorus");
     register(r, new CocoaItem(props.food(Config.SERVER.cocoa)), "cup_cocoa");
-
-    // blocks
-    registerBlockItem(r, tea_fence);
-    registerBlockItem(r, tea_fence_gate);
-    registerBlockItem(r, tea_sapling);
   }
 
   @SubscribeEvent
@@ -182,8 +183,12 @@ public class Registration {
     return value;
   }
 
+  private static BlockItem registerBlockItem(IForgeRegistry<Item> registry, BlockItem item) {
+    return register(registry, item, item.getBlock().getRegistryName());
+  }
+
   private static BlockItem registerBlockItem(IForgeRegistry<Item> registry, Block block) {
     Item.Properties props = new Item.Properties().group(group);
-    return register(registry, new BlockItem(block, props), block.getRegistryName());
+    return registerBlockItem(registry, new BlockItem(block, props));
   }
 }
