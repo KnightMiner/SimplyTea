@@ -1,0 +1,49 @@
+{
+  "itemGroup.simplytea": "Simply Tea!",
+
+  "block.simplytea.tea_sapling": "Sadzonka herbaty",
+  "block.simplytea.tea_trunk": "Trzon herbaty",
+  "block.simplytea.tea_fence": "Płot z herbaty",
+  "block.simplytea.tea_fence_gate": "Furtka z herbaty",
+
+  "item.simplytea.tea_leaf": "Liść herbaty",
+  "item.simplytea.tea_leaf.tooltip": "Przyjemny zapach!",
+  "item.simplytea.black_tea": "Czarna herbata",
+  "item.simplytea.black_tea.tooltip": "Sfermentowana!",
+  "item.simplytea.tea_stick": "Patyk herbaciany",
+  "item.simplytea.tea_stick.tooltip": "Słodki jak cynamon!",
+  "item.simplytea.chorus_petal": "Płatek refrenusu",
+  "item.simplytea.chorus_petal.tooltip": "Mistyczny!",
+
+  "item.simplytea.cup": "Szklanka herbaty",
+  "item.simplytea.cup_water": "Szklanka wody",
+  "item.simplytea.cup_tea_green": "Szklanka zielonej herbaty",
+  "item.simplytea.cup_tea_black": "Szklanka czarnej herbaty",
+  "item.simplytea.cup_tea_floral": "Szklanka herbaty z mlecza",
+  "item.simplytea.cup_tea_chai": "Szklanka herbaty chai",
+  "item.simplytea.cup_tea_chamomile": "Szklanka rumiankowej herbaty",
+  "item.simplytea.cup_tea_chorus": "Szklanka refrenusowej herbaty",
+  "item.simplytea.cup_cocoa": "Szklanka gorącej czekolady",
+
+  "item.simplytea.teabag": "Torebka herbaty",
+  "item.simplytea.teabag_green": "Torebka zielonej herbaty",
+  "item.simplytea.teabag_black": "Torebka czarnej herbaty",
+  "item.simplytea.teabag_floral": "Torebka herbaty z mlecza",
+  "item.simplytea.teabag_chamomile": "Torebka rumiankowej herbaty",
+  "item.simplytea.teabag_chorus": "Torebka refrenusowej herbaty",
+
+  "item.simplytea.teapot": "Czajnik",
+  "item.simplytea.teapot.tooltip": "Pusty",
+  "item.simplytea.teapot_water": "Czajnik",
+  "item.simplytea.teapot_water.tooltip": "Napełniony wodą",
+  "item.simplytea.teapot_milk": "Czajnik",
+  "item.simplytea.teapot_milk.tooltip": "Napełniony mlekiem",
+  "item.simplytea.teapot_hot": "Czajnik",
+  "item.simplytea.teapot_hot.tooltip": "Gotuje się",
+  "item.simplytea.teapot_frothed": "Czajnik",
+  "item.simplytea.teapot_frothed.tooltip": "Spienione mleko",
+
+  "effect.simplytea.restful": "Ukojony",
+  "effect.simplytea.caffeinated": "Pobudzony",
+  "effect.simplytea.enderfalling": "Enderfalling"
+}
