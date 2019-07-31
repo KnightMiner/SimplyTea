@@ -12,16 +12,14 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '2.0.1'
+version = '2.0.2'
 group = 'knightminer.simplytea'
 archivesBaseName = 'simplytea'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190626-1.14.3'
-
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    mappings channel: 'snapshot', version: '20190729-1.14.3'
     accessTransformer = file('src/main/resources/META-INF/access_transformer.cfg')
     
     runs {
@@ -56,11 +54,29 @@ minecraft {
                 }
             }
         }
+
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'simplytea', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                simplytea {
+                    source sourceSets.main
+                }
+            }
+        }
     }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.3-27.0.13'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.24'
 }
 
 jar {

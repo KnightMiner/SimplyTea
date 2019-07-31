@@ -73,7 +73,7 @@ public class Events {
     LootTable table = event.getTable();
     if (table != LootTable.EMPTY_LOOT_TABLE) {
       ResourceLocation location = new ResourceLocation(SimplyTea.MOD_ID, base.getPath());
-      table.addPool(new LootPool.Builder().name(location.toString()).rolls(ConstantRange.func_215835_a(1)).addEntry(TableLootEntry.func_216171_a(location)).build());
+      table.addPool(new LootPool.Builder().name(location.toString()).rolls(ConstantRange.of(1)).addEntry(TableLootEntry.builder(location)).build());
     }
   }
 }

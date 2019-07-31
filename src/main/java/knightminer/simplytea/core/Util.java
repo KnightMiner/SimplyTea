@@ -5,7 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameterSets;
 import net.minecraft.world.storage.loot.LootParameters;
@@ -34,10 +34,9 @@ public final class Util {
             .withNullableParameter(LootParameters.BLOCK_ENTITY, world.getTileEntity(pos))
             .withNullableParameter(LootParameters.THIS_ENTITY, player)
             .withParameter(LootParameters.TOOL, tool);
-        LootContext lootcontext = builder.build(LootParameterSets.BLOCK);
-        ServerWorld serverworld = lootcontext.getWorld();
-        LootTable table = serverworld.getServer().getLootTableManager().getLootTableFromLocation(location);
-        return table.generate(lootcontext);
+        LootContext context = builder.build(LootParameterSets.BLOCK);
+        LootTable table = world.getServer().getLootTableManager().getLootTableFromLocation(location);
+        return table.generate(context);
     }
 
     /**
