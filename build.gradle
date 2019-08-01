@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '2.0.2'
+version = '2.0.3'
 group = 'knightminer.simplytea'
 archivesBaseName = 'simplytea'
 
@@ -20,7 +20,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 minecraft {
     mappings channel: 'snapshot', version: '20190729-1.14.3'
-    accessTransformer = file('src/main/resources/META-INF/access_transformer.cfg')
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     
     runs {
         client {
