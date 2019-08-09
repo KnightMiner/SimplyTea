@@ -1,0 +1,49 @@
+{
+  "itemGroup.simplytea": "Simply Tea!",
+
+  "block.simplytea.tea_sapling": "Teebaumsetzling",
+  "block.simplytea.tea_trunk": "Teabaumstamm",
+  "block.simplytea.tea_fence": "Teebaumzaun",
+  "block.simplytea.tea_fence_gate": "Teebaumzauntor",
+
+  "item.simplytea.tea_leaf": "Teebaumlaub",
+  "item.simplytea.tea_leaf.tooltip": "Angenehmes Aroma!",
+  "item.simplytea.black_tea": "Schwarzer Tee",
+  "item.simplytea.black_tea.tooltip": "Fermentiert!",
+  "item.simplytea.tea_stick": "Teebaum Stock",
+  "item.simplytea.tea_stick.tooltip": "Süß wie Zimt!",
+  "item.simplytea.chorus_petal": "Chorus Blütenblatt",
+  "item.simplytea.chorus_petal.tooltip": "Mystisch!",
+
+  "item.simplytea.cup": "Teetasse",
+  "item.simplytea.cup_water": "Tasse Wasser",
+  "item.simplytea.cup_tea_green": "Tasse grüner Tee",
+  "item.simplytea.cup_tea_black": "Tasse schwarzer Tee",
+  "item.simplytea.cup_tea_floral": "Tasse Löwenzahntee",
+  "item.simplytea.cup_tea_chai": "Tasse Chai-Tee",
+  "item.simplytea.cup_tea_chamomile": "Tasse Kamillentee",
+  "item.simplytea.cup_tea_chorus": "Tasse Chorus Tee",
+  "item.simplytea.cup_cocoa": "Tasse heiße Schokolade",
+
+  "item.simplytea.teabag": "Teebeutel",
+  "item.simplytea.teabag_green": "Beutel Grüner Tee",
+  "item.simplytea.teabag_black": "Beutel Schwarzer Tee",
+  "item.simplytea.teabag_floral": "Beutel Löwenzahntee",
+  "item.simplytea.teabag_chamomile": "Beutel Kamillentee",
+  "item.simplytea.teabag_chorus": "Beutel Chorustee",
+
+  "item.simplytea.teapot": "Teekanne",
+  "item.simplytea.teapot.tooltip": "Leer!",
+  "item.simplytea.teapot_water": "Teekanne",
+  "item.simplytea.teapot_water.tooltip": "Voll mit Wasser!",
+  "item.simplytea.teapot_milk": "Teekanne",
+  "item.simplytea.teapot_milk.tooltip": "Voll mit Milch!",
+  "item.simplytea.teapot_hot": "Teekanne",
+  "item.simplytea.teapot_hot.tooltip": "Kochend!",
+  "item.simplytea.teapot_frothed": "Teekanne",
+  "item.simplytea.teapot_frothed.tooltip": "Milchschaum!",
+
+  "effect.simplytea.restful": "Beruihgend",
+  "effect.simplytea.caffeinated": "Koffeinhaltig",
+  "effect.simplytea.enderfalling": "Enderfalling"
+}
