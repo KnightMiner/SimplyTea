@@ -47,6 +47,7 @@ public final class Util {
      * @return  Filled stack if 1 container, leftover container if more than 1, dropping the filled
      */
     public static ItemStack fillContainer(PlayerEntity player, ItemStack container, ItemStack filled) {
+        container = container.copy();
         if (!player.isCreative()) {
             container.shrink(1);
             if (container.isEmpty()) {
