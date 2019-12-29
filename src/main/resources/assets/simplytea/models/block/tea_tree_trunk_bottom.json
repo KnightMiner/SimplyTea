@@ -8,29 +8,29 @@
 	},
 	"elements": [
 		{
-			"__comment": "Cube3",
+			"__comment": "Leaves",
 			"from": [ 2, 4.01, 2 ],
 			"to": [ 14, 16.01, 14 ],
 			"faces": {
-				"down": { "uv": [ 2, 2, 14, 14 ], "texture": "#leaves" },
-				"up": { "uv": [ 2, 2, 14, 14 ], "texture": "#leaves" },
-				"north": { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves" },
-				"south": { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves" },
-				"west": { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves" },
-				"east": { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves" }
+				"down":  { "uv": [ 2, 2, 14, 14 ], "texture": "#leaves", "tintindex": 0 },
+				"up":    { "uv": [ 2, 2, 14, 14 ], "texture": "#leaves", "tintindex": 0 },
+				"north": { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves", "tintindex": 0 },
+				"south": { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves", "tintindex": 0 },
+				"west":  { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves", "tintindex": 0 },
+				"east":  { "uv": [ 2, 0, 14, 12 ], "texture": "#leaves", "tintindex": 0 }
 			}
 		},
 		{
-			"__comment": "Cube2",
+			"__comment": "Bark",
 			"from": [ 6.5, 0, 6.5 ],
 			"to": [ 9.5, 16, 9.5 ],
 			"faces": {
-				"down": { "uv": [ 4, 4, 7, 7 ], "texture": "#bark" },
-				"up": { "uv": [ 4, 4, 7, 7 ], "texture": "#bark" },
+				"down":  { "uv": [ 4,  4, 7, 7 ], "texture": "#bark" },
+				"up":    { "uv": [ 4,  4, 7, 7 ], "texture": "#bark" },
 				"north": { "uv": [ 0, 16, 3, 0 ], "texture": "#bark" },
 				"south": { "uv": [ 0, 16, 3, 0 ], "texture": "#bark" },
-				"west": { "uv": [ 0, 16, 3, 0 ], "texture": "#bark" },
-				"east": { "uv": [ 0, 16, 3, 0 ], "texture": "#bark" }
+				"west":  { "uv": [ 0, 16, 3, 0 ], "texture": "#bark" },
+				"east":  { "uv": [ 0, 16, 3, 0 ], "texture": "#bark" }
 			}
 		}
 	]
