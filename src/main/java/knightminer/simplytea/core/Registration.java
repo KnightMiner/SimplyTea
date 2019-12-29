@@ -15,8 +15,10 @@ import knightminer.simplytea.potion.EnderfallingEffect;
 import knightminer.simplytea.potion.RestfulEffect;
 import knightminer.simplytea.worldgen.TeaTreeFeature;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.FenceBlock;
 import net.minecraft.block.FenceGateBlock;
+import net.minecraft.block.FireBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -31,6 +33,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
@@ -167,6 +170,17 @@ public class Registration {
     IForgeRegistry<Feature<?>> r = event.getRegistry();
 
     register(r, new TeaTreeFeature(NoFeatureConfig::deserialize), "tea_tree");
+  }
+
+  @SubscribeEvent
+  public static void registerMisc(final FMLCommonSetupEvent event) {
+    // flamability
+    if (Blocks.FIRE instanceof FireBlock) {
+      FireBlock fire = (FireBlock)Blocks.FIRE;
+      fire.setFireInfo(tea_fence, 5, 20);
+      fire.setFireInfo(tea_fence_gate, 5, 20);
+      fire.setFireInfo(tea_trunk, 15, 30);
+    }
   }
 
   /* Helper methods */
