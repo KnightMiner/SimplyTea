@@ -16,6 +16,7 @@ import knightminer.simplytea.potion.RestfulEffect;
 import knightminer.simplytea.worldgen.TeaTreeFeature;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.ComposterBlock;
 import net.minecraft.block.FenceBlock;
 import net.minecraft.block.FenceGateBlock;
 import net.minecraft.block.FireBlock;
@@ -181,6 +182,11 @@ public class Registration {
       fire.setFireInfo(tea_fence_gate, 5, 20);
       fire.setFireInfo(tea_trunk, 15, 30);
     }
+
+    ComposterBlock.registerCompostable(0.3f, tea_leaf);
+    ComposterBlock.registerCompostable(0.4f, black_tea);
+    ComposterBlock.registerCompostable(0.5f, chorus_petal);
+    ComposterBlock.registerCompostable(0.3f, tea_sapling);
   }
 
   /* Helper methods */
