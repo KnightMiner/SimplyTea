@@ -60,12 +60,10 @@ public class Events {
 
   @SubscribeEvent
   public static void addLoot(LootTableLoadEvent event) {
-    // TODO: never called for vanilla tables, Forge #5671
     addToLootTable(event, "blocks/chorus_flower");
   }
 
   private static void addToLootTable(LootTableLoadEvent event, String name) {
-    // TODO: current version of Forge includes "loot_tables" folder and ".json" in the name
     if (!event.getName().getNamespace().equals("minecraft") || !event.getName().getPath().equals(name)) {
       return;
     }

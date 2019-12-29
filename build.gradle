@@ -19,7 +19,7 @@ archivesBaseName = 'simplytea'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190729-1.14.3'
+    mappings channel: 'snapshot', version: '20191013-1.14.3'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     
     runs {
@@ -76,7 +76,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.24'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.0'
 }
 
 jar {
