@@ -29,12 +29,19 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
@@ -187,6 +194,13 @@ public class Registration {
     ComposterBlock.registerCompostable(0.4f, black_tea);
     ComposterBlock.registerCompostable(0.5f, chorus_petal);
     ComposterBlock.registerCompostable(0.3f, tea_sapling);
+  }
+
+  @SubscribeEvent
+  public static void registerFeatures(final InterModProcessEvent event) {
+    BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST).forEach((biome) -> {
+      biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Registration.tea_tree, IFeatureConfig.NO_FEATURE_CONFIG, Placement.DARK_OAK_TREE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+    });
   }
 
   /* Helper methods */
