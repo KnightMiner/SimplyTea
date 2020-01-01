@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-group = 'knightminer.simplytea'
+group = 'knightminer'
 archivesBaseName = 'simplytea'
 
 
