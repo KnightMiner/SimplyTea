@@ -1,17 +1,17 @@
 {
-    "multipart": [
-        {   "apply": { "model": "simplytea:block/tea_fence_post" }},
-        {   "when": { "north": "true" },
-            "apply": { "model": "simplytea:block/tea_fence_side" }
-        },
-        {   "when": { "east": "true" },
-            "apply": { "model": "simplytea:block/tea_fence_side", "y": 90 }
-        },
-        {   "when": { "south": "true" },
-            "apply": { "model": "simplytea:block/tea_fence_side", "y": 180 }
-        },
-        {   "when": { "west": "true" },
-            "apply": { "model": "simplytea:block/tea_fence_side", "y": 270 }
-        }
-    ]
+  "multipart": [
+    { "apply": { "model": "simplytea:block/fence/post" }},
+    { "when": { "north": "true" },
+      "apply": { "model": "simplytea:block/fence/side" }
+    },
+    { "when": { "east": "true" },
+      "apply": { "model": "simplytea:block/fence/side", "y": 90 }
+    },
+    { "when": { "south": "true" },
+      "apply": { "model": "simplytea:block/fence/side", "y": 180 }
+    },
+    { "when": { "west": "true" },
+      "apply": { "model": "simplytea:block/fence/side", "y": 270 }
+    }
+  ]
 }

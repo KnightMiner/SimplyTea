@@ -1,27 +1,23 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "simplytea:block/tea_fence_gate_closed"
-  },
   "variants": {    
-    "facing=south,in_wall=false,open=false": [{}],
-    "facing=west,in_wall=false,open=false":  {"y":  90},
-    "facing=north,in_wall=false,open=false": {"y": 180},
-    "facing=east,in_wall=false,open=false":  {"y": 270},
+    "facing=south,in_wall=false,open=false": {"model": "simplytea:block/fence_gate/normal_closed"},
+    "facing=west,in_wall=false,open=false":  {"model": "simplytea:block/fence_gate/normal_closed", "y":  90},
+    "facing=north,in_wall=false,open=false": {"model": "simplytea:block/fence_gate/normal_closed", "y": 180},
+    "facing=east,in_wall=false,open=false":  {"model": "simplytea:block/fence_gate/normal_closed", "y": 270},
     
-    "facing=south,in_wall=false,open=true": {"model": "simplytea:block/tea_fence_gate_open"},
-    "facing=west,in_wall=false,open=true":  {"model": "simplytea:block/tea_fence_gate_open", "y":  90},
-    "facing=north,in_wall=false,open=true": {"model": "simplytea:block/tea_fence_gate_open", "y": 180},
-    "facing=east,in_wall=false,open=true":  {"model": "simplytea:block/tea_fence_gate_open", "y": 270},
+    "facing=south,in_wall=false,open=true":  {"model": "simplytea:block/fence_gate/normal_open"},
+    "facing=west,in_wall=false,open=true":   {"model": "simplytea:block/fence_gate/normal_open", "y":  90},
+    "facing=north,in_wall=false,open=true":  {"model": "simplytea:block/fence_gate/normal_open", "y": 180},
+    "facing=east,in_wall=false,open=true":   {"model": "simplytea:block/fence_gate/normal_open", "y": 270},
     
-    "facing=south,in_wall=true,open=false": [{"transform": {"translation": [ 0, -0.1875, 0 ]}}],
-    "facing=west,in_wall=true,open=false":  [{"transform": {"translation": [ 0, -0.1875, 0 ], "rotation": {"y": 270}}}],
-    "facing=north,in_wall=true,open=false": [{"transform": {"translation": [ 0, -0.1875, 0 ], "rotation": {"y": 180}}}],
-    "facing=east,in_wall=true,open=false":  [{"transform": {"translation": [ 0, -0.1875, 0 ], "rotation": {"y":  90}}}],
+    "facing=south,in_wall=true,open=false": {"model": "simplytea:block/fence_gate/wall_closed"},
+    "facing=west,in_wall=true,open=false":  {"model": "simplytea:block/fence_gate/wall_closed", "y":  90},
+    "facing=north,in_wall=true,open=false": {"model": "simplytea:block/fence_gate/wall_closed", "y": 180},
+    "facing=east,in_wall=true,open=false":  {"model": "simplytea:block/fence_gate/wall_closed", "y": 270},
     
-    "facing=south,in_wall=true,open=true": {"model": "simplytea:block/tea_fence_gate_open", "transform": {"translation": [ 0, -0.1875, 0 ]}},
-    "facing=west,in_wall=true,open=true":  {"model": "simplytea:block/tea_fence_gate_open", "transform": {"translation": [ 0, -0.1875, 0 ], "rotation": {"y": 270}}},
-    "facing=north,in_wall=true,open=true": {"model": "simplytea:block/tea_fence_gate_open", "transform": {"translation": [ 0, -0.1875, 0 ], "rotation": {"y": 180}}},
-    "facing=east,in_wall=true,open=true":  {"model": "simplytea:block/tea_fence_gate_open", "transform": {"translation": [ 0, -0.1875, 0 ], "rotation": {"y":  90}}}
+    "facing=south,in_wall=true,open=true": {"model": "simplytea:block/fence_gate/wall_open"},
+    "facing=west,in_wall=true,open=true":  {"model": "simplytea:block/fence_gate/wall_open", "y":  90},
+    "facing=north,in_wall=true,open=true": {"model": "simplytea:block/fence_gate/wall_open", "y": 180},
+    "facing=east,in_wall=true,open=true":  {"model": "simplytea:block/fence_gate/wall_open", "y": 270}
   }
 }
