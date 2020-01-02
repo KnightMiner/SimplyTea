@@ -148,7 +148,7 @@ public class Registration {
     // blocks
     registerBlockItem(r, new WoodBlockItem(tea_fence, props));
     registerBlockItem(r, new WoodBlockItem(tea_fence_gate, props));
-    registerBlockItem(r, tea_sapling);
+    registerBlockItem(r, new BlockItem(tea_sapling, props));
 
     // teapots
     props = new Item.Properties().group(group).maxStackSize(16);
@@ -206,24 +206,43 @@ public class Registration {
 
   /* Helper methods */
 
+  /**
+   * Registers a forge registry object at the given resource location
+   * @param registry  Forge registry
+   * @param value     Value to register
+   * @param location  Resource location
+   * @param <V>  Value class, extends registry class
+   * @param <R>  Registry class
+   * @return  Registered value
+   */
   private static <V extends R, R extends IForgeRegistryEntry<R>> V register(IForgeRegistry<R> registry, V value, ResourceLocation location) {
     value.setRegistryName(location);
     registry.register(value);
     return value;
   }
 
+  /**
+   * Registers a forge registry object using the given name and a domain of "simplytea"
+   * @param registry  Forge registry
+   * @param value     Value to register
+   * @param name      Registration name
+   * @param <V>  Value class, extends registry class
+   * @param <R>  Registry class
+   * @return  Registered value
+   */
   private static <V extends R, R extends IForgeRegistryEntry<R>> V register(IForgeRegistry<R> registry, V value, String name) {
     value.setRegistryName(new ResourceLocation(SimplyTea.MOD_ID, name));
     registry.register(value);
     return value;
   }
 
+  /**
+   * Registers a block item
+   * @param registry  Item registry
+   * @param item      Item to register, registry name will be set automatically from the internal block
+   * @return  Registered block item
+   */
   private static BlockItem registerBlockItem(IForgeRegistry<Item> registry, BlockItem item) {
     return register(registry, item, item.getBlock().getRegistryName());
-  }
-
-  private static BlockItem registerBlockItem(IForgeRegistry<Item> registry, Block block) {
-    Item.Properties props = new Item.Properties().group(group);
-    return registerBlockItem(registry, new BlockItem(block, props));
   }
 }
