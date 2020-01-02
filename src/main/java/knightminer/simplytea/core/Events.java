@@ -1,6 +1,8 @@
 package knightminer.simplytea.core;
 
 import knightminer.simplytea.SimplyTea;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
@@ -62,17 +64,22 @@ public class Events {
 
   @SubscribeEvent
   public static void addLoot(LootTableLoadEvent event) {
-    addToLootTable(event, "blocks/chorus_flower");
+    addToBlockLoot(event, Blocks.CHORUS_FLOWER);
   }
 
-  private static void addToLootTable(LootTableLoadEvent event, String name) {
-    if (!event.getName().getNamespace().equals("minecraft") || !event.getName().getPath().equals(name)) {
+  /**
+   * Injects an custom loot pool from animalcrops:blocks/minecraft/ into the vanilla block
+   * @param event  Event, used to determine if this is the proper loot table
+   * @param block  Block to inject loot into
+   */
+  private static void addToBlockLoot(LootTableLoadEvent event, Block block) {
+    String name = block.getRegistryName().getPath();
+    if (!event.getName().getNamespace().equals("minecraft") || !event.getName().getPath().equals("blocks/" + name)) {
       return;
     }
-    ResourceLocation base = new ResourceLocation(name);
     LootTable table = event.getTable();
     if (table != LootTable.EMPTY_LOOT_TABLE) {
-      ResourceLocation location = new ResourceLocation(SimplyTea.MOD_ID, base.getPath());
+      ResourceLocation location = new ResourceLocation(SimplyTea.MOD_ID, "blocks/minecraft/" + name);
       table.addPool(new LootPool.Builder().name(location.toString()).rolls(ConstantRange.of(1)).addEntry(TableLootEntry.builder(location)).build());
     }
   }
