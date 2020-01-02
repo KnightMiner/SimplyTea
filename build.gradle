@@ -28,7 +28,7 @@ configurations {
   deployerJars
 }
 
-version = config.mod_version
+version = "${config.minecraft_version}-${config.mod_version}"
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
