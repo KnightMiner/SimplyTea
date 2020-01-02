@@ -3,31 +3,31 @@ package knightminer.simplytea.block;
 import knightminer.simplytea.block.TeaTrunkBlock.TrunkType;
 import knightminer.simplytea.core.Registration;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.IGrowable;
 import net.minecraft.block.SaplingBlock;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
 
-public class TeaSaplingBlock extends SaplingBlock implements IGrowable {
+public class TeaSaplingBlock extends SaplingBlock {
 
 	public TeaSaplingBlock(Properties props) {
 		// TODO: add a tree for some logic?
 		super(null, props);
 	}
 
+	// IGrowable's grow
 	@Override
-	public void grow(IWorld world, BlockPos pos, BlockState state, Random rand) {
+	public void func_225535_a_(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
 		if(state.get(STAGE) == 0) {
 			world.setBlockState(pos, state.cycle(STAGE), 4);
 		}
-		else {
-			if (!ForgeEventFactory.saplingGrowTree(world, rand, pos)) return;
+		else if(ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
 			TeaSaplingBlock.generateTree(world, pos, rand);
 		}
 	}

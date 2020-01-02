@@ -3,7 +3,9 @@ package knightminer.simplytea.worldgen;
 import com.mojang.datafixers.Dynamic;
 import knightminer.simplytea.block.TeaSaplingBlock;
 import knightminer.simplytea.core.Config;
-import net.minecraft.tags.BlockTags;
+import knightminer.simplytea.core.Registration;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -24,7 +26,9 @@ public class TeaTreeFeature extends Feature<NoFeatureConfig> {
 		if (!Config.SERVER.tree.generate() || random.nextInt(100) != 0) {
 			return false;
 		}
-		if(world.getBlockState(pos.down()).getBlock().isIn(BlockTags.DIRT_LIKE) && world.getBlockState(pos).isAir(world, pos)) {
+		BlockPos down = pos.down();
+		BlockState soil = world.getBlockState(down);
+		if(soil.canSustainPlant(world, down, Direction.UP, Registration.tea_sapling) && world.getBlockState(pos).isAir(world, pos)) {
 			TeaSaplingBlock.generateTree(world, pos, random);
 			return true;
 		}

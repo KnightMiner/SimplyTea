@@ -29,7 +29,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
@@ -64,7 +63,7 @@ public class Registration {
   public static final Effect enderfalling = null;
 
   /* Blocks */
-  public static final Block tea_sapling = null;
+  public static final TeaSaplingBlock tea_sapling = null;
   public static final Block tea_trunk = null;
   public static final Block tea_fence = null;
   public static final Block tea_fence_gate = null;
@@ -199,7 +198,9 @@ public class Registration {
   @SubscribeEvent
   public static void registerFeatures(final InterModProcessEvent event) {
     BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST).forEach((biome) -> {
-      biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Registration.tea_tree, IFeatureConfig.NO_FEATURE_CONFIG, Placement.DARK_OAK_TREE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+      biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
+                       tea_tree.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG)
+                               .func_227228_a_(Placement.DARK_OAK_TREE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
     });
   }
 

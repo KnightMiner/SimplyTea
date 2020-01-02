@@ -14,7 +14,7 @@ import net.minecraft.item.ShearsItem;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -65,9 +65,11 @@ public class TeaTrunkBlock extends Block {
 		this.setDefaultState(this.stateContainer.getBaseState().with(TYPE, TrunkType.STUMP).with(CLIPPED, false));
 	}
 
+	// block tick
 	@Deprecated
 	@Override
-	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
+	public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+		super.func_225534_a_(state, world, pos, rand);
 		if(state.getBlock() == this && state.get(CLIPPED)) {
 			if (rand.nextFloat() < Config.SERVER.tree.regrowthChance()) {
 				world.setBlockState(pos, state.with(CLIPPED, false));
@@ -81,16 +83,15 @@ public class TeaTrunkBlock extends Block {
 		return new ItemStack(Registration.tea_sapling);
 	}
 
-	@Override
 	@Deprecated
-	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult face) {
+	public ActionResultType func_225533_a_(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
 		if(state.getBlock() != this || state.get(CLIPPED) || state.get(TYPE) == TrunkType.STUMP) {
-			return false;
+			return ActionResultType.PASS;
 		}
 
 		ItemStack heldItem = player.getHeldItem(hand);
 		Item item = heldItem.getItem();
-		if(item instanceof ShearsItem || item.getToolTypes(heldItem).contains("shears")) {
+		if(item instanceof ShearsItem || item.getToolTypes(heldItem).contains(SimplyTea.SHEAR_TYPE)) {
 			ItemStack stack = heldItem.copy();
 			stack.damageItem(1, player, (playerEntity) -> {
 				playerEntity.sendBreakAnimation(hand);
@@ -107,9 +108,9 @@ public class TeaTrunkBlock extends Block {
 			world.setBlockState(pos, state.with(CLIPPED, true), 8);
 			world.notifyBlockUpdate(pos, state, state.with(CLIPPED, true), 8);
 			world.playSound(player, pos, SoundEvents.ENTITY_SHEEP_SHEAR, SoundCategory.BLOCKS, 1.0F, 1.0F);
-			return true;
+			return ActionResultType.SUCCESS;
 		}
-		return false;
+		return ActionResultType.PASS;
 	}
 
 	@Deprecated
@@ -129,11 +130,6 @@ public class TeaTrunkBlock extends Block {
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(TYPE, CLIPPED);
-	}
-
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
 	@Override

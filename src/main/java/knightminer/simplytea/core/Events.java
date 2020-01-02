@@ -21,12 +21,14 @@ public class Events {
 
   @SubscribeEvent
   public static void playerWakeUp(PlayerWakeUpEvent event) {
-    if (!event.shouldSetSpawn() || event.updateWorld()) {
+    // update world means the client sent it, comes from the leave bed button being clicked
+    // server would set that to false, like when we sleep full night
+    if (event.updateWorld()) {
       return;
     }
 
     // if caffeinated, remove that with no restful benefits
-    PlayerEntity player = event.getEntityPlayer();
+    PlayerEntity player = event.getPlayer();
     if (player.isPotionActive(Registration.caffeinated)) {
       player.removePotionEffect(Registration.caffeinated);
       player.removePotionEffect(Registration.restful);
