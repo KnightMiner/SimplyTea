@@ -29,6 +29,7 @@ public class ClientEvents {
     // set render types
     RenderType cutout_mipped = RenderType.getCutoutMipped();
     RenderTypeLookup.setRenderLayer(Registration.tea_sapling, cutout_mipped);
+    RenderTypeLookup.setRenderLayer(Registration.potted_tea_sapling, cutout_mipped);
     RenderTypeLookup.setRenderLayer(Registration.tea_trunk, cutout_mipped);
   }
 }

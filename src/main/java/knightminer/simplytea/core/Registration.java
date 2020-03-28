@@ -3,24 +3,12 @@ package knightminer.simplytea.core;
 import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.block.TeaSaplingBlock;
 import knightminer.simplytea.block.TeaTrunkBlock;
-import knightminer.simplytea.item.CocoaItem;
-import knightminer.simplytea.item.HotTeapotItem;
-import knightminer.simplytea.item.TeaCupItem;
-import knightminer.simplytea.item.TeaStickItem;
-import knightminer.simplytea.item.TeapotItem;
-import knightminer.simplytea.item.TooltipItem;
-import knightminer.simplytea.item.WoodBlockItem;
+import knightminer.simplytea.item.*;
 import knightminer.simplytea.potion.CaffeinatedEffect;
 import knightminer.simplytea.potion.EnderfallingEffect;
 import knightminer.simplytea.potion.RestfulEffect;
 import knightminer.simplytea.worldgen.TeaTreeFeature;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ComposterBlock;
-import net.minecraft.block.FenceBlock;
-import net.minecraft.block.FenceGateBlock;
-import net.minecraft.block.FireBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItem;
@@ -67,6 +55,7 @@ public class Registration {
   public static final Block tea_trunk = null;
   public static final Block tea_fence = null;
   public static final Block tea_fence_gate = null;
+  public static final Block potted_tea_sapling = null;
 
   /* Items */
   /* Crafting */
@@ -124,6 +113,10 @@ public class Registration {
 
     props = Block.Properties.create(Material.WOOD, MaterialColor.BROWN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).tickRandomly();
     register(r, new TeaTrunkBlock(props), "tea_trunk");
+
+    props = Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0f).notSolid();
+    register(r, new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> tea_sapling, props), "potted_tea_sapling");
+    ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(new ResourceLocation(SimplyTea.MOD_ID, "tea_sapling"), () -> potted_tea_sapling);
   }
 
   @SubscribeEvent
