@@ -199,8 +199,8 @@ public class Registration {
   public static void registerFeatures(final InterModProcessEvent event) {
     BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST).forEach((biome) -> {
       biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
-                       tea_tree.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG)
-                               .func_227228_a_(Placement.DARK_OAK_TREE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+                       tea_tree.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
+                               .withPlacement(Placement.DARK_OAK_TREE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
     });
   }
 

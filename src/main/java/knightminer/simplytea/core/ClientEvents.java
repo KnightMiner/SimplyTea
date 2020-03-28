@@ -20,14 +20,14 @@ public class ClientEvents {
       if (world == null || pos == null) {
         return FoliageColors.getDefault();
       }
-      return BiomeColors.func_228361_b_(world, pos);
+      return BiomeColors.getFoliageColor(world, pos);
     }, Registration.tea_trunk);
   }
 
   @SubscribeEvent
   public static void registerMisc(FMLClientSetupEvent event) {
     // set render types
-    RenderType cutout_mipped = RenderType.func_228641_d_();
+    RenderType cutout_mipped = RenderType.getCutoutMipped();
     RenderTypeLookup.setRenderLayer(Registration.tea_sapling, cutout_mipped);
     RenderTypeLookup.setRenderLayer(Registration.tea_trunk, cutout_mipped);
   }

@@ -51,7 +51,7 @@ public class Config {
 	}
 
 	@SubscribeEvent
-	public static void onFileChange(final ModConfig.ConfigReloading event) {
+	public static void onFileChange(final ModConfig.Reloading event) {
 		// clear the effect cache so we get the new version of the config
 		if (event.getConfig().getType() == ModConfig.Type.SERVER) {
 			SERVER.floral_tea.invalidEffects();
