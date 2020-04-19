@@ -65,13 +65,12 @@ public class TeaTrunkBlock extends Block {
 		this.setDefaultState(this.stateContainer.getBaseState().with(TYPE, TrunkType.STUMP).with(CLIPPED, false));
 	}
 
-	// block tick
 	@Deprecated
 	@Override
-	public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
-		super.func_225534_a_(state, world, pos, rand);
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+		super.tick(state, world, pos, random);
 		if(state.getBlock() == this && state.get(CLIPPED)) {
-			if (rand.nextFloat() < Config.SERVER.tree.regrowthChance()) {
+			if (random.nextFloat() < Config.SERVER.tree.regrowthChance()) {
 				world.setBlockState(pos, state.with(CLIPPED, false));
 				world.notifyBlockUpdate(pos, state, state.with(CLIPPED, false), 8);
 			}
