@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
 
-import javax.annotation.Nonnull;
 import java.util.Random;
 
 public class TeaSaplingBlock extends SaplingBlock {
@@ -24,7 +23,7 @@ public class TeaSaplingBlock extends SaplingBlock {
 
 	// IGrowable's grow
 	@Override
-	public void grow(@Nonnull ServerWorld world,@Nonnull Random rand,@Nonnull BlockPos pos, BlockState state) {
+	public void func_226942_a_(ServerWorld world, BlockPos pos, BlockState state, Random rand) {
 		if(state.get(STAGE) == 0) {
 			world.setBlockState(pos, state.cycle(STAGE), 4);
 		}
