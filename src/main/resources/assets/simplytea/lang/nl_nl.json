@@ -1,0 +1,49 @@
+{
+  "itemGroup.simplytea": "Simply Tea!",
+
+  "block.simplytea.tea_sapling": "Thee boom",
+  "block.simplytea.tea_trunk": "Theeboomstam",
+  "block.simplytea.tea_fence": "Thee hek",
+  "block.simplytea.tea_fence_gate": "Thee poort",
+
+  "item.simplytea.tea_leaf": "Theeblad",
+  "item.simplytea.tea_leaf.tooltip": "Prettige aroma!",
+  "item.simplytea.black_tea": "Zwarte thee",
+  "item.simplytea.black_tea.tooltip": "Gefermenteerde!",
+  "item.simplytea.tea_stick": "Thee stokje",
+  "item.simplytea.tea_stick.tooltip": "Zoet als kaneel!",
+  "item.simplytea.chorus_petal": "Koorblaadje",
+  "item.simplytea.chorus_petal.tooltip": "Mystieke!",
+
+  "item.simplytea.cup": "Theekop",
+  "item.simplytea.cup_water": "Glas water",
+  "item.simplytea.cup_tea_green": "Kopje groene thee",
+  "item.simplytea.cup_tea_black": "Kopje zwarte thee",
+  "item.simplytea.cup_tea_floral": "Kopje paardenbloem thee",
+  "item.simplytea.cup_tea_chai": "Kopje Chai thee",
+  "item.simplytea.cup_tea_chamomile": "Kopje kamille thee",
+  "item.simplytea.cup_tea_chorus": "Kopje koor thee",
+  "item.simplytea.cup_cocoa": "Kopje warme chocolademelk",
+
+  "item.simplytea.teabag": "Theezak",
+  "item.simplytea.teabag_green": "Groene theezakje",
+  "item.simplytea.teabag_black": "Zwarte theezakje",
+  "item.simplytea.teabag_floral": "Paardebloem theezakje",
+  "item.simplytea.teabag_chamomile": "Kamille theezakje",
+  "item.simplytea.teabag_chorus": "Koor theezakje",
+
+  "item.simplytea.teapot": "Theepot",
+  "item.simplytea.teapot.tooltip": "Leeg!",
+  "item.simplytea.teapot_water": "Theepot",
+  "item.simplytea.teapot_water.tooltip": "Vol met water!",
+  "item.simplytea.teapot_milk": "Theepot",
+  "item.simplytea.teapot_milk.tooltip": "Vol met melk!!",
+  "item.simplytea.teapot_hot": "Theepot",
+  "item.simplytea.teapot_hot.tooltip": "Aan het koken!",
+  "item.simplytea.teapot_frothed": "Theepot",
+  "item.simplytea.teapot_frothed.tooltip": "Opgeschuimde melk!",
+
+  "effect.simplytea.restful": "Rustgevend",
+  "effect.simplytea.caffeinated": "Caffeinated",
+  "effect.simplytea.enderfalling": "Enderfalling"
+}
