@@ -1,0 +1,49 @@
+{
+  "itemGroup.simplytea": "Simply Tea!",
+
+  "block.simplytea.tea_sapling": "Саженец чайного дерева",
+  "block.simplytea.tea_trunk": "Ствол чайного дерева",
+  "block.simplytea.tea_fence": "Забор из чайного дерева",
+  "block.simplytea.tea_fence_gate": "Калитка из чайного дерева",
+
+  "item.simplytea.tea_leaf": "Чайный листочек",
+  "item.simplytea.tea_leaf.tooltip": "Такой приятный аромат!",
+  "item.simplytea.black_tea": "Чёрный чай",
+  "item.simplytea.black_tea.tooltip": "Ферментированный!",
+  "item.simplytea.tea_stick": "Палка из чайного дерева",
+  "item.simplytea.tea_stick.tooltip": "Пахнет сладко, словно корица!",
+  "item.simplytea.chorus_petal": "Лепесток хоруса",
+  "item.simplytea.chorus_petal.tooltip": "Мистический!",
+
+  "item.simplytea.cup": "Кружка",
+  "item.simplytea.cup_water": "Кружка воды",
+  "item.simplytea.cup_tea_green": "Кружка зеленого чая",
+  "item.simplytea.cup_tea_black": "Кружка чёрного чая",
+  "item.simplytea.cup_tea_floral": "Кружка одуванчикового чая",
+  "item.simplytea.cup_tea_chai": "Cup of Chai Tea",
+  "item.simplytea.cup_tea_chamomile": "Кружка ромашкового чая",
+  "item.simplytea.cup_tea_chorus": "Кружка чая из лепестков хоруса",
+  "item.simplytea.cup_cocoa": "Кружка горячего шоколада",
+
+  "item.simplytea.teabag": "Пустой чайный пакетик",
+  "item.simplytea.teabag_green": "Пакетик зеленого чая",
+  "item.simplytea.teabag_black": "Пакетик чёрного чая",
+  "item.simplytea.teabag_floral": "Пакетик чая из одуванчиков",
+  "item.simplytea.teabag_chamomile": "Пакетик ромашкового чая",
+  "item.simplytea.teabag_chorus": "Пакетик чая из лепестков хоруса",
+
+  "item.simplytea.teapot": "Чайник",
+  "item.simplytea.teapot.tooltip": "Пуст!",
+  "item.simplytea.teapot_water": "Чайник",
+  "item.simplytea.teapot_water.tooltip": "Полон воды!",
+  "item.simplytea.teapot_milk": "Чайник",
+  "item.simplytea.teapot_milk.tooltip": "Полон молока!",
+  "item.simplytea.teapot_hot": "Чайник",
+  "item.simplytea.teapot_hot.tooltip": "Настолько горячий, что можно обжечься!",
+  "item.simplytea.teapot_frothed": "Чайник",
+  "item.simplytea.teapot_frothed.tooltip": "С кипячёным молоком!",
+
+  "effect.simplytea.restful": "Расслабленность",
+  "effect.simplytea.caffeinated": "Энергичность",
+  "effect.simplytea.enderfalling": "Лёгкость"
+}
