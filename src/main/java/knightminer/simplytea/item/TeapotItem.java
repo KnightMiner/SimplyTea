@@ -2,11 +2,11 @@ package knightminer.simplytea.item;
 
 import knightminer.simplytea.core.Config;
 import knightminer.simplytea.core.Registration;
-import knightminer.simplytea.core.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CauldronBlock;
+import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.DrinkHelper;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +44,7 @@ public class TeapotItem extends TooltipItem {
 			// try filling from the cauldron
 			if (Config.SERVER.teapot.fillFromCauldron() && block == Blocks.CAULDRON && state.get(CauldronBlock.LEVEL) == 3) {
 				((CauldronBlock)Blocks.CAULDRON).setWaterLevel(world, pos, state, 0);
-				stack = Util.fillContainer(player, stack, new ItemStack(Registration.teapot_water));
+				stack = DrinkHelper.fill(stack, player, new ItemStack(Registration.teapot_water));
 				return new ActionResult<>(ActionResultType.SUCCESS, stack);
 			}
 
@@ -59,10 +61,15 @@ public class TeapotItem extends TooltipItem {
 				if(item != null) {
 					// water is considered infinite unless disabled in the config
 					if(!Config.SERVER.teapot.infiniteWater()) {
-						world.setBlockState(pos, Blocks.AIR.getDefaultState());
+						Direction side = rayTrace.getFace();
+						// unable to modify the block, fail
+						if (!world.isBlockModifiable(player, pos) || !player.canPlayerEdit(pos.offset(side), side, stack) || !(state.getBlock() instanceof IBucketPickupHandler)) {
+							return new ActionResult<>(ActionResultType.FAIL, stack);
+						}
+						((IBucketPickupHandler)state.getBlock()).pickupFluid(world, pos, state);
 					}
 
-					stack = Util.fillContainer(player, stack, new ItemStack(item));
+					stack = DrinkHelper.fill(stack, player, new ItemStack(item));
 
 					// TODO: fluid sound based on fluid
 					player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0f, 1.0f);
@@ -76,12 +83,12 @@ public class TeapotItem extends TooltipItem {
 	@Override
 	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
 		// only work if the teapot is empty and right clicking a cow
-		if(Config.SERVER.teapot.canMilkCows() && target instanceof CowEntity && !player.isCreative()) {
+		if(Config.SERVER.teapot.canMilkCows() && target instanceof CowEntity) {
 			// sound
 			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
 
 			// fill with milk
-			player.setHeldItem(hand, Util.fillContainer(player, stack, new ItemStack(Registration.teapot_milk)));
+			player.setHeldItem(hand, DrinkHelper.fill(stack, player, new ItemStack(Registration.teapot_milk)));
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
