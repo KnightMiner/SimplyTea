@@ -1,6 +1,6 @@
 {
-  "conditions": [{,
-    "type": "forge:mod_loaded"
+  "conditions": [{
+    "type": "forge:mod_loaded",
     "modid": "ceramics"
   }],
   "type": "ceramics:kiln",
