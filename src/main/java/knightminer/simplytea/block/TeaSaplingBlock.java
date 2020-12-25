@@ -21,11 +21,10 @@ public class TeaSaplingBlock extends SaplingBlock {
 		super(null, props);
 	}
 
-	// IGrowable's grow
 	@Override
-	public void func_226942_a_(ServerWorld world, BlockPos pos, BlockState state, Random rand) {
+	public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
 		if(state.get(STAGE) == 0) {
-			world.setBlockState(pos, state.cycle(STAGE), 4);
+			world.setBlockState(pos, state.func_235896_a_(STAGE), 4);
 		}
 		else if(ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
 			TeaSaplingBlock.generateTree(world, pos, rand);

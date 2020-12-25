@@ -22,7 +22,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
@@ -34,10 +33,9 @@ public class TeapotItem extends TooltipItem {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		RayTraceResult rayTrace = this.rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
-		if (rayTrace != null && rayTrace.getType() == Type.BLOCK) {
-			BlockRayTraceResult trace = (BlockRayTraceResult)rayTrace;
-			BlockPos pos = trace.getPos();
+		BlockRayTraceResult rayTrace = rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
+		if (rayTrace.getType() == Type.BLOCK) {
+			BlockPos pos = rayTrace.getPos();
 			BlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
 
@@ -45,7 +43,7 @@ public class TeapotItem extends TooltipItem {
 			if (Config.SERVER.teapot.fillFromCauldron() && block == Blocks.CAULDRON && state.get(CauldronBlock.LEVEL) == 3) {
 				((CauldronBlock)Blocks.CAULDRON).setWaterLevel(world, pos, state, 0);
 				stack = Util.fillContainer(player, stack, new ItemStack(Registration.teapot_water));
-				return new ActionResult<ItemStack>(ActionResultType.SUCCESS, stack);
+				return new ActionResult<>(ActionResultType.SUCCESS, stack);
 			}
 
 			// we use name for lookup to prevent default fluid conflicts
@@ -68,15 +66,15 @@ public class TeapotItem extends TooltipItem {
 
 					// TODO: fluid sound based on fluid
 					player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0f, 1.0f);
-					return new ActionResult<ItemStack>(ActionResultType.SUCCESS, stack);
+					return new ActionResult<>(ActionResultType.SUCCESS, stack);
 				}
 			}
 		}
-		return new ActionResult<ItemStack>(ActionResultType.FAIL, stack);
+		return new ActionResult<>(ActionResultType.FAIL, stack);
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
+	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
 		// only work if the teapot is empty and right clicking a cow
 		if(Config.SERVER.teapot.canMilkCows() && target instanceof CowEntity && !player.isCreative()) {
 			// sound
@@ -84,8 +82,8 @@ public class TeapotItem extends TooltipItem {
 
 			// fill with milk
 			player.setHeldItem(hand, Util.fillContainer(player, stack, new ItemStack(Registration.teapot_milk)));
-			return true;
+			return ActionResultType.SUCCESS;
 		}
-		return false;
+		return ActionResultType.PASS;
 	}
 }

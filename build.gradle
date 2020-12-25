@@ -15,24 +15,22 @@ apply plugin: 'maven-publish'
 group = 'knightminer'
 archivesBaseName = 'simplytea'
 
-
-// External properties
-ext.configFile = file "build.properties"
-configFile.withReader {
-  // Load config.  It shall from now be referenced as simply config or project.config
-  def prop = new Properties()
-  prop.load(it)
-  project.ext.config = new ConfigSlurper().parse prop
-}
 configurations {
-  deployerJars
+    deployerJars
 }
 
-version = "${config.minecraft_version}-${config.mod_version}"
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+version = "${minecraft_version}-${mod_version}"
+
+sourceSets {
+  main { resources {
+    srcDirs "$rootDir/src/generated/resources"
+    //But exclude the cache of the generated data from what gets built
+    exclude '.cache'
+  } }
+}
 
 minecraft {
-  mappings channel: 'snapshot', version: config.mappings_version
+  mappings channel: 'snapshot', version: mappings_version
   accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
   
   runs {
@@ -88,8 +86,56 @@ minecraft {
   }
 }
 
+// Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = "1.8"
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.8"
+}
+
 dependencies {
-  minecraft "net.minecraftforge:forge:${config.minecraft_version}-${config.forge_version}"
+  minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+}
+
+
+// process mods.toml to inject variables
+def modsTomlSpec = copySpec{
+  from(sourceSets.main.resources) {
+    include 'META-INF/mods.toml'
+    expand 'version': mod_version,
+            'loader_range': loader_range,
+            'minecraft_range': minecraft_range,
+            'forge_range': forge_range
+  }
+}
+// need to copy into each build directory, unfortunately does not seem easy to do this automatically
+def buildPaths = [
+        "$rootDir/out/production/resources", // IDEA
+        "$rootDir/bin", // Eclipse
+]
+
+// task to add mods.toml to all relevant folders
+task replaceResources {
+  // copy for gradle
+  copy {
+    outputs.upToDateWhen { false }
+    with modsTomlSpec
+    into processResources.destinationDir
+  }
+  // copy for IDEs
+  buildPaths.each { path ->
+    if (new File(path).exists()) {
+      copy {
+        outputs.upToDateWhen { false }
+        with modsTomlSpec
+        into path
+      }
+    }
+  }
+}
+
+processResources {
+  exclude 'META-INF/mods.toml'
+  finalizedBy replaceResources
 }
 
 jar {

@@ -1,9 +1,9 @@
 package knightminer.simplytea.core.config;
 
+import com.mojang.datafixers.util.Pair;
 import knightminer.simplytea.core.Registration;
 import net.minecraft.potion.EffectInstance;
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import java.util.Locale;
 
 /** Properties for a tea drink */
 public class TeaDrink extends Drink {
-  private TeaEffect type;
-  private ForgeConfigSpec.IntValue configurable;
-  private int constant;
+  private final TeaEffect type;
+  private final ForgeConfigSpec.IntValue configurable;
+  private final int constant;
   private List<Pair<EffectInstance, Float>> effects = null;
 
   /**
@@ -63,7 +63,7 @@ public class TeaDrink extends Drink {
   }
 
   @Override
-  public List<Pair<EffectInstance, Float>> getEffects() {
+  public List<Pair<EffectInstance,Float>> getEffects() {
     if (effects != null) {
       return effects;
     }
@@ -88,7 +88,7 @@ public class TeaDrink extends Drink {
     HERBAL(true),
     ENDERFALLING(false);
 
-    private boolean level;
+    private final boolean level;
 
     /** @param level  If true, level is configurable. If false time is configurable */
     TeaEffect(boolean level) {

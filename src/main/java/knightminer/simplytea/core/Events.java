@@ -5,24 +5,43 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.loot.ConstantRange;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.TableLootEntry;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.ConstantRange;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTable;
-import net.minecraft.world.storage.loot.TableLootEntry;
+import net.minecraft.world.biome.Biome.Category;
+import net.minecraft.world.gen.GenerationStage.Decoration;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.Features.Placements;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.NoPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+@SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = SimplyTea.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Events {
+  public static final Lazy<ConfiguredFeature<?,?>> configuredTree = Lazy.of(
+      () -> Registration.tea_tree.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
+                                 .withPlacement(Registration.tree_gen_enabled.configure(NoPlacementConfig.INSTANCE))
+                                 .withPlacement(Placement.CHANCE.configure(new ChanceConfig(100)))
+                                 .withPlacement(Placements.HEIGHTMAP_PLACEMENT)
+                                 .withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(2, 0.1F, 1))));
+
 
   @SubscribeEvent
-  public static void playerWakeUp(PlayerWakeUpEvent event) {
+  static void playerWakeUp(PlayerWakeUpEvent event) {
     // update world means the client sent it, comes from the leave bed button being clicked
     // server would set that to false, like when we sleep full night
     if (event.updateWorld()) {
@@ -46,7 +65,7 @@ public class Events {
   }
 
   @SubscribeEvent
-  public static void entityFall(LivingFallEvent event) {
+  static void entityFall(LivingFallEvent event) {
     LivingEntity entity = event.getEntityLiving();
     if (entity.isPotionActive(Registration.enderfalling)) {
       EffectInstance effect = entity.getActivePotionEffect(Registration.enderfalling);
@@ -56,14 +75,14 @@ public class Events {
   }
 
   @SubscribeEvent
-  public static void throwEnderPearl(EnderTeleportEvent event) {
+  static void throwEnderPearl(EnderTeleportEvent event) {
     if (event.getEntityLiving().isPotionActive(Registration.enderfalling)) {
       event.setAttackDamage(0);
     }
   }
 
   @SubscribeEvent
-  public static void addLoot(LootTableLoadEvent event) {
+  static void addLoot(LootTableLoadEvent event) {
     addToBlockLoot(event, Blocks.CHORUS_FLOWER);
   }
 
@@ -81,6 +100,13 @@ public class Events {
     if (table != LootTable.EMPTY_LOOT_TABLE) {
       ResourceLocation location = new ResourceLocation(SimplyTea.MOD_ID, "blocks/minecraft/" + name);
       table.addPool(new LootPool.Builder().name(location.toString()).rolls(ConstantRange.of(1)).addEntry(TableLootEntry.builder(location)).build());
+    }
+  }
+
+  @SubscribeEvent
+  static void onBiomeLoad(BiomeLoadingEvent event) {
+    if (event.getCategory() == Category.FOREST) {
+      event.getGeneration().withFeature(Decoration.VEGETAL_DECORATION, configuredTree.get());
     }
   }
 }

@@ -1,15 +1,16 @@
 modLoader="javafml"
-loaderVersion="[28,)"
+loaderVersion="${loader_range}"
 issueTrackerURL="https://github.com/elucent/SimplyTea/issues"
+license="MIT"
 
 [[mods]]
 modId="simplytea"
-version="${file.jarVersion}"
+version="${version}"
 displayName="Simply Tea"
 displayURL="https://minecraft.curseforge.com/projects/simply-tea"
 logoFile="simplytea.png"
 credits="Original mod made by Elucent, who also designed most of the textures"
-authors="Elucent, KnightMiner" #optional
+authors="Elucent, KnightMiner"
 description='''
 A simple tea mod made for /u/Pickles256 on Reddit!
 
@@ -18,22 +19,16 @@ Contains:
 * Teapots that you can fill with water and boil!
 * Five types of tea: green, black, chai, floral, and chorus; with different effects!
 '''
-# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.simplytea]] #optional
-    # the modid of the dependency
-    modId="forge" #mandatory
-    # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
-    # The version range of the dependency
-    versionRange="[30,)" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+[[dependencies.simplytea]]
+    modId="forge"
+    mandatory=true
+    versionRange="${forge_range}"
     ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
 [[dependencies.simplytea]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.1,)"
+    versionRange="${minecraft_range}"
     ordering="NONE"
     side="BOTH"

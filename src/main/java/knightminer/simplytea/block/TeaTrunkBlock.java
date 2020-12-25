@@ -154,7 +154,7 @@ public class TeaTrunkBlock extends Block {
 		}
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return this.name().toLowerCase(Locale.US);
 		}
 
