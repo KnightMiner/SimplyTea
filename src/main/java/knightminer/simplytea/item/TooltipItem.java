@@ -9,20 +9,21 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Lazy;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class TooltipItem extends Item {
-    private final ITextComponent tooltipLine;
+    private final Lazy<ITextComponent> tooltipLine;
     public TooltipItem(Properties props) {
         super(props);
-        tooltipLine = new TranslationTextComponent(this.getTranslationKey() + ".tooltip").mergeStyle(TextFormatting.GRAY);
+        tooltipLine = Lazy.of(()->new TranslationTextComponent(this.getTranslationKey() + ".tooltip").mergeStyle(TextFormatting.GRAY));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(tooltipLine);
+        tooltip.add(tooltipLine.get());
     }
 }
