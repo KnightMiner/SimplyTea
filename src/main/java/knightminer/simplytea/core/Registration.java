@@ -160,7 +160,13 @@ public class Registration {
 
     // teapots
     props = new Item.Properties().group(group).maxStackSize(16);
+    register(r, new Item(props), "unfired_teapot");
     Item teapot = register(r, new TeapotItem(props), "teapot");
+    // teacups
+    register(r, new Item(props), "unfired_cup");
+    Item cup = register(r, new Item(props), "cup");
+
+    // filled teapots
     props.containerItem(teapot).maxStackSize(1);
     register(r, new TooltipItem(props), "teapot_water");
     register(r, new TooltipItem(props), "teapot_milk");
@@ -169,8 +175,6 @@ public class Registration {
     register(r, new HotTeapotItem(props), "teapot_frothed");
 
     // drinks
-    props = new Item.Properties().group(group).maxStackSize(16);
-    Item cup = register(r, new Item(props), "cup");
     props = new Item.Properties().group(group).maxStackSize(1).maxDamage(2).setNoRepair().containerItem(cup);
     register(r, new TeaCupItem(props.food(Config.SERVER.black_tea)), "cup_tea_black");
     register(r, new TeaCupItem(props.food(Config.SERVER.green_tea)), "cup_tea_green");

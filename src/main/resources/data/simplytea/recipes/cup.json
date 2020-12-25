@@ -2,7 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "group": "simplytea:cup",
   "result": {
-    "item": "simplytea:cup"
+    "item": "simplytea:unfired_cup",
+    "count": 2
   },
   "pattern": [
     "CBC",
@@ -10,6 +11,6 @@
   ],
   "key": {
     "C": { "item": "minecraft:clay_ball" },
-    "B": { "tag": "forge:dyes/white" }
+    "B": { "item": "minecraft:bone_meal" }
   }
 }

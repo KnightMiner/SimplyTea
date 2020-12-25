@@ -1,0 +1,13 @@
+{
+  "conditions": [{,
+    "type": "forge:mod_loaded"
+    "modid": "ceramics"
+  }],
+  "type": "ceramics:kiln",
+  "ingredient": {
+    "item": "simplytea:unfired_teapot"
+  },
+  "result": "simplytea:teapot",
+  "experience": 0.1,
+  "cookingtime": 100
+}

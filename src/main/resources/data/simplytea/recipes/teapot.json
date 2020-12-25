@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "group": "simplytea:teapot",
   "result": {
-    "item": "simplytea:teapot"
+    "item": "simplytea:unfired_teapot"
   },
   "pattern": [
-    "CcC",
+    "CBC",
     "CC "
   ],
   "key": {
     "C": { "item": "minecraft:clay_ball" },
-    "c": { "tag": "forge:dyes/cyan" }
+    "B": { "item": "minecraft:bone_meal" }
   }
 }
