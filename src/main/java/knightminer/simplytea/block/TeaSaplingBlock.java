@@ -8,7 +8,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -22,11 +21,10 @@ public class TeaSaplingBlock extends SaplingBlock {
 	}
 
 	@Override
-	public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
-		if(state.get(STAGE) == 0) {
+	public void placeTree(ServerWorld world, BlockPos pos, BlockState state, Random rand) {
+		if (state.get(STAGE) == 0) {
 			world.setBlockState(pos, state.func_235896_a_(STAGE), 4);
-		}
-		else if(ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
+		} else if (ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
 			TeaSaplingBlock.generateTree(world, pos, rand);
 		}
 	}
@@ -44,11 +42,9 @@ public class TeaSaplingBlock extends SaplingBlock {
 		return true;
 	}
 
-	@Override
-	public boolean canUseBonemeal(World world, Random random, BlockPos blockPos, BlockState blockState) {
-		return (double)world.rand.nextFloat() < 0.45D;
-	}
-
+	/**
+	 * Creates a new tea tree
+	 */
 	public static void generateTree(IWorld world, BlockPos pos, Random random) {
 		// TODO: move to tree?
 		BlockState trunk = Registration.tea_trunk.getDefaultState().with(TeaTrunkBlock.CLIPPED, false);
