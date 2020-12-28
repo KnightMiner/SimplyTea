@@ -88,7 +88,7 @@ public class TeapotItem extends TooltipItem {
 			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
 
 			// fill with milk
-			player.setHeldItem(hand, DrinkHelper.fill(stack, player, new ItemStack(Registration.teapot_milk)));
+			player.setHeldItem(hand, DrinkHelper.fill(stack.copy(), player, new ItemStack(Registration.teapot_milk)));
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
