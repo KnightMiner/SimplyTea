@@ -10,7 +10,9 @@ import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.TableLootEntry;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
@@ -20,6 +22,8 @@ import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.NoPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -103,9 +107,21 @@ public class Events {
     }
   }
 
+  /**
+   * Checks if the event biome is valid
+   * @param event  Event to check
+   * @return  True if its a forest
+   */
+  private static boolean validBiome(BiomeLoadingEvent event) {
+    if (event.getName() == null) {
+      return event.getCategory() == Category.FOREST;
+    }
+    return BiomeDictionary.hasType(RegistryKey.getOrCreateKey(Registry.BIOME_KEY, event.getName()), Type.FOREST);
+  }
+
   @SubscribeEvent
   static void onBiomeLoad(BiomeLoadingEvent event) {
-    if (event.getCategory() == Category.FOREST) {
+    if (validBiome(event)) {
       event.getGeneration().withFeature(Decoration.VEGETAL_DECORATION, configuredTree.get());
     }
   }
