@@ -19,6 +19,7 @@ public class TeaTreeFeature extends Feature<NoFeatureConfig> {
 
 	@Override
 	public boolean generate(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, NoFeatureConfig config) {
+		System.out.println(pos);
 		BlockPos down = pos.down();
 		BlockState soil = world.getBlockState(down);
 		if(soil.canSustainPlant(world, down, Direction.UP, Registration.tea_sapling) && world.getBlockState(pos).isAir(world, pos)) {

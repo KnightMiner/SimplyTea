@@ -31,8 +31,15 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.Features.Placements;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.NoPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.event.RegistryEvent;
@@ -102,6 +109,8 @@ public class Registration {
   /* World Gen */
   public static final Placement<NoPlacementConfig> tree_gen_enabled = injected();
   public static final Feature<NoFeatureConfig> tea_tree = injected();
+
+  public static ConfiguredFeature<?,?> configured_tea_tree;
 
   @SubscribeEvent
   static void registerEffects(final RegistryEvent.Register<Effect> event) {
@@ -212,6 +221,14 @@ public class Registration {
     ComposterBlock.registerCompostable(0.4f, black_tea);
     ComposterBlock.registerCompostable(0.5f, chorus_petal);
     ComposterBlock.registerCompostable(0.3f, tea_sapling);
+
+    // configured features
+    configured_tea_tree = tea_tree.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
+                                  .withPlacement(Registration.tree_gen_enabled.configure(NoPlacementConfig.INSTANCE))
+                                  .withPlacement(Placement.CHANCE.configure(new ChanceConfig(50)))
+                                  .withPlacement(Placements.HEIGHTMAP_PLACEMENT)
+                                  .withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
+    Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(SimplyTea.MOD_ID, "tea_tree"), configured_tea_tree);
   }
 
   /* Helper methods */

@@ -15,16 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.gen.GenerationStage.Decoration;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Features.Placements;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.NoPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -36,14 +28,6 @@ import net.minecraftforge.fml.common.Mod;
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = SimplyTea.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Events {
-  public static final Lazy<ConfiguredFeature<?,?>> configuredTree = Lazy.of(
-      () -> Registration.tea_tree.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
-                                 .withPlacement(Registration.tree_gen_enabled.configure(NoPlacementConfig.INSTANCE))
-                                 .withPlacement(Placement.CHANCE.configure(new ChanceConfig(100)))
-                                 .withPlacement(Placements.HEIGHTMAP_PLACEMENT)
-                                 .withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(2, 0.1F, 1))));
-
-
   @SubscribeEvent
   static void playerWakeUp(PlayerWakeUpEvent event) {
     // update world means the client sent it, comes from the leave bed button being clicked
@@ -122,7 +106,7 @@ public class Events {
   @SubscribeEvent
   static void onBiomeLoad(BiomeLoadingEvent event) {
     if (validBiome(event)) {
-      event.getGeneration().withFeature(Decoration.VEGETAL_DECORATION, configuredTree.get());
+      event.getGeneration().withFeature(Decoration.VEGETAL_DECORATION, Registration.configured_tea_tree);
     }
   }
 }
