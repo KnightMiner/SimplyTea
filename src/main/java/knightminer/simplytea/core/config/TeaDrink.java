@@ -2,6 +2,7 @@ package knightminer.simplytea.core.config;
 
 import com.mojang.datafixers.util.Pair;
 import knightminer.simplytea.core.Registration;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraftforge.common.ForgeConfigSpec;
 
@@ -9,6 +10,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 /** Properties for a tea drink */
 public class TeaDrink extends Drink {
@@ -33,12 +35,12 @@ public class TeaDrink extends Drink {
     // determine last property based on type
     this.type = type;
     if (type.isLevel()) {
-      this.configurable = builder.comment(String.format("Level of the %s effect when drinking this tea.", type), "Set to 0 to disable the effect.")
+      this.configurable = builder.comment(String.format("Level of the %s effect when drinking this tea.", type), type.getDescription(), "Set to 0 to disable the effect.")
                                  .translation("simplytea.config.tea.level")
                                  .defineInRange("level", level, 0, 10);
       this.constant = time;
     } else {
-      this.configurable = builder.comment(String.format("Time in seconds for the %s effect from drinking this tea.", type), "Set to 0 to disable the effect.")
+      this.configurable = builder.comment(String.format("Time in seconds for the %s effect from drinking this tea.", type), type.getDescription(), "Set to 0 to disable the effect.")
                                           .translation("simplytea.config.tea.time")
                                           .defineInRange("time", time, 0, 600);
       this.constant = level;
@@ -50,13 +52,10 @@ public class TeaDrink extends Drink {
   private EffectInstance getEffect() {
     int configurable = this.configurable.get();
     if (configurable != 0) {
-      switch(type) {
-        case CAFFEINE:
-          return new EffectInstance(Registration.caffeinated, configurable * 20, constant - 1);
-        case HERBAL:
-          return new EffectInstance(Registration.restful, constant*20, configurable-1);
-        case ENDERFALLING:
-          return new EffectInstance(Registration.enderfalling, configurable*20, constant-1);
+      if (type.isLevel()) {
+        return new EffectInstance(type.getEffect(), constant * 20, configurable - 1);
+      } else {
+        return new EffectInstance(type.getEffect(), configurable * 20, constant - 1);
       }
     }
     return null;
@@ -84,15 +83,21 @@ public class TeaDrink extends Drink {
 
   /** Tea effect types */
   public enum TeaEffect {
-    CAFFEINE(false),
-    HERBAL(true),
-    ENDERFALLING(false);
+    RESTFUL(true, () -> Registration.restful, "Heals one heart after sleeping per level"),
+    RELAXED(true, () -> Registration.relaxed, "Heals 0.5 hearts every (60 / level) seconds"),
+    CAFFEINATED(false, () -> Registration.caffeinated, "Grants +6% movement and +5% attack speed"),
+    INVIGORATED(false, () -> Registration.invigorated, "Grants +1 attack damage and 0.5 knockback"),
+    ENDERFALLING(false, () -> Registration.enderfalling, "Grants immunity to ender pearl damage and reduces fall damage");
 
+    private final Supplier<Effect> effectSupplier;
     private final boolean level;
+    private final String description;
 
     /** @param level  If true, level is configurable. If false time is configurable */
-    TeaEffect(boolean level) {
+    TeaEffect(boolean level, Supplier<Effect> effectSupplier, String description) {
+      this.effectSupplier = effectSupplier;
       this.level = level;
+      this.description = description;
     }
 
     /**
@@ -101,6 +106,16 @@ public class TeaDrink extends Drink {
      */
     public boolean isLevel() {
       return level;
+    }
+
+    /** Gets the description for the config */
+    public String getDescription() {
+      return description;
+    }
+
+    /** Gets the effect for this drink */
+    public Effect getEffect() {
+      return effectSupplier.get();
     }
 
     @Override

@@ -17,6 +17,8 @@ import knightminer.simplytea.item.TooltipItem;
 import knightminer.simplytea.item.WoodBlockItem;
 import knightminer.simplytea.potion.CaffeinatedEffect;
 import knightminer.simplytea.potion.EnderfallingEffect;
+import knightminer.simplytea.potion.InvigoratedEffect;
+import knightminer.simplytea.potion.RelaxedEffect;
 import knightminer.simplytea.potion.RestfulEffect;
 import knightminer.simplytea.worldgen.TeaTreeFeature;
 import knightminer.simplytea.worldgen.TreeGenEnabledPlacement;
@@ -77,7 +79,9 @@ public class Registration {
 
   /* Potions */
   public static final Effect restful = injected();
+  public static final Effect relaxed = injected();
   public static final Effect caffeinated = injected();
+  public static final Effect invigorated = injected();
   public static final Effect enderfalling = injected();
 
   /* Blocks */
@@ -130,8 +134,10 @@ public class Registration {
   static void registerEffects(final RegistryEvent.Register<Effect> event) {
     IForgeRegistry<Effect> r = event.getRegistry();
 
-    register(r, new CaffeinatedEffect(), "caffeinated");
     register(r, new RestfulEffect(), "restful");
+    register(r, new RelaxedEffect(), "relaxed");
+    register(r, new CaffeinatedEffect(), "caffeinated");
+    register(r, new InvigoratedEffect(), "invigorated");
     register(r, new EnderfallingEffect(), "enderfalling");
   }
 

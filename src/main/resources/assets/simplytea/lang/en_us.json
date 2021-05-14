@@ -46,6 +46,8 @@
   "item.simplytea.teapot_frothed.tooltip": "Frothed milk!",
 
   "effect.simplytea.restful": "Restful",
+  "effect.simplytea.relaxed": "Relaxed",
   "effect.simplytea.caffeinated": "Caffeinated",
+  "effect.simplytea.invigorated": "Invigorated",
   "effect.simplytea.enderfalling": "Enderfalling"
 }

@@ -25,10 +25,10 @@ public class Config {
 
 			// drinks
 			builder.comment("Stats for each available drink type").push("drinks");
-			floral_tea = new TeaDrink("floral", builder, TeaEffect.HERBAL, 2, 0.5, 20, 2);
-			green_tea  = new TeaDrink("green", builder, TeaEffect.CAFFEINE, 3, 0.5, 150, 2);
-			black_tea  = new TeaDrink("black", builder, TeaEffect.CAFFEINE, 4, 0.8, 210, 2);
-			chai_tea   = new TeaDrink("chai", builder, TeaEffect.CAFFEINE, 5, 0.6, 150, 3);
+			floral_tea = new TeaDrink("floral", builder, TeaEffect.RESTFUL, 1, 0.5, 60, 2);
+			green_tea  = new TeaDrink("green", builder, TeaEffect.RELAXED, 3, 0.5, 120, 2);
+			black_tea  = new TeaDrink("black", builder, TeaEffect.CAFFEINATED, 4, 0.8, 210, 2);
+			chai_tea   = new TeaDrink("chai", builder, TeaEffect.INVIGORATED, 5, 0.6, 150, 1);
 			chorus_tea = new TeaDrink("chorus", builder, TeaEffect.ENDERFALLING, 3, 0.9, 150, 1);
 			cocoa = new CocoaDrink(builder, 4, 0.6);
 			builder.pop();
