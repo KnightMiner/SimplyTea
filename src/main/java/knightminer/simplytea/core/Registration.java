@@ -49,6 +49,7 @@ import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.NoPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -218,6 +219,13 @@ public class Registration {
     IForgeRegistry<Feature<?>> r = event.getRegistry();
 
     register(r, new TeaTreeFeature(), "tea_tree");
+  }
+
+  @SubscribeEvent
+  static void registerGlobalLootTables(final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
+    IForgeRegistry<GlobalLootModifierSerializer<?>> r = event.getRegistry();
+
+    register(r, new AddEntryLootModifier.Serializer(), "add_loot_entry");
   }
 
   @SubscribeEvent

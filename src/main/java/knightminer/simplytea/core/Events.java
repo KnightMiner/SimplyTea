@@ -1,23 +1,15 @@
 package knightminer.simplytea.core;
 
 import knightminer.simplytea.SimplyTea;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.loot.ConstantRange;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.TableLootEntry;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
@@ -66,28 +58,6 @@ public class Events {
   static void throwEnderPearl(EnderTeleportEvent event) {
     if (event.getEntityLiving().isPotionActive(Registration.enderfalling)) {
       event.setAttackDamage(0);
-    }
-  }
-
-  @SubscribeEvent
-  static void addLoot(LootTableLoadEvent event) {
-    addToBlockLoot(event, Blocks.CHORUS_FLOWER);
-  }
-
-  /**
-   * Injects an custom loot pool from animalcrops:blocks/minecraft/ into the vanilla block
-   * @param event  Event, used to determine if this is the proper loot table
-   * @param block  Block to inject loot into
-   */
-  private static void addToBlockLoot(LootTableLoadEvent event, Block block) {
-    String name = block.getRegistryName().getPath();
-    if (!event.getName().getNamespace().equals("minecraft") || !event.getName().getPath().equals("blocks/" + name)) {
-      return;
-    }
-    LootTable table = event.getTable();
-    if (table != LootTable.EMPTY_LOOT_TABLE) {
-      ResourceLocation location = new ResourceLocation(SimplyTea.MOD_ID, "blocks/minecraft/" + name);
-      table.addPool(new LootPool.Builder().name(location.toString()).rolls(ConstantRange.of(1)).addEntry(TableLootEntry.builder(location)).build());
     }
   }
 
