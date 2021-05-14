@@ -209,18 +209,20 @@ public class Registration {
 
   @SubscribeEvent
   static void registerMisc(final FMLCommonSetupEvent event) {
-    // flamability
-    if (Blocks.FIRE instanceof FireBlock) {
-      FireBlock fire = (FireBlock)Blocks.FIRE;
-      fire.setFireInfo(tea_fence, 5, 20);
-      fire.setFireInfo(tea_fence_gate, 5, 20);
-      fire.setFireInfo(tea_trunk, 15, 30);
-    }
+    event.enqueueWork(() -> {
+      // flamability
+      if (Blocks.FIRE instanceof FireBlock) {
+        FireBlock fire = (FireBlock)Blocks.FIRE;
+        fire.setFireInfo(tea_fence, 5, 20);
+        fire.setFireInfo(tea_fence_gate, 5, 20);
+        fire.setFireInfo(tea_trunk, 15, 30);
+      }
 
-    ComposterBlock.registerCompostable(0.3f, tea_leaf);
-    ComposterBlock.registerCompostable(0.4f, black_tea);
-    ComposterBlock.registerCompostable(0.5f, chorus_petal);
-    ComposterBlock.registerCompostable(0.3f, tea_sapling);
+      ComposterBlock.registerCompostable(0.3f, tea_leaf);
+      ComposterBlock.registerCompostable(0.4f, black_tea);
+      ComposterBlock.registerCompostable(0.5f, chorus_petal);
+      ComposterBlock.registerCompostable(0.3f, tea_sapling);
+    });
 
     // configured features
     configured_tea_tree = tea_tree.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
