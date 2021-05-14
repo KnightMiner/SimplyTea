@@ -3,6 +3,11 @@ package knightminer.simplytea.core;
 import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.block.TeaSaplingBlock;
 import knightminer.simplytea.block.TeaTrunkBlock;
+import knightminer.simplytea.data.AddEntryLootModifier;
+import knightminer.simplytea.data.gen.BlockTagGenerator;
+import knightminer.simplytea.data.gen.ItemTagGenerator;
+import knightminer.simplytea.data.gen.LootTableGenerator;
+import knightminer.simplytea.data.gen.RecipeGenerator;
 import knightminer.simplytea.item.CocoaItem;
 import knightminer.simplytea.item.HotTeapotItem;
 import knightminer.simplytea.item.TeaCupItem;
@@ -25,6 +30,7 @@ import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -42,10 +48,12 @@ import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.NoPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
@@ -92,17 +100,22 @@ public class Registration {
   public static final Item teabag_chorus = injected();
   public static final Item teabag_green = injected();
 
-  /* Tea bags */
+  /* Tea pots */
+  public static final Item unfired_teapot = injected();
   public static final Item teapot = injected();
   public static final Item teapot_water = injected();
   public static final Item teapot_milk = injected();
+  public static final Item teapot_hot = injected();
+  public static final Item teapot_frothed = injected();
 
   /* Drinks */
+  public static final Item unfired_cup = injected();
   public static final Item cup = injected();
   public static final Item cup_tea_black = injected();
   public static final Item cup_tea_green = injected();
   public static final Item cup_tea_floral = injected();
   public static final Item cup_tea_chai = injected();
+  public static final Item cup_tea_iced = injected();
   public static final Item cup_tea_chorus = injected();
   public static final Item cup_cocoa = injected();
 
@@ -123,7 +136,7 @@ public class Registration {
 
 
   @SubscribeEvent
-  public static void registerBlocks(final RegistryEvent.Register<Block> event) {
+  static void registerBlocks(final RegistryEvent.Register<Block> event) {
     IForgeRegistry<Block> r = event.getRegistry();
 
     Block.Properties props;
@@ -232,6 +245,20 @@ public class Registration {
                                   .withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
     Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(SimplyTea.MOD_ID, "tea_tree"), configured_tea_tree);
   }
+
+  @SubscribeEvent
+  static void gatherData(GatherDataEvent event) {
+    if (event.includeServer()) {
+      ExistingFileHelper existing = event.getExistingFileHelper();
+      DataGenerator generator = event.getGenerator();
+      BlockTagGenerator blockTags = new BlockTagGenerator(generator, existing);
+      generator.addProvider(blockTags);
+      generator.addProvider(new ItemTagGenerator(generator, blockTags, existing));
+      generator.addProvider(new RecipeGenerator(generator));
+      generator.addProvider(new LootTableGenerator(generator));
+    }
+  }
+
 
   /* Helper methods */
 

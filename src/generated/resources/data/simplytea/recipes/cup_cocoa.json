@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "simplytea:cup"
+    },
+    {
+      "item": "minecraft:cocoa_beans"
+    },
+    {
+      "item": "minecraft:cocoa_beans"
+    },
+    {
+      "item": "simplytea:teapot_frothed"
+    }
+  ],
+  "result": {
+    "item": "simplytea:cup_cocoa"
+  }
+}

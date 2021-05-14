@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "simplytea:teabag",
+  "ingredients": [
+    {
+      "item": "simplytea:teabag"
+    },
+    {
+      "item": "minecraft:dandelion"
+    },
+    {
+      "item": "minecraft:dandelion"
+    }
+  ],
+  "result": {
+    "item": "simplytea:teabag_floral"
+  }
+}

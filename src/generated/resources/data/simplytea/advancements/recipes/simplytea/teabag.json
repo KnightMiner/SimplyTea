@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "simplytea:teabag"
+    ]
+  },
+  "criteria": {
+    "has_floral": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:dandelion"
+          }
+        ]
+      }
+    },
+    "has_leaf": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "simplytea:tea_leaf"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplytea:teabag"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_floral",
+      "has_leaf",
+      "has_the_recipe"
+    ]
+  ]
+}

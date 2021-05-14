@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "simplytea:teabag_black"
+    ]
+  },
+  "criteria": {
+    "has_leaf": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "simplytea:black_tea"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplytea:teabag_black"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_leaf",
+      "has_the_recipe"
+    ]
+  ]
+}

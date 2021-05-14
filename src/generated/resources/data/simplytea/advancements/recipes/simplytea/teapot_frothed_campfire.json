@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "simplytea:teapot_frothed_campfire"
+    ]
+  },
+  "criteria": {
+    "has_unfired": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "simplytea:teapot_milk"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplytea:teapot_frothed_campfire"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_unfired",
+      "has_the_recipe"
+    ]
+  ]
+}

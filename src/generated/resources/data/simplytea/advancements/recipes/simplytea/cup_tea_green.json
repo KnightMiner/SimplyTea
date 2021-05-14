@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "simplytea:cup_tea_green"
+    ]
+  },
+  "criteria": {
+    "has_bag": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "simplytea:teabag_green"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplytea:cup_tea_green"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_bag",
+      "has_the_recipe"
+    ]
+  ]
+}

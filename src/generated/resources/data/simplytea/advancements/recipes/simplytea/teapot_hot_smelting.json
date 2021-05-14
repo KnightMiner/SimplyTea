@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "simplytea:teapot_hot_smelting"
+    ]
+  },
+  "criteria": {
+    "has_unfired": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "simplytea:teapot_water"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplytea:teapot_hot_smelting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_unfired",
+      "has_the_recipe"
+    ]
+  ]
+}
