@@ -30,10 +30,12 @@ import java.util.Objects;
 public class ShapelessHoneyRecipe extends ShapelessRecipe {
 	private final Item tea;
 	private final Ingredient honey;
-	public ShapelessHoneyRecipe(ResourceLocation id, String group, IItemProvider tea, Ingredient honey) {
-		super(id, group, TeaCupItem.withHoney(new ItemStack(tea)), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(tea), honey));
+	private final String tag;
+	public ShapelessHoneyRecipe(ResourceLocation id, String group, IItemProvider tea, Ingredient honey, String tag) {
+		super(id, group, TeaCupItem.withHoney(new ItemStack(tea), tag), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(tea), honey));
 		this.tea = tea.asItem();
 		this.honey = honey;
+		this.tag = tag;
 	}
 
 	@Override
@@ -50,7 +52,7 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (!stack.isEmpty() && stack.getItem() == tea) {
-				return !TeaCupItem.hasHoney(stack);
+				return !TeaCupItem.hasHoney(stack, tag);
 			}
 		}
 		// somehow did not find the tea, thats a problem
@@ -63,7 +65,7 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (!stack.isEmpty() && stack.getItem() == tea) {
-				return TeaCupItem.withHoney(ItemHandlerHelper.copyStackWithSize(stack, 1));
+				return TeaCupItem.withHoney(ItemHandlerHelper.copyStackWithSize(stack, 1), tag);
 			}
 		}
 		return getRecipeOutput().copy();
@@ -96,7 +98,8 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 				throw new JsonSyntaxException("Missing tea_cup item '" + name + "'");
 			}
 			Ingredient ingredient = Ingredient.deserialize(json.get("honey"));
-			return new ShapelessHoneyRecipe(id, group, item, ingredient);
+			String tag = JSONUtils.getString(json, "tag", "with_honey");
+			return new ShapelessHoneyRecipe(id, group, item, ingredient, tag);
 		}
 
 		@Nullable
@@ -105,7 +108,8 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 			String group = buffer.readString(Short.MAX_VALUE);
 			Item item = buffer.readRegistryIdUnsafe(ForgeRegistries.ITEMS);
 			Ingredient ingredient = Ingredient.read(buffer);
-			return new ShapelessHoneyRecipe(id, group, item, ingredient);
+			String tag = buffer.readString(Short.MAX_VALUE);
+			return new ShapelessHoneyRecipe(id, group, item, ingredient, tag);
 		}
 
 		@Override
@@ -113,6 +117,7 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 			buffer.writeString(recipe.getGroup());
 			buffer.writeRegistryIdUnsafe(ForgeRegistries.ITEMS, recipe.tea);
 			recipe.honey.write(buffer);
+			buffer.writeString(recipe.tag);
 		}
 	}
 
@@ -122,14 +127,16 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 		private final String group;
 		private final Item tea;
 		private final Ingredient honey;
+		private final String tag;
 		private final ResourceLocation advancementId;
 		private final Advancement.Builder advancementBuilder;
 
-		public FinishedRecipe(ResourceLocation id, String group, IItemProvider tea, Ingredient honey, @Nullable ResourceLocation advancementId, @Nullable Builder advancementBuilder) {
+		public FinishedRecipe(ResourceLocation id, String group, IItemProvider tea, Ingredient honey, String tag, @Nullable ResourceLocation advancementId, @Nullable Builder advancementBuilder) {
 			this.id = id;
 			this.group = group;
 			this.tea = tea.asItem();
 			this.honey = honey;
+			this.tag = tag;
 			this.advancementId = advancementId;
 			this.advancementBuilder = advancementBuilder;
 		}
@@ -151,6 +158,7 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 			}
 			json.addProperty("tea", Objects.requireNonNull(tea.getRegistryName()).toString());
 			json.add("honey", honey.serialize());
+			json.addProperty("tag", tag);
 		}
 
 		@Nullable

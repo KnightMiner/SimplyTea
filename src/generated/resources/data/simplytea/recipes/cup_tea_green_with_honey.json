@@ -4,5 +4,6 @@
   "tea": "simplytea:cup_tea_green",
   "honey": {
     "item": "minecraft:honey_bottle"
-  }
+  },
+  "tag": "with_honey"
 }

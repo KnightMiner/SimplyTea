@@ -52,7 +52,7 @@ public class TeaCupItem extends Item {
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity living) {
 		if (this.isFood()) {
 			ItemStack result = stack.getContainerItem();
-			boolean hasHoney = hasHoney(stack);
+			boolean hasHoney = hasHoney(stack, HONEY_TAG);
 			living.curePotionEffects(stack); /// remove conflicting teas
 			living.onFoodEaten(worldIn, stack);
 			// we handle effects directly so it can be stack sensitive
@@ -71,20 +71,20 @@ public class TeaCupItem extends Item {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		if (hasHoney(stack)) {
+		if (hasHoney(stack, HONEY_TAG)) {
 			tooltip.add(WITH_HONEY);
 		}
 	}
 
 	/** Ads honey to the given tea */
-	public static ItemStack withHoney(ItemStack stack) {
-		stack.getOrCreateTag().putBoolean(HONEY_TAG, true);
+	public static ItemStack withHoney(ItemStack stack, String tag) {
+		stack.getOrCreateTag().putBoolean(tag, true);
 		return stack;
 	}
 
 	/** Checks if the given tea contains honey */
-	public static boolean hasHoney(ItemStack stack) {
+	public static boolean hasHoney(ItemStack stack, String tag) {
 		CompoundNBT nbt = stack.getTag();
-		return nbt != null && nbt.getBoolean(HONEY_TAG);
+		return nbt != null && nbt.getBoolean(tag);
 	}
 }

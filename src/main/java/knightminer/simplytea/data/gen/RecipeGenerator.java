@@ -1,6 +1,8 @@
 package knightminer.simplytea.data.gen;
 
 import knightminer.simplytea.data.SimplyTags;
+import knightminer.simplytea.item.CocoaItem;
+import knightminer.simplytea.item.TeaCupItem;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.IRequirementsStrategy;
@@ -113,6 +115,7 @@ public class RecipeGenerator extends RecipeProvider {
 
 		// advanced tea
 		addTea(consumer, cup_cocoa, Items.COCOA_BEANS, Items.COCOA_BEANS, teapot_frothed);
+		addHoney(consumer, cup_cocoa, tea_stick, CocoaItem.CINNAMON_TAG);
 		addTea(consumer, cup_tea_chai, teabag_black, tea_stick, teapot_frothed);
 		addHoney(consumer, cup_tea_chai);
 		ShapelessRecipeBuilder.shapelessRecipe(cup_tea_iced)
@@ -125,6 +128,7 @@ public class RecipeGenerator extends RecipeProvider {
 		addHoney(consumer, cup_tea_iced);
 	}
 
+	/** Suffixes the item ID location with the given text */
 	private static ResourceLocation suffix(IItemProvider item, String suffix) {
 		ResourceLocation name = Objects.requireNonNull(item.asItem().getRegistryName());
 		return new ResourceLocation(name.getNamespace(), name.getPath() + suffix);
@@ -160,11 +164,16 @@ public class RecipeGenerator extends RecipeProvider {
 
 	/** Creates a recipe to add honey to a tea */
 	public static void addHoney(Consumer<IFinishedRecipe> consumer, IItemProvider tea) {
-		ResourceLocation recipeId = suffix(tea, "_with_honey");
+		addHoney(consumer, tea, Items.HONEY_BOTTLE, TeaCupItem.HONEY_TAG);
+	}
+
+	/** Creates a recipe to "honey" to a tea */
+	public static void addHoney(Consumer<IFinishedRecipe> consumer, IItemProvider tea, IItemProvider honey, String tag) {
+		ResourceLocation recipeId = suffix(tea, "_" + tag);
 
 		// advancement builder just like vanilla
 		Advancement.Builder builder = Advancement.Builder.builder();
-		builder.withCriterion("has_item", hasItem(Items.HONEY_BOTTLE))
+		builder.withCriterion("has_item", hasItem(honey))
 					 .withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(recipeId))
 					 .withParentId(new ResourceLocation("recipes/root"))
 					 .withRewards(AdvancementRewards.Builder.recipe(recipeId))
@@ -172,7 +181,7 @@ public class RecipeGenerator extends RecipeProvider {
 		ResourceLocation advancementId = new ResourceLocation(recipeId.getNamespace(), "recipes/" + Objects.requireNonNull(tea.asItem().getGroup()).getPath() + "/" + recipeId.getPath());
 
 		// build final recipe
-		consumer.accept(new ShapelessHoneyRecipe.FinishedRecipe(recipeId, "simplytea:with_honey", tea, Ingredient.fromItems(Items.HONEY_BOTTLE), advancementId, builder));
+		consumer.accept(new ShapelessHoneyRecipe.FinishedRecipe(recipeId, "simplytea:" + tag, tea, Ingredient.fromItems(honey), tag, advancementId, builder));
 	}
 
 	/** Adds a recipe to pour tea and make tea bags */
