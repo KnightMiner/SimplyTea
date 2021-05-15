@@ -4,10 +4,11 @@ import com.mojang.datafixers.util.Pair;
 import knightminer.simplytea.core.Registration;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -17,7 +18,6 @@ public class TeaDrink extends Drink {
   private final TeaEffect type;
   private final ForgeConfigSpec.IntValue configurable;
   private final int constant;
-  private List<Pair<EffectInstance, Float>> effects = null;
 
   /**
    * Creates a new tea settings category for the given tea
@@ -48,15 +48,17 @@ public class TeaDrink extends Drink {
     builder.pop();
   }
 
+  /** Gets the effect for this drink, or null if the effect is disabled */
   @Nullable
-  private EffectInstance getEffect() {
+  public EffectInstance getEffect(boolean hasHoney) {
+    int levelOffset = hasHoney ? 0 : -1; // config stores values as +1 to make it easier to understand
     int configurable = this.configurable.get();
     if (configurable != 0) {
       EffectInstance effect;
       if (type.isLevel()) {
-        effect = new EffectInstance(type.getEffect(), constant * 20, configurable - 1);
+        effect = new EffectInstance(type.getEffect(), constant * 20, configurable + levelOffset);
       } else {
-        effect = new EffectInstance(type.getEffect(), configurable * 20, constant - 1);
+        effect = new EffectInstance(type.getEffect(), configurable * 20, constant + levelOffset);
       }
       if (type == TeaEffect.ABSORPTION) {
         effect.getCurativeItems().clear();
@@ -68,22 +70,7 @@ public class TeaDrink extends Drink {
 
   @Override
   public List<Pair<EffectInstance,Float>> getEffects() {
-    if (effects != null) {
-      return effects;
-    }
-
-    // create effect list
-    effects = new ArrayList<>();
-    EffectInstance effect = getEffect();
-    if (effect != null) {
-      effects.add(Pair.of(effect, 1.0f));
-    }
-    return effects;
-  }
-
-  /** Invalidates the effect cache. Called on config reload to update the effect */
-  public void invalidEffects() {
-    this.effects = null;
+    return Collections.emptyList();
   }
 
   /** Tea effect types */

@@ -1,6 +1,5 @@
 package knightminer.simplytea.core;
 
-import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.core.config.CocoaDrink;
 import knightminer.simplytea.core.config.TeaDrink;
 import knightminer.simplytea.core.config.TeaDrink.TeaEffect;
@@ -8,12 +7,9 @@ import knightminer.simplytea.core.config.Teapot;
 import knightminer.simplytea.core.config.Tree;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
-@Mod.EventBusSubscriber(modid=SimplyTea.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+//@Mod.EventBusSubscriber(modid=SimplyTea.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
 
 	public static class Server {
@@ -51,16 +47,10 @@ public class Config {
 		SERVER = specPair.getLeft();
 	}
 
-	@SubscribeEvent
-	public static void onFileChange(final ModConfig.Reloading event) {
-		// clear the effect cache so we get the new version of the config
-		if (event.getConfig().getType() == ModConfig.Type.SERVER) {
-			SERVER.floral_tea.invalidEffects();
-			SERVER.green_tea.invalidEffects();
-			SERVER.black_tea.invalidEffects();
-			SERVER.chai_tea.invalidEffects();
-			SERVER.chorus_tea.invalidEffects();
-			SERVER.iced_tea.invalidEffects();
-		}
-	}
+//	@SubscribeEvent
+//	public static void onFileChange(final ModConfig.Reloading event) {
+//		// clear the effect cache so we get the new version of the config
+//		if (event.getConfig().getType() == ModConfig.Type.SERVER) {
+//		}
+//	}
 }

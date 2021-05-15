@@ -9,6 +9,7 @@ import knightminer.simplytea.data.gen.BlockTagGenerator;
 import knightminer.simplytea.data.gen.ItemTagGenerator;
 import knightminer.simplytea.data.gen.LootTableGenerator;
 import knightminer.simplytea.data.gen.RecipeGenerator;
+import knightminer.simplytea.data.gen.ShapelessHoneyRecipe;
 import knightminer.simplytea.item.CocoaItem;
 import knightminer.simplytea.item.HotTeapotItem;
 import knightminer.simplytea.item.TeaCupItem;
@@ -38,6 +39,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.loot.LootConditionType;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
@@ -131,6 +133,7 @@ public class Registration {
   public static final Placement<NoPlacementConfig> tree_gen_enabled = injected();
   public static final Feature<NoFeatureConfig> tea_tree = injected();
 
+  public static final IRecipeSerializer<?> shapeless_honey = injected();
   public static ConfiguredFeature<?,?> configured_tea_tree;
   public static LootConditionType matchToolType;
 
@@ -241,6 +244,9 @@ public class Registration {
 
   @SubscribeEvent
   static void registerRecipeSerializers(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
+    IForgeRegistry<IRecipeSerializer<?>> r = event.getRegistry();
+
+    register(r, new ShapelessHoneyRecipe.Serializer(), "shapeless_honey");
     matchToolType = Registry.register(Registry.LOOT_CONDITION_TYPE, MatchToolTypeLootCondition.ID, new LootConditionType(MatchToolTypeLootCondition.SERIALIZER));
   }
 

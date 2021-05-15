@@ -1,6 +1,10 @@
 package knightminer.simplytea.data.gen;
 
 import knightminer.simplytea.data.SimplyTags;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.IRequirementsStrategy;
+import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
@@ -110,6 +114,7 @@ public class RecipeGenerator extends RecipeProvider {
 		// advanced tea
 		addTea(consumer, cup_cocoa, Items.COCOA_BEANS, Items.COCOA_BEANS, teapot_frothed);
 		addTea(consumer, cup_tea_chai, teabag_black, tea_stick, teapot_frothed);
+		addHoney(consumer, cup_tea_chai);
 		ShapelessRecipeBuilder.shapelessRecipe(cup_tea_iced)
 													.addIngredient(cup)
 													.addIngredient(teabag_green)
@@ -117,6 +122,7 @@ public class RecipeGenerator extends RecipeProvider {
 													.addIngredient(SimplyTags.Items.ICE_CUBES)
 													.addCriterion("has_ice", hasItem(SimplyTags.Items.ICE_CUBES))
 													.build(consumer);
+		addHoney(consumer, cup_tea_iced);
 	}
 
 	private static ResourceLocation suffix(IItemProvider item, String suffix) {
@@ -152,6 +158,23 @@ public class RecipeGenerator extends RecipeProvider {
 		builder.build(consumer);
 	}
 
+	/** Creates a recipe to add honey to a tea */
+	public static void addHoney(Consumer<IFinishedRecipe> consumer, IItemProvider tea) {
+		ResourceLocation recipeId = suffix(tea, "_with_honey");
+
+		// advancement builder just like vanilla
+		Advancement.Builder builder = Advancement.Builder.builder();
+		builder.withCriterion("has_item", hasItem(Items.HONEY_BOTTLE))
+					 .withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(recipeId))
+					 .withParentId(new ResourceLocation("recipes/root"))
+					 .withRewards(AdvancementRewards.Builder.recipe(recipeId))
+					 .withRequirementsStrategy(IRequirementsStrategy.OR);
+		ResourceLocation advancementId = new ResourceLocation(recipeId.getNamespace(), "recipes/" + Objects.requireNonNull(tea.asItem().getGroup()).getPath() + "/" + recipeId.getPath());
+
+		// build final recipe
+		consumer.accept(new ShapelessHoneyRecipe.FinishedRecipe(recipeId, "simplytea:with_honey", tea, Ingredient.fromItems(Items.HONEY_BOTTLE), advancementId, builder));
+	}
+
 	/** Adds a recipe to pour tea and make tea bags */
 	private static void addTeaWithBag(Consumer<IFinishedRecipe> consumer, IItemProvider leaf, IItemProvider filledTeabag, IItemProvider filledCup) {
 		ShapelessRecipeBuilder.shapelessRecipe(filledTeabag)
@@ -162,5 +185,6 @@ public class RecipeGenerator extends RecipeProvider {
 													.addCriterion("has_leaf", hasItem(leaf))
 													.build(consumer);
 		addTea(consumer, filledCup, filledTeabag, teapot_hot);
+		addHoney(consumer, filledCup);
 	}
 }
