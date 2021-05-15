@@ -1,0 +1,64 @@
+{
+  "type": "simplytea:add_loot_entry",
+  "conditions": [
+    {
+      "condition": "minecraft:alternative",
+      "terms": [
+        {
+          "condition": "forge:loot_table_id",
+          "loot_table_id": "minecraft:blocks/ice"
+        },
+        {
+          "condition": "forge:loot_table_id",
+          "loot_table_id": "minecraft:blocks/packed_ice"
+        },
+        {
+          "condition": "forge:loot_table_id",
+          "loot_table_id": "minecraft:blocks/blue_ice"
+        }
+      ]
+    },
+    {
+      "condition": "simplytea:match_tool_type",
+      "type": "pickaxe"
+    },
+    {
+      "condition": "minecraft:inverted",
+      "term": {
+        "condition": "minecraft:match_tool",
+        "predicate": {
+          "enchantments": [
+            {
+              "enchantment": "minecraft:silk_touch",
+              "levels": {
+                "min": 1
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "entry": {
+    "type": "minecraft:item",
+    "name": "simplytea:ice_cube",
+    "functions": [
+      {
+        "function": "minecraft:set_count",
+        "count": { "min": 2, "max": 4, "type": "minecraft:uniform" }
+      },
+      {
+        "function": "minecraft:apply_bonus",
+        "enchantment": "minecraft:fortune",
+        "formula": "minecraft:uniform_bonus_count",
+        "parameters": {
+          "bonusMultiplier": 1
+        }
+      },
+      {
+        "function": "minecraft:limit_count",
+        "limit": { "min": 1, "max": 4 }
+      }
+    ]
+  }
+}

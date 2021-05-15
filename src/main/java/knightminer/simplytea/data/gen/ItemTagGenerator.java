@@ -2,6 +2,7 @@ package knightminer.simplytea.data.gen;
 
 import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.core.Registration;
+import knightminer.simplytea.data.SimplyTags;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
@@ -23,6 +24,7 @@ public class ItemTagGenerator extends ItemTagsProvider {
 	@Override
 	protected void registerTags() {
 		this.getOrCreateBuilder(Tags.Items.RODS_WOODEN).add(Registration.tea_stick);
+		this.getOrCreateBuilder(SimplyTags.Items.ICE_CUBES).add(Registration.ice_cube);
 		// saplings
 		copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
 		// fences

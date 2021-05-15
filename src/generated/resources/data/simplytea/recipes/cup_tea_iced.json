@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "simplytea:cup"
+    },
+    {
+      "item": "simplytea:teabag_green"
+    },
+    {
+      "item": "minecraft:apple"
+    },
+    {
+      "tag": "forge:ice_cubes"
+    }
+  ],
+  "result": {
+    "item": "simplytea:cup_tea_iced"
+  }
+}

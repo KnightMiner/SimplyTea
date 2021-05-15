@@ -52,11 +52,16 @@ public class TeaDrink extends Drink {
   private EffectInstance getEffect() {
     int configurable = this.configurable.get();
     if (configurable != 0) {
+      EffectInstance effect;
       if (type.isLevel()) {
-        return new EffectInstance(type.getEffect(), constant * 20, configurable - 1);
+        effect = new EffectInstance(type.getEffect(), constant * 20, configurable - 1);
       } else {
-        return new EffectInstance(type.getEffect(), configurable * 20, constant - 1);
+        effect = new EffectInstance(type.getEffect(), configurable * 20, constant - 1);
       }
+      if (type == TeaEffect.ABSORPTION) {
+        effect.getCurativeItems().clear();
+      }
+      return effect;
     }
     return null;
   }
@@ -87,7 +92,8 @@ public class TeaDrink extends Drink {
     RELAXED(true, () -> Registration.relaxed, "Heals 0.5 hearts every (60 / level) seconds"),
     CAFFEINATED(false, () -> Registration.caffeinated, "Grants +6% movement and +5% attack speed"),
     INVIGORATED(false, () -> Registration.invigorated, "Grants +1 attack damage and 0.5 knockback"),
-    ENDERFALLING(false, () -> Registration.enderfalling, "Grants immunity to ender pearl damage and reduces fall damage");
+    ENDERFALLING(false, () -> Registration.enderfalling, "Grants immunity to ender pearl damage and reduces fall damage"),
+    ABSORPTION(true, () -> Effects.ABSORPTION, "Grants 2 temporary absorption hearts per level for a short time");
 
     private final Supplier<Effect> effectSupplier;
     private final boolean level;

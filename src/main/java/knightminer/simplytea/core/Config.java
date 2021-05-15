@@ -17,7 +17,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class Config {
 
 	public static class Server {
-		public TeaDrink black_tea, green_tea, floral_tea, chai_tea, chorus_tea;
+		public TeaDrink black_tea, green_tea, floral_tea, chai_tea, chorus_tea, iced_tea;
 		public CocoaDrink cocoa;
 		public Teapot teapot;
 		public Tree tree;
@@ -30,6 +30,7 @@ public class Config {
 			black_tea  = new TeaDrink("black", builder, TeaEffect.CAFFEINATED, 4, 0.8, 210, 2);
 			chai_tea   = new TeaDrink("chai", builder, TeaEffect.INVIGORATED, 5, 0.6, 150, 1);
 			chorus_tea = new TeaDrink("chorus", builder, TeaEffect.ENDERFALLING, 3, 0.9, 150, 1);
+			iced_tea = new TeaDrink("iced", builder, TeaEffect.ABSORPTION, 3, 0.9, 90, 1);
 			cocoa = new CocoaDrink(builder, 4, 0.6);
 			builder.pop();
 
@@ -59,6 +60,7 @@ public class Config {
 			SERVER.black_tea.invalidEffects();
 			SERVER.chai_tea.invalidEffects();
 			SERVER.chorus_tea.invalidEffects();
+			SERVER.iced_tea.invalidEffects();
 		}
 	}
 }

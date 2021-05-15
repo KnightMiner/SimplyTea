@@ -2,6 +2,7 @@
 1c7fc7063e430f6ce9671c42e9a7804b70d9f2e5 data/forge/tags/blocks/fences/wooden.json
 972dcbfbbce4b47cd223f5a2b677b63bbabd7dc9 data/forge/tags/items/fence_gates/wooden.json
 1c7fc7063e430f6ce9671c42e9a7804b70d9f2e5 data/forge/tags/items/fences/wooden.json
+cd28e778c1f3ad04fda5b24471724ecf92ad2c0a data/forge/tags/items/ice_cubes.json
 fa481b225c4bc6e37112a04a501dcb7fa5e36638 data/forge/tags/items/rods/wooden.json
 972dcbfbbce4b47cd223f5a2b677b63bbabd7dc9 data/minecraft/tags/blocks/fence_gates.json
 22a494ec41cd76dafdb73877f14d0f0a412a22dd data/minecraft/tags/blocks/flower_pots.json
@@ -17,6 +18,7 @@ a93990aeec05291ed46d7e6523b6f652c30d13ee data/simplytea/advancements/recipes/sim
 3dc32b4e88f0255f5cef57a8f585370d67fcbe98 data/simplytea/advancements/recipes/simplytea/cup_tea_chorus.json
 4af6c171ff79c48c5605cffb8ba01a1cfbb29aaa data/simplytea/advancements/recipes/simplytea/cup_tea_floral.json
 2311de055ad378b3962688b03196953121043e3a data/simplytea/advancements/recipes/simplytea/cup_tea_green.json
+9d987824435fdcb7042aa25540b44c18d4cfc84a data/simplytea/advancements/recipes/simplytea/cup_tea_iced.json
 3ec9b1bd3030224ade62fb2551db9b70cfd3c65c data/simplytea/advancements/recipes/simplytea/tea_fence.json
 92985260edc0ba03195cc993c371aa329bd6f3aa data/simplytea/advancements/recipes/simplytea/tea_fence_gate.json
 c251a923bfd4cbd666c63209142f44b0666e4d97 data/simplytea/advancements/recipes/simplytea/teabag.json
@@ -45,6 +47,7 @@ a3de54d7ecd3d3ebb35f9320ee83e57ddcd95620 data/simplytea/recipes/cup.json
 443699cb8b9ff6346a7133c37c12f5a199deabf8 data/simplytea/recipes/cup_tea_chorus.json
 08cbf31c087d75534061ade4e0cb5899bb046110 data/simplytea/recipes/cup_tea_floral.json
 75b4a64f03d77d71216a93ea014b23b758b22344 data/simplytea/recipes/cup_tea_green.json
+ddd2689d4a0a1d45126ed743138a24940ca67331 data/simplytea/recipes/cup_tea_iced.json
 5ffbbbb38f8e7cdb78a8a69bb8ffd09b85d5619b data/simplytea/recipes/tea_fence.json
 f59a3995169f44ce21a05747007e331e4c0fb9f8 data/simplytea/recipes/tea_fence_gate.json
 70b6e51e7586709c61814a276edaee7876565fd8 data/simplytea/recipes/teabag.json

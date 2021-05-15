@@ -4,6 +4,7 @@ import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.block.TeaSaplingBlock;
 import knightminer.simplytea.block.TeaTrunkBlock;
 import knightminer.simplytea.data.AddEntryLootModifier;
+import knightminer.simplytea.data.MatchToolTypeLootCondition;
 import knightminer.simplytea.data.gen.BlockTagGenerator;
 import knightminer.simplytea.data.gen.ItemTagGenerator;
 import knightminer.simplytea.data.gen.LootTableGenerator;
@@ -37,6 +38,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootConditionType;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
@@ -96,6 +98,7 @@ public class Registration {
   public static final Item tea_leaf = injected();
   public static final Item black_tea = injected();
   public static final Item tea_stick = injected();
+  public static final Item ice_cube = injected();
   public static final Item chorus_petal = injected();
 
   /* Tea bags */
@@ -129,6 +132,7 @@ public class Registration {
   public static final Feature<NoFeatureConfig> tea_tree = injected();
 
   public static ConfiguredFeature<?,?> configured_tea_tree;
+  public static LootConditionType matchToolType;
 
   @SubscribeEvent
   static void registerEffects(final RegistryEvent.Register<Effect> event) {
@@ -140,7 +144,6 @@ public class Registration {
     register(r, new InvigoratedEffect(), "invigorated");
     register(r, new EnderfallingEffect(), "enderfalling");
   }
-
 
   @SubscribeEvent
   static void registerBlocks(final RegistryEvent.Register<Block> event) {
@@ -173,6 +176,7 @@ public class Registration {
     register(r, new TooltipItem(props), "tea_leaf");
     register(r, new TooltipItem(props), "black_tea");
     register(r, new TeaStickItem(props), "tea_stick");
+    register(r, new TooltipItem(props), "ice_cube");
     register(r, new TooltipItem(props), "chorus_petal");
 
     // tea bags
@@ -209,6 +213,7 @@ public class Registration {
     register(r, new TeaCupItem(props.food(Config.SERVER.green_tea)), "cup_tea_green");
     register(r, new TeaCupItem(props.food(Config.SERVER.floral_tea)), "cup_tea_floral");
     register(r, new TeaCupItem(props.food(Config.SERVER.chai_tea)), "cup_tea_chai");
+    register(r, new TeaCupItem(props.food(Config.SERVER.iced_tea)), "cup_tea_iced");
     register(r, new TeaCupItem(props.food(Config.SERVER.chorus_tea)), "cup_tea_chorus");
     register(r, new CocoaItem(props.food(Config.SERVER.cocoa)), "cup_cocoa");
   }
@@ -232,6 +237,11 @@ public class Registration {
     IForgeRegistry<GlobalLootModifierSerializer<?>> r = event.getRegistry();
 
     register(r, new AddEntryLootModifier.Serializer(), "add_loot_entry");
+  }
+
+  @SubscribeEvent
+  static void registerRecipeSerializers(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
+    matchToolType = Registry.register(Registry.LOOT_CONDITION_TYPE, MatchToolTypeLootCondition.ID, new LootConditionType(MatchToolTypeLootCondition.SERIALIZER));
   }
 
   @SubscribeEvent

@@ -1,5 +1,6 @@
 package knightminer.simplytea.data.gen;
 
+import knightminer.simplytea.data.SimplyTags;
 import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
@@ -24,6 +25,7 @@ import static knightminer.simplytea.core.Registration.cup_tea_chai;
 import static knightminer.simplytea.core.Registration.cup_tea_chorus;
 import static knightminer.simplytea.core.Registration.cup_tea_floral;
 import static knightminer.simplytea.core.Registration.cup_tea_green;
+import static knightminer.simplytea.core.Registration.cup_tea_iced;
 import static knightminer.simplytea.core.Registration.tea_fence;
 import static knightminer.simplytea.core.Registration.tea_fence_gate;
 import static knightminer.simplytea.core.Registration.tea_leaf;
@@ -108,6 +110,13 @@ public class RecipeGenerator extends RecipeProvider {
 		// advanced tea
 		addTea(consumer, cup_cocoa, Items.COCOA_BEANS, Items.COCOA_BEANS, teapot_frothed);
 		addTea(consumer, cup_tea_chai, teabag_black, tea_stick, teapot_frothed);
+		ShapelessRecipeBuilder.shapelessRecipe(cup_tea_iced)
+													.addIngredient(cup)
+													.addIngredient(teabag_green)
+													.addIngredient(Items.APPLE)
+													.addIngredient(SimplyTags.Items.ICE_CUBES)
+													.addCriterion("has_ice", hasItem(SimplyTags.Items.ICE_CUBES))
+													.build(consumer);
 	}
 
 	private static ResourceLocation suffix(IItemProvider item, String suffix) {
