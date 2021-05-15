@@ -53,6 +53,7 @@ public class TeaCupItem extends Item {
 		if (this.isFood()) {
 			ItemStack result = stack.getContainerItem();
 			boolean hasHoney = hasHoney(stack);
+			living.curePotionEffects(stack); /// remove conflicting teas
 			living.onFoodEaten(worldIn, stack);
 			// we handle effects directly so it can be stack sensitive
 			Food food = getFood();

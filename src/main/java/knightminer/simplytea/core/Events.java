@@ -1,6 +1,7 @@
 package knightminer.simplytea.core;
 
 import knightminer.simplytea.SimplyTea;
+import knightminer.simplytea.potion.RestfulEffect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
@@ -30,18 +31,17 @@ public class Events {
 
     // if caffeinated, remove that with no restful benefits
     PlayerEntity player = event.getPlayer();
-    if (player.isPotionActive(Registration.caffeinated)) {
-      player.removePotionEffect(Registration.caffeinated);
+    if (RestfulEffect.removeConflicts(player)) {
       player.removePotionEffect(Registration.restful);
-      return;
+    } else {
+      EffectInstance effect = player.getActivePotionEffect(Registration.restful);
+      // if restful, heal based on the potion level and remove it
+      if (effect != null) {
+        player.heal((effect.getAmplifier()+1)*2);
+        player.removePotionEffect(Registration.restful);
+      }
     }
 
-    // if restful, heal based on the potion level and remove it
-    EffectInstance effect = player.getActivePotionEffect(Registration.restful);
-    if (effect != null) {
-      player.heal((effect.getAmplifier()+1)*2);
-      player.removePotionEffect(Registration.restful);
-    }
   }
 
   @SubscribeEvent

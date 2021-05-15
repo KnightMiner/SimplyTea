@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "simplytea:cup_tea_green",
+    "simplytea:cup_tea_black",
+    "simplytea:cup_tea_iced",
+    "simplytea:cup_tea_chai",
+    "simplytea:cup_tea_chorus"
+  ]
+}

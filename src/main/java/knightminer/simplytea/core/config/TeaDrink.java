@@ -2,6 +2,9 @@ package knightminer.simplytea.core.config;
 
 import com.mojang.datafixers.util.Pair;
 import knightminer.simplytea.core.Registration;
+import knightminer.simplytea.data.SimplyTags;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -60,9 +63,13 @@ public class TeaDrink extends Drink {
       } else {
         effect = new EffectInstance(type.getEffect(), configurable * 20, constant + levelOffset);
       }
-      if (type == TeaEffect.ABSORPTION) {
-        effect.getCurativeItems().clear();
+      // teas conflict with each other, add other teas as curative items
+      List<ItemStack> curativeEffects = effect.getCurativeItems();
+      curativeEffects.clear();
+      for (Item tea : SimplyTags.Items.EXCLUSIVE_TEAS.getAllElements()) {
+        curativeEffects.add(new ItemStack(tea));
       }
+
       return effect;
     }
     return null;

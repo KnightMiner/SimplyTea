@@ -72,7 +72,6 @@ import java.util.Objects;
 @ObjectHolder(SimplyTea.MOD_ID)
 @EventBusSubscriber(modid = SimplyTea.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class Registration {
-
   /* Creative tab */
   public static ItemGroup group = new ItemGroup("simplytea") {
     @Override
@@ -143,7 +142,7 @@ public class Registration {
 
     register(r, new RestfulEffect(), "restful");
     register(r, new RelaxedEffect(), "relaxed");
-    register(r, new CaffeinatedEffect(), "caffeinated");
+    Effect caffeinated = register(r, new CaffeinatedEffect(), "caffeinated");
     register(r, new InvigoratedEffect(), "invigorated");
     register(r, new EnderfallingEffect(), "enderfalling");
   }
@@ -265,6 +264,10 @@ public class Registration {
       ComposterBlock.registerCompostable(0.4f, black_tea);
       ComposterBlock.registerCompostable(0.5f, chorus_petal);
       ComposterBlock.registerCompostable(0.3f, tea_sapling);
+
+      // too much caffiene to sleep
+      RestfulEffect.addConflict(caffeinated);
+      RestfulEffect.addConflict(invigorated);
     });
 
     // configured features

@@ -74,3 +74,5 @@ b82dd4bb9fc5276fc4462fe1812304dbb92a3e66 data/simplytea/recipes/teapot_frothed_c
 0f26e5972f41efbb25f45496b52d2acfe0f30cd6 data/simplytea/recipes/teapot_hot_smelting.json
 3d3752febcca8c0eeec097bb84c564880a7d34f2 data/simplytea/recipes/unfired_cup.json
 22f54d8772a224db47823982f4ef8baa618d3973 data/simplytea/recipes/unfired_teapot.json
+366d26aca52eab3b2f1c9ac89f85e1f12764ceed data/simplytea/tags/items/teas.json
+9754b11c61e3dbde2b99ed0b3c34857c01fdfd54 data/simplytea/tags/items/teas/exclusive.json
