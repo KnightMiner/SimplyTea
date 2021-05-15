@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "item": "simplytea:tea_leaf"
+            "tag": "forge:crops/tea"
           }
         ]
       }

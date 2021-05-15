@@ -13,9 +13,20 @@ public class SimplyTags {
 	}
 
 	public static class Items {
-		public static final IOptionalNamedTag<Item> TEAS = ItemTags.createOptional(new ResourceLocation(SimplyTea.MOD_ID, "teas"));
-		public static final IOptionalNamedTag<Item> EXCLUSIVE_TEAS = ItemTags.createOptional(new ResourceLocation(SimplyTea.MOD_ID, "teas/exclusive"));
-		public static final IOptionalNamedTag<Item> ICE_CUBES = ItemTags.createOptional(new ResourceLocation("forge", "ice_cubes"));
+		public static final IOptionalNamedTag<Item> TEA_CROP = forgeTag("crops/tea");
+
+		public static final IOptionalNamedTag<Item> TEAS = tag("teas");
+		public static final IOptionalNamedTag<Item> EXCLUSIVE_TEAS = tag("teas/exclusive");
+		public static final IOptionalNamedTag<Item> ICE_CUBES = forgeTag("ice_cubes");
+
+
+		private static IOptionalNamedTag<Item> tag(String name) {
+			return ItemTags.createOptional(new ResourceLocation(SimplyTea.MOD_ID, name));
+		}
+
+		private static IOptionalNamedTag<Item> forgeTag(String name) {
+			return ItemTags.createOptional(new ResourceLocation("forge", name));
+		}
 
 		private static void init() {}
 	}

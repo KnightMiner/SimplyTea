@@ -30,6 +30,8 @@ public class ItemTagGenerator extends ItemTagsProvider {
 				Registration.cup_tea_iced, Registration.cup_tea_chai, Registration.cup_tea_chorus);
 		this.getOrCreateBuilder(SimplyTags.Items.TEAS).add(Registration.cup_tea_floral).addTag(SimplyTags.Items.EXCLUSIVE_TEAS);
 
+		this.getOrCreateBuilder(SimplyTags.Items.TEA_CROP).add(Registration.tea_leaf);
+
 		// saplings
 		copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
 		// fences

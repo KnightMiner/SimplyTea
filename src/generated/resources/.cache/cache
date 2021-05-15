@@ -1,5 +1,6 @@
 972dcbfbbce4b47cd223f5a2b677b63bbabd7dc9 data/forge/tags/blocks/fence_gates/wooden.json
 1c7fc7063e430f6ce9671c42e9a7804b70d9f2e5 data/forge/tags/blocks/fences/wooden.json
+6bf2d27ff6edae24ae6f3f78396b7cb71e2de29a data/forge/tags/items/crops/tea.json
 972dcbfbbce4b47cd223f5a2b677b63bbabd7dc9 data/forge/tags/items/fence_gates/wooden.json
 1c7fc7063e430f6ce9671c42e9a7804b70d9f2e5 data/forge/tags/items/fences/wooden.json
 cd28e778c1f3ad04fda5b24471724ecf92ad2c0a data/forge/tags/items/ice_cubes.json
@@ -10,7 +11,7 @@ fc58d7df4989d523883c28617d89c90d6000f218 data/minecraft/tags/blocks/saplings.jso
 1c7fc7063e430f6ce9671c42e9a7804b70d9f2e5 data/minecraft/tags/blocks/wooden_fences.json
 fc58d7df4989d523883c28617d89c90d6000f218 data/minecraft/tags/items/saplings.json
 1c7fc7063e430f6ce9671c42e9a7804b70d9f2e5 data/minecraft/tags/items/wooden_fences.json
-ab4f95c6be24c16672272b39f255c3e5041a7dcc data/simplytea/advancements/recipes/simplytea/black_tea.json
+1ab9c005f4beb1c071b256d3357abbd51c01e822 data/simplytea/advancements/recipes/simplytea/black_tea.json
 a93990aeec05291ed46d7e6523b6f652c30d13ee data/simplytea/advancements/recipes/simplytea/cup.json
 4132a83d9cc527edba4c6d2a70876229ae248af0 data/simplytea/advancements/recipes/simplytea/cup_cocoa.json
 1d376ca66016c8832deaa1a02c1eb6f56bed169b data/simplytea/advancements/recipes/simplytea/cup_cocoa_with_cinnamon.json
@@ -46,7 +47,7 @@ c1f16e6b8d9c0dfe8e0ddacf3177a27ddde25cf9 data/simplytea/loot_tables/blocks/tea_f
 7b6f6dee6c2b6fc374809e8582f70ee5b536d815 data/simplytea/loot_tables/blocks/tea_leaves.json
 b84c4f41cef9e43dc3b85b62b1fbf1f777adc514 data/simplytea/loot_tables/blocks/tea_sapling.json
 59b04cb6cdb43fd11bf656526fd5ebf8ad943619 data/simplytea/loot_tables/blocks/tea_trunk.json
-7bd3f0f11b01e01e2330ca514d94dcd5b3575fea data/simplytea/recipes/black_tea.json
+5724934cb6dacd04c48f68ddde2c19c897aa91de data/simplytea/recipes/black_tea.json
 a3de54d7ecd3d3ebb35f9320ee83e57ddcd95620 data/simplytea/recipes/cup.json
 44b9ea87df96d15bfb8bd93dd1897c8705a30f49 data/simplytea/recipes/cup_cocoa.json
 3f626c24a8f4296c52b34dc448273e82ddfeca7f data/simplytea/recipes/cup_cocoa_with_cinnamon.json

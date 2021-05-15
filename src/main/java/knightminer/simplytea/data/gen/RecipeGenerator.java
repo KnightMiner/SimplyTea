@@ -62,8 +62,8 @@ public class RecipeGenerator extends RecipeProvider {
 	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
 		// ingredients
-		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(tea_leaf), black_tea, 0.35f, 200, IRecipeSerializer.SMOKING)
-												.addCriterion("has_item", hasItem(tea_leaf))
+		CookingRecipeBuilder.cookingRecipe(Ingredient.fromTag(SimplyTags.Items.TEA_CROP), black_tea, 0.35f, 200, IRecipeSerializer.SMOKING)
+												.addCriterion("has_item", hasItem(SimplyTags.Items.TEA_CROP))
 												.build(consumer);
 
 		// wood
