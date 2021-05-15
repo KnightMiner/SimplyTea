@@ -11,7 +11,7 @@ import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import net.minecraftforge.event.entity.living.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -47,16 +47,16 @@ public class Events {
   @SubscribeEvent
   static void entityFall(LivingFallEvent event) {
     LivingEntity entity = event.getEntityLiving();
-    if (entity.isPotionActive(Registration.enderfalling)) {
-      EffectInstance effect = entity.getActivePotionEffect(Registration.enderfalling);
+    EffectInstance effect = entity.getActivePotionEffect(Registration.enderfalling);
+    if (effect != null) {
       // every level halves the damage of the previous, but start at 1/4
       event.setDamageMultiplier(event.getDamageMultiplier() * (float)Math.pow(2, -effect.getAmplifier()-3));
     }
   }
 
   @SubscribeEvent
-  static void throwEnderPearl(EnderTeleportEvent event) {
-    if (event.getEntityLiving().isPotionActive(Registration.enderfalling)) {
+  static void throwEnderPearl(EntityTeleportEvent.EnderPearl event) {
+    if (event.getPlayer().isPotionActive(Registration.enderfalling)) {
       event.setAttackDamage(0);
     }
   }
