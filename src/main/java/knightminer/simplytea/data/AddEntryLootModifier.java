@@ -1,21 +1,25 @@
 package knightminer.simplytea.data;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootEntry;
-import net.minecraft.loot.LootSerializers;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.functions.ILootFunction;
-import net.minecraft.loot.functions.LootFunctionManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.common.loot.LootModifier;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import javax.annotation.Nonnull;
-import java.util.List;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
+import net.minecraftforge.common.loot.LootModifier;
+import net.minecraftforge.common.loot.LootModifierManager;
+import net.minecraftforge.registries.ForgeRegistries;
+
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -24,50 +28,72 @@ import java.util.function.Consumer;
  * Based on code from Mantle
  */
 public class AddEntryLootModifier extends LootModifier {
-	private static final Gson GSON = LootSerializers.func_237387_b_().create();
+	
+	private static final Codec<LootItemFunction[]> LOOT_ITEM_FUNCTION_CODEC = Codec.PASSTHROUGH.flatXmap(
+			d -> {
+				try {
+					LootItemFunction[] functions = LootModifierManager.GSON_INSTANCE.fromJson(getJson(d), LootItemFunction[].class);
+					return DataResult.success(functions);
+				}catch(JsonSyntaxException e) {
+					LootModifierManager.LOGGER.warn("Unable to decode item functions", e);
+                    return DataResult.error(e.getMessage());
+				}
+			},
+			functions -> {
+				try
+                {
+                    JsonElement element = LootModifierManager.GSON_INSTANCE.toJsonTree(functions);
+                    return DataResult.success(new Dynamic<>(JsonOps.INSTANCE, element));
+                }
+                catch (JsonSyntaxException e)
+                {
+                    LootModifierManager.LOGGER.warn("Unable to encode item functions", e);
+                    return DataResult.error(e.getMessage());
+                }
+			}); 
 
-	private final LootEntry entry;
-	private final ILootFunction[] functions;
+	public static final Codec<AddEntryLootModifier> CODEC = RecordCodecBuilder.create(inst -> codecStart(inst).and(
+            inst.group(
+            		ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(m -> m.item),
+            		LOOT_ITEM_FUNCTION_CODEC.fieldOf("functions").forGetter(m -> m.functions),
+            		Codec.BOOL.fieldOf("require_empty").orElse(false).forGetter(m -> m.requireEmpty)
+            )).apply(inst, AddEntryLootModifier::new)
+    );
+
+	private final Item item;
+	private final LootItemFunction[] functions;
 	private final BiFunction<ItemStack, LootContext, ItemStack> combinedFunctions;
 	private final boolean requireEmpty;
-	protected AddEntryLootModifier(ILootCondition[] conditionsIn, LootEntry entry, ILootFunction[] functions, boolean requireEmpty) {
+	
+	protected AddEntryLootModifier(LootItemCondition[] conditionsIn, Item item, LootItemFunction[] functions, boolean requireEmpty) {
 		super(conditionsIn);
-		this.entry = entry;
+		this.item = item;
 		this.functions = functions;
-		this.combinedFunctions = LootFunctionManager.combine(functions);
+		this.combinedFunctions = LootItemFunctions.compose(functions);
 		this.requireEmpty = requireEmpty;
 	}
 
 	@Override
-	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+	public ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
 		if (!requireEmpty || generatedLoot.isEmpty()) {
-			Consumer<ItemStack> consumer = ILootFunction.func_215858_a(this.combinedFunctions, generatedLoot::add, context);
-			entry.expand(context, generator -> generator.func_216188_a(consumer, context));
+			Consumer<ItemStack> consumer = LootItemFunction.decorate(this.combinedFunctions, generatedLoot::add, context);
+			ItemStack stack = new ItemStack(this.item);
+			consumer.accept(stack);
 		}
 		return generatedLoot;
 	}
-
-	public static class Serializer extends GlobalLootModifierSerializer<AddEntryLootModifier> {
-		@Override
-		public AddEntryLootModifier read(ResourceLocation location, JsonObject object, ILootCondition[] conditions) {
-			LootEntry entry = GSON.fromJson(JSONUtils.getJsonObject(object, "entry"), LootEntry.class);
-			ILootFunction[] functions;
-			if (object.has("functions")) {
-				functions = GSON.fromJson(JSONUtils.getJsonArray(object, "functions"), ILootFunction[].class);
-			} else {
-				functions = new ILootFunction[0];
-			}
-			boolean requireEmpty = JSONUtils.getBoolean(object, "require_empty", false);
-			return new AddEntryLootModifier(conditions, entry, functions, requireEmpty);
-		}
-
-		@Override
-		public JsonObject write(AddEntryLootModifier instance) {
-			JsonObject object = makeConditions(instance.conditions);
-			object.addProperty("require_empty", instance.requireEmpty);
-			object.add("entry", GSON.toJsonTree(instance.entry, LootEntry.class));
-			object.add("functions", GSON.toJsonTree(instance.functions, ILootFunction[].class));
-			return object;
-		}
+	
+	@Override
+	public Codec<? extends IGlobalLootModifier> codec() {
+		return CODEC;
 	}
+	
+	// From IGlobalLootModifier
+	@SuppressWarnings("unchecked")
+	private static <U> JsonElement getJson(Dynamic<?> dynamic) {
+        Dynamic<U> typed = (Dynamic<U>) dynamic;
+        return typed.getValue() instanceof JsonElement ?
+                (JsonElement) typed.getValue() :
+                typed.getOps().convertTo(JsonOps.INSTANCE, typed.getValue());
+    }
 }

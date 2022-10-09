@@ -3,11 +3,13 @@ package knightminer.simplytea.core.config;
 import com.mojang.datafixers.util.Pair;
 import knightminer.simplytea.core.Registration;
 import knightminer.simplytea.data.SimplyTags;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nullable;
@@ -52,21 +54,22 @@ public class TeaDrink extends Drink {
   }
 
   /** Gets the effect for this drink, or null if the effect is disabled */
-  @Nullable
-  public EffectInstance getEffect(boolean hasHoney) {
+  @SuppressWarnings("deprecation")
+@Nullable
+  public MobEffectInstance getEffect(boolean hasHoney) {
     int levelOffset = hasHoney ? 0 : -1; // config stores values as +1 to make it easier to understand
     int configurable = this.configurable.get();
     if (configurable != 0) {
-      EffectInstance effect;
+    	MobEffectInstance effect;
       if (type.isLevel()) {
-        effect = new EffectInstance(type.getEffect(), constant * 20, configurable + levelOffset);
+        effect = new MobEffectInstance(type.getEffect(), constant * 20, configurable + levelOffset);
       } else {
-        effect = new EffectInstance(type.getEffect(), configurable * 20, constant + levelOffset);
+        effect = new MobEffectInstance(type.getEffect(), configurable * 20, constant + levelOffset);
       }
       // teas conflict with each other, add other teas as curative items
       List<ItemStack> curativeEffects = effect.getCurativeItems();
       curativeEffects.clear();
-      for (Item tea : SimplyTags.Items.EXCLUSIVE_TEAS.getAllElements()) {
+      for (Holder<Item> tea : Registry.ITEM.getTagOrEmpty(SimplyTags.Items.EXCLUSIVE_TEAS)) {
         curativeEffects.add(new ItemStack(tea));
       }
 
@@ -76,25 +79,25 @@ public class TeaDrink extends Drink {
   }
 
   @Override
-  public List<Pair<EffectInstance,Float>> getEffects() {
+  public List<Pair<MobEffectInstance,Float>> getEffects() {
     return Collections.emptyList();
   }
 
   /** Tea effect types */
   public enum TeaEffect {
-    RESTFUL(true, () -> Registration.restful, "Heals one heart after sleeping per level"),
-    RELAXED(true, () -> Registration.relaxed, "Heals 0.5 hearts every (60 / level) seconds"),
-    CAFFEINATED(false, () -> Registration.caffeinated, "Grants +6% movement and +5% attack speed"),
-    INVIGORATED(false, () -> Registration.invigorated, "Grants +1 attack damage and 0.5 knockback"),
-    ENDERFALLING(false, () -> Registration.enderfalling, "Grants immunity to ender pearl damage and reduces fall damage"),
-    ABSORPTION(true, () -> Effects.ABSORPTION, "Grants 2 temporary absorption hearts per level for a short time");
+    RESTFUL(true, () -> Registration.restful.get(), "Heals one heart after sleeping per level"),
+    RELAXED(true, () -> Registration.relaxed.get(), "Heals 0.5 hearts every (60 / level) seconds"),
+    CAFFEINATED(false, () -> Registration.caffeinated.get(), "Grants +6% movement and +5% attack speed"),
+    INVIGORATED(false, () -> Registration.invigorated.get(), "Grants +1 attack damage and 0.5 knockback"),
+    ENDERFALLING(false, () -> Registration.enderfalling.get(), "Grants immunity to ender pearl damage and reduces fall damage"),
+    ABSORPTION(true, () -> MobEffects.ABSORPTION, "Grants 2 temporary absorption hearts per level for a short time");
 
-    private final Supplier<Effect> effectSupplier;
+    private final Supplier<MobEffect> effectSupplier;
     private final boolean level;
     private final String description;
 
     /** @param level  If true, level is configurable. If false time is configurable */
-    TeaEffect(boolean level, Supplier<Effect> effectSupplier, String description) {
+    TeaEffect(boolean level, Supplier<MobEffect> effectSupplier, String description) {
       this.effectSupplier = effectSupplier;
       this.level = level;
       this.description = description;
@@ -114,7 +117,7 @@ public class TeaDrink extends Drink {
     }
 
     /** Gets the effect for this drink */
-    public Effect getEffect() {
+    public MobEffect getEffect() {
       return effectSupplier.get();
     }
 

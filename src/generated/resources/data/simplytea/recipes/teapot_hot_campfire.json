@@ -1,9 +1,9 @@
 {
   "type": "minecraft:campfire_cooking",
+  "cookingtime": 900,
+  "experience": 0.35,
   "ingredient": {
     "item": "simplytea:teapot_water"
   },
-  "result": "simplytea:teapot_hot",
-  "experience": 0.35,
-  "cookingtime": 900
+  "result": "simplytea:teapot_hot"
 }

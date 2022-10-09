@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "sss",
-    "sss"
-  ],
   "key": {
     "s": {
       "item": "simplytea:tea_stick"
     }
   },
+  "pattern": [
+    "sss",
+    "sss"
+  ],
   "result": {
-    "item": "simplytea:tea_fence",
-    "count": 2
+    "count": 2,
+    "item": "simplytea:tea_fence"
   }
 }

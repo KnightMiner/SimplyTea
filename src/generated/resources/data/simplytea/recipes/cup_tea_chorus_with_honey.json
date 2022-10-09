@@ -1,9 +1,9 @@
 {
   "type": "simplytea:shapeless_honey",
   "group": "simplytea:with_honey",
-  "tea": "simplytea:cup_tea_chorus",
   "honey": {
     "item": "minecraft:honey_bottle"
   },
-  "tag": "with_honey"
+  "tag": "with_honey",
+  "tea": "simplytea:cup_tea_chorus"
 }

@@ -1,0 +1,7 @@
+// 1.19.2	2022-10-09T12:22:25.9118353	Simply Tea Block Tags
+c5f0b13c826847743b9b9d1e4ab065e5fed72550 data/forge/tags/blocks/fences/wooden.json
+d12d46cf26853e73b83ef3a475026df53e509975 data/forge/tags/blocks/fence_gates/wooden.json
+d12d46cf26853e73b83ef3a475026df53e509975 data/minecraft/tags/blocks/fence_gates.json
+dfafe89f9453f9a4f0d34861497a2e09958306f2 data/minecraft/tags/blocks/flower_pots.json
+10c71b1f8300e3d5b1f75799680cb33d3d8fdc1e data/minecraft/tags/blocks/saplings.json
+c5f0b13c826847743b9b9d1e4ab065e5fed72550 data/minecraft/tags/blocks/wooden_fences.json

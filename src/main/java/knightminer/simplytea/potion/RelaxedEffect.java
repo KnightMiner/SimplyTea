@@ -1,24 +1,24 @@
 package knightminer.simplytea.potion;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 
 /** Effectively just slow regeneration */
-public class RelaxedEffect extends Effect {
+public class RelaxedEffect extends MobEffect {
 	public RelaxedEffect() {
-		super(EffectType.BENEFICIAL, 0xA0E8A7);
+		super(MobEffectCategory.BENEFICIAL, 0xA0E8A7);
 	}
 
 	@Override
-	public void performEffect(LivingEntity entityLivingBaseIn, int amplifier) {
+	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier) {
 		if (entityLivingBaseIn.getHealth() < entityLivingBaseIn.getMaxHealth()) {
 			entityLivingBaseIn.heal(1.0F);
 		}
 	}
 
 	@Override
-	public boolean isReady(int duration, int amplifier) {
+	public boolean isDurationEffectTick(int duration, int amplifier) {
 		// at level 1, 1 half heart every 60 seconds
 		// level 2, every 30 seconds
 		// level 3, every 20 seconds

@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
+  "cookingtime": 300,
+  "experience": 0.35,
   "ingredient": {
     "item": "simplytea:unfired_teapot"
   },
-  "result": "simplytea:teapot",
-  "experience": 0.35,
-  "cookingtime": 300
+  "result": "simplytea:teapot"
 }

@@ -1,26 +1,23 @@
 {
   "parent": "minecraft:recipes/root",
-  "rewards": {
-    "recipes": [
-      "simplytea:cup"
-    ]
-  },
   "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "simplytea:cup"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
     "has_unfired": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "simplytea:unfired_cup"
+            "items": [
+              "simplytea:unfired_cup"
+            ]
           }
         ]
-      }
-    },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "simplytea:cup"
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "requirements": [
@@ -28,5 +25,10 @@
       "has_unfired",
       "has_the_recipe"
     ]
-  ]
+  ],
+  "rewards": {
+    "recipes": [
+      "simplytea:cup"
+    ]
+  }
 }

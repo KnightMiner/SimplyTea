@@ -1,20 +1,19 @@
 package knightminer.simplytea.core;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.LootTable;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
-
 import javax.annotation.Nullable;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
+
 import java.util.List;
 
 public final class Util {
@@ -30,15 +29,15 @@ public final class Util {
      * @param location  Location of loot table to use to get block drops
      * @return  List of block drops
      */
-    public static List<ItemStack> getBlockLoot(BlockState state, ServerWorld world, BlockPos pos, @Nullable PlayerEntity player, ItemStack tool, ResourceLocation location) {
+    public static List<ItemStack> getBlockLoot(BlockState state, ServerLevel world, BlockPos pos, @Nullable Player player, ItemStack tool, ResourceLocation location) {
         LootContext.Builder builder = new LootContext.Builder(world)
-            .withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos))
-            .withParameter(LootParameters.BLOCK_STATE, state)
-            .withNullableParameter(LootParameters.BLOCK_ENTITY, world.getTileEntity(pos))
-            .withNullableParameter(LootParameters.THIS_ENTITY, player)
-            .withParameter(LootParameters.TOOL, tool);
-        LootContext context = builder.build(LootParameterSets.BLOCK);
-        LootTable table = world.getServer().getLootTableManager().getLootTableFromLocation(location);
-        return table.generate(context);
+            .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+            .withParameter(LootContextParams.BLOCK_STATE, state)
+            .withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(pos))
+            .withOptionalParameter(LootContextParams.THIS_ENTITY, player)
+            .withParameter(LootContextParams.TOOL, tool);
+        LootContext context = builder.create(LootContextParamSets.BLOCK);
+        LootTable table = world.getServer().getLootTables().get(location);
+        return table.getRandomItems(context);
     }
 }

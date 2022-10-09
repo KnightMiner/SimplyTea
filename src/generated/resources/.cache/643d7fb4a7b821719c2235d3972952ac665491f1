@@ -1,0 +1,10 @@
+// 1.19.2	2022-10-09T12:22:25.9138339	Simply Tea Item Tags
+96ff1201fb906579e8218e4bdef72033e4e32ad9 data/forge/tags/items/crops/tea.json
+c5f0b13c826847743b9b9d1e4ab065e5fed72550 data/forge/tags/items/fences/wooden.json
+d12d46cf26853e73b83ef3a475026df53e509975 data/forge/tags/items/fence_gates/wooden.json
+03e7de53929c6c982990a9618f2c9e99a0ca524a data/forge/tags/items/ice_cubes.json
+e54482da2d20c6c1ebc34fe5d6a69602d08c1d2b data/forge/tags/items/rods/wooden.json
+10c71b1f8300e3d5b1f75799680cb33d3d8fdc1e data/minecraft/tags/items/saplings.json
+c5f0b13c826847743b9b9d1e4ab065e5fed72550 data/minecraft/tags/items/wooden_fences.json
+849579916037bec85f63e45f1591abb0efd28ee6 data/simplytea/tags/items/teas.json
+175dfd8e7276b9133e52f0341da8ced06fc4b2bd data/simplytea/tags/items/teas/exclusive.json

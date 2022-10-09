@@ -1,25 +1,31 @@
 {
   "type": "minecraft:block",
+  "functions": [
+    {
+      "function": "minecraft:explosion_decay"
+    }
+  ],
   "pools": [
     {
-      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "simplytea:tea_leaf"
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:apply_bonus",
               "enchantment": "minecraft:fortune",
               "formula": "minecraft:binomial_with_bonus_count",
+              "function": "minecraft:apply_bonus",
               "parameters": {
                 "extra": 2,
                 "probability": 0.55
@@ -28,36 +34,33 @@
           ],
           "name": "simplytea:tea_leaf"
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "chances": [
+            0.05,
+            0.0625,
+            0.083333336,
+            0.1
+          ],
+          "condition": "minecraft:table_bonus",
+          "enchantment": "minecraft:fortune"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "simplytea:tea_sapling"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        },
-        {
-          "condition": "minecraft:table_bonus",
-          "enchantment": "minecraft:fortune",
-          "chances": [
-            0.05,
-            0.0625,
-            0.083333336,
-            0.1
-          ]
-        }
-      ]
-    }
-  ],
-  "functions": [
-    {
-      "function": "minecraft:explosion_decay"
+      "rolls": 1.0
     }
   ]
 }

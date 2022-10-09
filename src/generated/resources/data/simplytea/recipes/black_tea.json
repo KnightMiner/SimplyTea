@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smoking",
+  "cookingtime": 200,
+  "experience": 0.35,
   "ingredient": {
     "tag": "forge:crops/tea"
   },
-  "result": "simplytea:black_tea",
-  "experience": 0.35,
-  "cookingtime": 200
+  "result": "simplytea:black_tea"
 }

@@ -2,16 +2,15 @@ package knightminer.simplytea.block;
 
 import knightminer.simplytea.block.TeaTrunkBlock.TrunkType;
 import knightminer.simplytea.core.Registration;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SaplingBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.ForgeEventFactory;
-
-import java.util.Random;
 
 public class TeaSaplingBlock extends SaplingBlock {
 
@@ -20,22 +19,23 @@ public class TeaSaplingBlock extends SaplingBlock {
 		super(null, props);
 	}
 
+	@SuppressWarnings("removal")
 	@Override
-	public void placeTree(ServerWorld world, BlockPos pos, BlockState state, Random rand) {
-		if (state.get(STAGE) == 0) {
-			world.setBlockState(pos, state.func_235896_a_(STAGE), 4);
-		} else if (ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
-			TeaSaplingBlock.generateTree(world, pos, rand);
+	public void advanceTree(ServerLevel pLevel, BlockPos pPos, BlockState pState, RandomSource pRandom) {
+		if (pState.getValue(STAGE) == 0) {
+			pLevel.setBlock(pPos, pState.cycle(STAGE), 4);
+		} else if (ForgeEventFactory.saplingGrowTree(pLevel, pRandom, pPos)) {
+			TeaSaplingBlock.generateTree(pLevel, pPos, pRandom);
 		}
 	}
 
 	@Override
-	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean b) {
+	public boolean isValidBonemealTarget(BlockGetter world, BlockPos pos, BlockState state, boolean b) {
 		// tree minimum is 4 blocks tall (sapling position plus 3)
 		for(int i = 1; i <= 3; i++) {
 			// TODO: use state.isReplaceable?
-			BlockState up = world.getBlockState(pos.up(i));
-			if(!up.isAir(world, pos) && !up.getMaterial().isReplaceable()) {
+			BlockState up = world.getBlockState(pos.above(i));
+			if(!up.isAir() && !up.getMaterial().isReplaceable()) {
 				return false;
 			}
 		}
@@ -45,18 +45,19 @@ public class TeaSaplingBlock extends SaplingBlock {
 	/**
 	 * Creates a new tea tree
 	 */
-	public static void generateTree(IWorld world, BlockPos pos, Random random) {
+	public static void generateTree(WorldGenLevel world, BlockPos pos, RandomSource random) {		
 		// TODO: move to tree?
-		BlockState trunk = Registration.tea_trunk.getDefaultState().with(TeaTrunkBlock.CLIPPED, false);
+		BlockState trunk = Registration.tea_trunk.get().defaultBlockState().setValue(TeaTrunkBlock.CLIPPED, false);
+		
 		// tree stump
-		world.setBlockState(pos, trunk.with(TeaTrunkBlock.TYPE, TrunkType.STUMP), 3);
-		world.setBlockState(pos.up(), trunk.with(TeaTrunkBlock.TYPE, TrunkType.BOTTOM), 3);
+		world.setBlock(pos, trunk.setValue(TeaTrunkBlock.TYPE, TrunkType.STUMP), 3);
+		world.setBlock(pos.above(), trunk.setValue(TeaTrunkBlock.TYPE, TrunkType.BOTTOM), 3);
 
 		// tree branches
 		// tree minimum is 4 blocks tall, but can be up to two blocks taller if space permits
 		int height = 3;
-		if(world.isAirBlock(pos.up(4))) {
-			height += random.nextInt(world.isAirBlock(pos.up(5)) ? 3 : 2);
+		if(world.isEmptyBlock(pos.above(4))) {
+			height += random.nextInt(world.isEmptyBlock(pos.above(5)) ? 3 : 2);
 		}
 		boolean north, south, west, east;
 		BlockPos branch;
@@ -65,27 +66,27 @@ public class TeaSaplingBlock extends SaplingBlock {
 			south = random.nextBoolean();
 			west = random.nextBoolean();
 			east = random.nextBoolean();
-			branch = pos.up(i);
+			branch = pos.above(i);
 
-			if (north) setBlockSafe(world, branch.north(), trunk.with(TeaTrunkBlock.TYPE, TrunkType.SOUTH));
-			if (east)  setBlockSafe(world, branch.east(),  trunk.with(TeaTrunkBlock.TYPE, TrunkType.WEST));
-			if (south) setBlockSafe(world, branch.south(), trunk.with(TeaTrunkBlock.TYPE, TrunkType.NORTH));
-			if (west)  setBlockSafe(world, branch.west(),  trunk.with(TeaTrunkBlock.TYPE, TrunkType.EAST));
+			if (north) setBlockSafe(world, branch.north(), trunk.setValue(TeaTrunkBlock.TYPE, TrunkType.SOUTH));
+			if (east)  setBlockSafe(world, branch.east(),  trunk.setValue(TeaTrunkBlock.TYPE, TrunkType.WEST));
+			if (south) setBlockSafe(world, branch.south(), trunk.setValue(TeaTrunkBlock.TYPE, TrunkType.NORTH));
+			if (west)  setBlockSafe(world, branch.west(),  trunk.setValue(TeaTrunkBlock.TYPE, TrunkType.EAST));
 
-			world.setBlockState(branch, trunk.with(TeaTrunkBlock.TYPE, TrunkType.MIDDLE), 3);
+			world.setBlock(branch, trunk.setValue(TeaTrunkBlock.TYPE, TrunkType.MIDDLE), 3);
 		}
 
 		// tree top
-		world.setBlockState(pos.up(height), trunk.with(TeaTrunkBlock.TYPE, TrunkType.TOP), 3);
+		world.setBlock(pos.above(height), trunk.setValue(TeaTrunkBlock.TYPE, TrunkType.TOP), 3);
 	}
 
 	/**
 	 * Sets a block only if the block is replaceable
 	 */
-	private static void setBlockSafe(IWorld world, BlockPos pos, BlockState state) {
+	private static void setBlockSafe(WorldGenLevel world, BlockPos pos, BlockState state) {
 		BlockState old = world.getBlockState(pos);
-		if(old.isAir(world, pos) || old.getMaterial().isReplaceable() || old.getBlock().isIn(BlockTags.LEAVES)) {
-			world.setBlockState(pos, state, 3);
+		if(old.isAir() || old.getMaterial().isReplaceable() || old.is(BlockTags.LEAVES)) {
+			world.setBlock(pos, state, 3);
 		}
 	}
 }

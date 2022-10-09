@@ -1,9 +1,9 @@
 {
   "type": "simplytea:shapeless_honey",
   "group": "simplytea:with_cinnamon",
-  "tea": "simplytea:cup_cocoa",
   "honey": {
     "item": "simplytea:tea_stick"
   },
-  "tag": "with_cinnamon"
+  "tag": "with_cinnamon",
+  "tea": "simplytea:cup_cocoa"
 }

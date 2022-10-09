@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:bone_meal"
+    },
+    "C": {
+      "item": "minecraft:clay_ball"
+    }
+  },
   "pattern": [
     "CBC",
     "CC "
   ],
-  "key": {
-    "C": {
-      "item": "minecraft:clay_ball"
-    },
-    "B": {
-      "item": "minecraft:bone_meal"
-    }
-  },
   "result": {
     "item": "simplytea:unfired_teapot"
   }
