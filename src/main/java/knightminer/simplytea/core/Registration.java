@@ -25,14 +25,23 @@ import knightminer.simplytea.potion.RelaxedEffect;
 import knightminer.simplytea.potion.RestfulEffect;
 import knightminer.simplytea.worldgen.TeaTreeFeature;
 import net.minecraft.core.Registry;
+import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -41,7 +50,9 @@ import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -198,6 +209,23 @@ public class Registration {
       // too much caffiene to sleep
       RestfulEffect.addConflict(caffeinated.get());
       RestfulEffect.addConflict(invigorated.get());
+      
+      // Register cauldron interaction
+      CauldronInteraction.WATER.put(teapot.get(), (pBlockState, pLevel, pBlockPos, pPlayer, pHand, pStack) -> {
+    	  if(!Config.SERVER.teapot.fillFromCauldron() || pBlockState.getValue(LayeredCauldronBlock.LEVEL) != 3) {
+    		  return InteractionResult.PASS;
+    	  }
+    	  if(!pLevel.isClientSide) {
+    		  Item item = pStack.getItem();
+              pPlayer.setItemInHand(pHand, ItemUtils.createFilledResult(pStack, pPlayer, new ItemStack(Registration.teapot_water.get())));
+              pPlayer.awardStat(Stats.USE_CAULDRON);
+              pPlayer.awardStat(Stats.ITEM_USED.get(item));
+              pLevel.setBlockAndUpdate(pBlockPos, Blocks.CAULDRON.defaultBlockState());
+              pLevel.playSound((Player)null, pBlockPos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+              pLevel.gameEvent((Entity)null, GameEvent.FLUID_PICKUP, pBlockPos);
+    	  }
+    	  return InteractionResult.sidedSuccess(pLevel.isClientSide);
+       });
     });
   }
 

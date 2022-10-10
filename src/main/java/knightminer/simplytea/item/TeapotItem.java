@@ -5,6 +5,7 @@ import knightminer.simplytea.core.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -12,22 +13,22 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult.Type;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class TeapotItem extends TooltipItem {
+
 	public TeapotItem(Properties props) {
 		super(props);
 	}
@@ -36,48 +37,59 @@ public class TeapotItem extends TooltipItem {
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 		BlockHitResult rayTrace = getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
-		if (rayTrace.getType() == Type.BLOCK) {
-			BlockPos pos = rayTrace.getBlockPos();
-			BlockState state = world.getBlockState(pos);
-			Block block = state.getBlock();
+		if(rayTrace.getType() == HitResult.Type.MISS || rayTrace.getType() != HitResult.Type.BLOCK) {
+			return InteractionResultHolder.pass(stack);
+		}
 
-			// try filling from the cauldron
-			if (Config.SERVER.teapot.fillFromCauldron() && block == Blocks.WATER_CAULDRON && state.getValue(BlockStateProperties.LEVEL_CAULDRON) == 3) {
-				world.setBlockAndUpdate(pos, Blocks.CAULDRON.defaultBlockState());
-				stack = ItemUtils.createFilledResult(stack, player, new ItemStack(Registration.teapot_water.get()));
-				return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
-			}
+		BlockPos blockpos = rayTrace.getBlockPos();
+		Direction direction = rayTrace.getDirection();
+		BlockPos nearPos = blockpos.relative(direction);
 
-			// we use name for lookup to prevent default fluid conflicts
-			Fluid fluid = state.getFluidState().getType();
-			if(fluid != Fluids.EMPTY) {
-				// try for water or milk using the config lists
-				Item item = null;
-				if (fluid.is(FluidTags.WATER)) {
-					item = Registration.teapot_water.get();
-				} // TODO: milk when mods make a standard
+		if(world.mayInteract(player, blockpos) && player.mayUseItemAt(nearPos, direction, stack)) {
+			BlockState blockstate = world.getBlockState(blockpos);
 
-				// if either one is found, update the stack
-				if(item != null) {
-					// water is considered infinite unless disabled in the config
-					if(!Config.SERVER.teapot.infiniteWater()) {
-						Direction side = rayTrace.getDirection();
-						// unable to modify the block, fail
-						if (!world.mayInteract(player, pos) || !player.mayUseItemAt(pos.relative(side), side, stack) || !(state.getBlock() instanceof BucketPickup)) {
-							return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
-						}
-						((BucketPickup)state.getBlock()).pickupBlock(world, pos, state);
+			if(blockstate.getBlock() instanceof BucketPickup) {
+				Fluid fluid = blockstate.getFluidState().getType();
+				if(fluid == Fluids.EMPTY) {
+					return InteractionResultHolder.fail(stack);
+				}
+
+				BucketPickup bucketpickup = (BucketPickup) blockstate.getBlock();
+
+				boolean isWater = ForgeRegistries.FLUIDS.tags().getTag(FluidTags.WATER).contains(fluid);
+				boolean isMilk = ForgeRegistries.FLUIDS.tags().getTag(Tags.Fluids.MILK).contains(fluid);
+
+				if(!isWater && !isMilk) {
+					return InteractionResultHolder.fail(stack);
+				}
+
+				boolean blockHasFluid = true;
+				if(!Config.SERVER.teapot.infiniteWater()) {
+					ItemStack filledBucket = bucketpickup.pickupBlock(world, blockpos, blockstate);
+					blockHasFluid = !filledBucket.isEmpty();
+				}
+
+				if(blockHasFluid) {
+					player.awardStat(Stats.ITEM_USED.get(this));
+					bucketpickup.getPickupSound(blockstate).ifPresent((sound) -> {
+						player.playSound(sound, 1.0F, 1.0F);
+					});
+					world.gameEvent(player, GameEvent.FLUID_PICKUP, blockpos);
+
+					ItemStack filledTeapot;
+					if(isWater) {
+						filledTeapot = ItemUtils.createFilledResult(stack, player, new ItemStack(Registration.teapot_water.get()));
+					}else {
+						// TODO: test
+						filledTeapot = ItemUtils.createFilledResult(stack, player, new ItemStack(Registration.teapot_milk.get()));
 					}
 
-					stack = ItemUtils.createFilledResult(stack, player, new ItemStack(item));
-
-					// TODO: fluid sound based on fluid
-					player.playSound(SoundEvents.BUCKET_FILL, 1.0f, 1.0f);
-					return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
+					return InteractionResultHolder.sidedSuccess(filledTeapot, world.isClientSide());
 				}
 			}
 		}
-		return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
+
+		return InteractionResultHolder.fail(stack);
 	}
 
 	@Override
