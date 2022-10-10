@@ -1,7 +1,7 @@
 package knightminer.simplytea.core;
 
 import knightminer.simplytea.SimplyTea;
-import knightminer.simplytea.block.TeaSaplingBlock;
+import knightminer.simplytea.block.TeaTreeGrower;
 import knightminer.simplytea.block.TeaTrunkBlock;
 import knightminer.simplytea.data.AddEntryLootModifier;
 import knightminer.simplytea.data.gen.BlockTagGenerator;
@@ -51,6 +51,7 @@ import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -110,7 +111,7 @@ public class Registration {
   /* Blocks */
   public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.Keys.BLOCKS, SimplyTea.MOD_ID);
 
-  public static final RegistryObject<TeaSaplingBlock> tea_sapling = BLOCKS.register("tea_sapling", () -> new TeaSaplingBlock(Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+  public static final RegistryObject<SaplingBlock> tea_sapling = BLOCKS.register("tea_sapling", () -> new SaplingBlock(new TeaTreeGrower(), Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
   public static final RegistryObject<TeaTrunkBlock> tea_trunk = BLOCKS.register("tea_trunk", () -> new TeaTrunkBlock(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD).randomTicks()));
   public static final RegistryObject<FenceBlock> tea_fence = BLOCKS.register("tea_fence", () -> new FenceBlock(Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
   public static final RegistryObject<FenceGateBlock> tea_fence_gate = BLOCKS.register("tea_fence_gate", () -> new FenceGateBlock(Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -183,7 +184,7 @@ public class Registration {
   
   public static final RegistryObject<PlacedFeature> placed_tea_tree = PLACED_FEATURES.register("placed_tea_tree", () -> {
 	return new PlacedFeature(configured_tea_tree.getHolder().get(), List.of(
-				RarityFilter.onAverageOnceEvery(700),
+				RarityFilter.onAverageOnceEvery(500),
 				InSquarePlacement.spread(),
 				PlacementUtils.HEIGHTMAP,
 				BiomeFilter.biome()
