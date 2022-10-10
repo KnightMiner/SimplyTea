@@ -6,6 +6,7 @@ import knightminer.simplytea.block.TeaTrunkBlock;
 import knightminer.simplytea.data.AddEntryLootModifier;
 import knightminer.simplytea.data.gen.BlockTagGenerator;
 import knightminer.simplytea.data.gen.ItemTagGenerator;
+import knightminer.simplytea.data.gen.LootModifierGenerator;
 import knightminer.simplytea.data.gen.LootTableGenerator;
 import knightminer.simplytea.data.gen.RecipeGenerator;
 import knightminer.simplytea.data.gen.ShapelessHoneyRecipe;
@@ -178,20 +179,6 @@ public class Registration {
 			));
   });
 
-  /*
-  @SubscribeEvent
-  static void registerGlobalLootTables(final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
-    IForgeRegistry<GlobalLootModifierSerializer<?>> r = event.getRegistry();
-
-    register(r, new AddEntryLootModifier.Serializer(), "add_loot_entry");
-  }
-
-  @SubscribeEvent
-  static void registerRecipeSerializers(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
-    matchToolType = Registry.register(Registry.LOOT_CONDITION_TYPE, MatchToolTypeLootCondition.ID, new LootConditionType(MatchToolTypeLootCondition.SERIALIZER));
-  }
-  */
-
   @SubscribeEvent
   static void registerMisc(final FMLCommonSetupEvent event) {
     event.enqueueWork(() -> {
@@ -224,6 +211,7 @@ public class Registration {
       generator.addProvider(event.includeServer(), new ItemTagGenerator(generator, blockTags, existing));
       generator.addProvider(event.includeServer(), new RecipeGenerator(generator));
       generator.addProvider(event.includeServer(), new LootTableGenerator(generator));
+      generator.addProvider(event.includeServer(), new LootModifierGenerator(generator));
     }
   }
 }

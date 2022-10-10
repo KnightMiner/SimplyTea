@@ -65,7 +65,7 @@ public class AddEntryLootModifier extends LootModifier {
 	private final BiFunction<ItemStack, LootContext, ItemStack> combinedFunctions;
 	private final boolean requireEmpty;
 	
-	protected AddEntryLootModifier(LootItemCondition[] conditionsIn, Item item, LootItemFunction[] functions, boolean requireEmpty) {
+	public AddEntryLootModifier(LootItemCondition[] conditionsIn, Item item, LootItemFunction[] functions, boolean requireEmpty) {
 		super(conditionsIn);
 		this.item = item;
 		this.functions = functions;
