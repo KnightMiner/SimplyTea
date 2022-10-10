@@ -4,5 +4,6 @@
 	"textures": {
 		"particle": "simplytea:block/tea_sapling",
 		"cross": "simplytea:block/tea_sapling"
-	}
+	},
+    "render_type": "cutout_mipped"
 }

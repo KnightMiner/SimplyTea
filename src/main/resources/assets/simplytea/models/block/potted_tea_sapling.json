@@ -2,5 +2,6 @@
     "parent": "block/flower_pot_cross",
     "textures": {
         "plant": "simplytea:block/tea_sapling"
-    }
+    },
+    "render_type": "cutout_mipped"
 }

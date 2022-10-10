@@ -210,6 +210,8 @@ public class Registration {
       RestfulEffect.addConflict(caffeinated.get());
       RestfulEffect.addConflict(invigorated.get());
       
+      ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(tea_sapling.getKey().location(), potted_tea_sapling);
+      
       // Register cauldron interaction
       CauldronInteraction.WATER.put(teapot.get(), (pBlockState, pLevel, pBlockPos, pPlayer, pHand, pStack) -> {
     	  if(!Config.SERVER.teapot.fillFromCauldron() || pBlockState.getValue(LayeredCauldronBlock.LEVEL) != 3) {
