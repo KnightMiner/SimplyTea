@@ -195,8 +195,7 @@ public class Registration {
   static void registerMisc(final FMLCommonSetupEvent event) {
     event.enqueueWork(() -> {
       // flamability
-      if (Blocks.FIRE instanceof FireBlock) {
-        FireBlock fire = (FireBlock)Blocks.FIRE;
+      if (Blocks.FIRE instanceof FireBlock fire) {
         fire.setFlammable(tea_fence.get(), 5, 20);
         fire.setFlammable(tea_fence_gate.get(), 5, 20);
         fire.setFlammable(tea_trunk.get(), 15, 30);

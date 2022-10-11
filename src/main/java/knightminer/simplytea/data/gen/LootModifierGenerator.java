@@ -11,9 +11,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext.EntityTarget;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.LimitCount;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -42,13 +43,13 @@ public class LootModifierGenerator extends GlobalLootModifierProvider {
 				MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1)))).invert().build()
 		};
 		
-		LootItemFunction[] iceCubesFunctions = new LootItemFunction[] {
-				SetItemCountFunction.setCount(UniformGenerator.between(2, 4)).build(),
-				ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE).build(),
-				LimitCount.limitCount(IntRange.range(1, 4)).build()
-		};
+		LootPoolEntryContainer iceCubesEntry = LootItem.lootTableItem(Registration.ice_cube.get())
+			.apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 4)))
+			.apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
+			.apply(LimitCount.limitCount(IntRange.range(1, 4)))
+			.build();
 		
-		AddEntryLootModifier iceCubesModifier = new AddEntryLootModifier(iceCubesConditions, Registration.ice_cube.get(), iceCubesFunctions, false);
+		AddEntryLootModifier iceCubesModifier = new AddEntryLootModifier(iceCubesConditions, iceCubesEntry, false);
 		this.add("ice_cubes", iceCubesModifier);
 		
 		// chorus petals
@@ -58,11 +59,11 @@ public class LootModifierGenerator extends GlobalLootModifierProvider {
 				LootItemEntityPropertyCondition.entityPresent(EntityTarget.THIS).invert().build()
 		};
 		
-		LootItemFunction[] petalsFunctions = new LootItemFunction[] {
-				SetItemCountFunction.setCount(UniformGenerator.between(1, 3)).build(),
-		};
+		LootPoolEntryContainer petalsEntry = LootItem.lootTableItem(Registration.chorus_petal.get())
+				.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3)))
+				.build();
 		
-		AddEntryLootModifier petalsModifier = new AddEntryLootModifier(petalsConditions, Registration.chorus_petal.get(), petalsFunctions, false);
+		AddEntryLootModifier petalsModifier = new AddEntryLootModifier(petalsConditions, petalsEntry, false);
 		this.add("chorus_petal", petalsModifier);
 	}
 
