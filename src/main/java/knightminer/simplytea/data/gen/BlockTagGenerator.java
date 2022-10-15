@@ -2,8 +2,8 @@ package knightminer.simplytea.data.gen;
 
 import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.core.Registration;
-import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -19,14 +19,14 @@ public class BlockTagGenerator extends BlockTagsProvider {
 	}
 
 	@Override
-	protected void registerTags() {
+	protected void addTags() {
 		// tea saplings
-		this.getOrCreateBuilder(BlockTags.FLOWER_POTS).add(Registration.potted_tea_sapling);
-		this.getOrCreateBuilder(BlockTags.SAPLINGS).add(Registration.tea_sapling);
+		this.tag(BlockTags.FLOWER_POTS).add(Registration.potted_tea_sapling.get());
+		this.tag(BlockTags.SAPLINGS).add(Registration.tea_sapling.get());
 		// tea fences
-		this.getOrCreateBuilder(BlockTags.WOODEN_FENCES).add(Registration.tea_fence);
-		this.getOrCreateBuilder(Tags.Blocks.FENCES_WOODEN).add(Registration.tea_fence);
-		this.getOrCreateBuilder(BlockTags.FENCE_GATES).add(Registration.tea_fence_gate);
-		this.getOrCreateBuilder(Tags.Blocks.FENCE_GATES_WOODEN).add(Registration.tea_fence_gate);
+		this.tag(BlockTags.WOODEN_FENCES).add(Registration.tea_fence.get());
+		this.tag(Tags.Blocks.FENCES_WOODEN).add(Registration.tea_fence.get());
+		this.tag(BlockTags.FENCE_GATES).add(Registration.tea_fence_gate.get());
+		this.tag(Tags.Blocks.FENCE_GATES_WOODEN).add(Registration.tea_fence_gate.get());
 	}
 }

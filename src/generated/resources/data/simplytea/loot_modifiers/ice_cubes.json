@@ -1,5 +1,4 @@
 {
-  "type": "simplytea:add_loot_entry",
   "conditions": [
     {
       "condition": "minecraft:alternative",
@@ -19,8 +18,8 @@
       ]
     },
     {
-      "condition": "simplytea:match_tool_type",
-      "type": "pickaxe"
+      "condition": "forge:can_tool_perform_action",
+      "action": "pickaxe_dig"
     },
     {
       "condition": "minecraft:inverted",
@@ -39,13 +38,18 @@
       }
     }
   ],
+  "require_empty": false,
   "entry": {
     "type": "minecraft:item",
-    "name": "simplytea:ice_cube",
     "functions": [
       {
         "function": "minecraft:set_count",
-        "count": { "min": 2, "max": 4, "type": "minecraft:uniform" }
+        "count": {
+          "type": "minecraft:uniform",
+          "min": 2.0,
+          "max": 4.0
+        },
+        "add": false
       },
       {
         "function": "minecraft:apply_bonus",
@@ -57,8 +61,13 @@
       },
       {
         "function": "minecraft:limit_count",
-        "limit": { "min": 1, "max": 4 }
+        "limit": {
+          "max": 4.0,
+          "min": 1.0
+        }
       }
-    ]
-  }
+    ],
+    "name": "simplytea:ice_cube"
+  },
+  "type": "simplytea:add_loot_entry"
 }

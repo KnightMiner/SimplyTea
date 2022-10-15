@@ -1,12 +1,12 @@
 package knightminer.simplytea.core.config;
 
-import net.minecraft.item.Food;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.Collections;
 
 /** Extension of vanilla food to allow linking stats to config */
-public class Drink extends Food {
+public class Drink extends FoodProperties {
   private ForgeConfigSpec.IntValue hunger;
   private ForgeConfigSpec.DoubleValue saturation;
 
@@ -18,7 +18,8 @@ public class Drink extends Food {
    * @param hunger      Default hunger value
    * @param saturation  Default saturation value
    */
-  protected Drink(String name, ForgeConfigSpec.Builder builder, int hunger, double saturation) {
+  @SuppressWarnings("deprecation")
+protected Drink(String name, ForgeConfigSpec.Builder builder, int hunger, double saturation) {
     super(0, 0f, false, true, true, Collections.emptyList());
     builder.comment(String.format("Stats for %s", name)).push(name);
     this.hunger = builder.comment("Hunger restored when drinking this drink.")
@@ -30,12 +31,12 @@ public class Drink extends Food {
   }
 
   @Override
-  public int getHealing() {
+  public int getNutrition() {
     return hunger.get();
   }
 
   @Override
-  public float getSaturation() {
+  public float getSaturationModifier() {
     return saturation.get().floatValue();
   }
 }

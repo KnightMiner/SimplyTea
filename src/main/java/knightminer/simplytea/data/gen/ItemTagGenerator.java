@@ -3,9 +3,9 @@ package knightminer.simplytea.data.gen;
 import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.core.Registration;
 import knightminer.simplytea.data.SimplyTags;
-import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
@@ -22,15 +22,15 @@ public class ItemTagGenerator extends ItemTagsProvider {
 	}
 
 	@Override
-	protected void registerTags() {
-		this.getOrCreateBuilder(Tags.Items.RODS_WOODEN).add(Registration.tea_stick);
-		this.getOrCreateBuilder(SimplyTags.Items.ICE_CUBES).add(Registration.ice_cube);
-		this.getOrCreateBuilder(SimplyTags.Items.EXCLUSIVE_TEAS).add(
-				Registration.cup_tea_green, Registration.cup_tea_black,
-				Registration.cup_tea_iced, Registration.cup_tea_chai, Registration.cup_tea_chorus);
-		this.getOrCreateBuilder(SimplyTags.Items.TEAS).add(Registration.cup_tea_floral).addTag(SimplyTags.Items.EXCLUSIVE_TEAS);
+	protected void addTags() {
+		this.tag(Tags.Items.RODS_WOODEN).add(Registration.tea_stick.get());
+		this.tag(SimplyTags.Items.ICE_CUBES).add(Registration.ice_cube.get());
+		this.tag(SimplyTags.Items.EXCLUSIVE_TEAS).add(
+				Registration.cup_tea_green.get(), Registration.cup_tea_black.get(),
+				Registration.cup_tea_iced.get(), Registration.cup_tea_chai.get(), Registration.cup_tea_chorus.get());
+		this.tag(SimplyTags.Items.TEAS).add(Registration.cup_tea_floral.get()).addTag(SimplyTags.Items.EXCLUSIVE_TEAS);
 
-		this.getOrCreateBuilder(SimplyTags.Items.TEA_CROP).add(Registration.tea_leaf);
+		this.tag(SimplyTags.Items.TEA_CROP).add(Registration.tea_leaf.get());
 
 		// saplings
 		copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);

@@ -1,11 +1,11 @@
 modLoader="javafml"
-loaderVersion="${loader_range}"
+loaderVersion="[40,)"
 issueTrackerURL="https://github.com/elucent/SimplyTea/issues"
 license="MIT"
 
 [[mods]]
 modId="simplytea"
-version="${version}"
+version="${file.jarVersion}"
 displayName="Simply Tea"
 displayURL="https://minecraft.curseforge.com/projects/simply-tea"
 logoFile="simplytea.png"
@@ -22,13 +22,13 @@ Contains:
 [[dependencies.simplytea]]
     modId="forge"
     mandatory=true
-    versionRange="${forge_range}"
+    versionRange="[40.1.0,)"
     ordering="NONE"
     side="BOTH"
 # Here's another dependency
 [[dependencies.simplytea]]
     modId="minecraft"
     mandatory=true
-    versionRange="${minecraft_range}"
+    versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"

@@ -1,0 +1,36 @@
+{
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:blocks/chorus_flower"
+    },
+    {
+      "condition": "minecraft:survives_explosion"
+    },
+    {
+      "condition": "minecraft:inverted",
+      "term": {
+        "condition": "minecraft:entity_properties",
+        "predicate": {},
+        "entity": "this"
+      }
+    }
+  ],
+  "require_empty": false,
+  "entry": {
+    "type": "minecraft:item",
+    "functions": [
+      {
+        "function": "minecraft:set_count",
+        "count": {
+          "type": "minecraft:uniform",
+          "min": 1.0,
+          "max": 3.0
+        },
+        "add": false
+      }
+    ],
+    "name": "simplytea:chorus_petal"
+  },
+  "type": "simplytea:add_loot_entry"
+}

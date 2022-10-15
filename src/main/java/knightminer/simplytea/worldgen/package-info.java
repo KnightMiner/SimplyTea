@@ -2,6 +2,6 @@
 @MethodsReturnNonnullByDefault
 package knightminer.simplytea.worldgen;
 
-import mcp.MethodsReturnNonnullByDefault;
-
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import net.minecraft.MethodsReturnNonnullByDefault;

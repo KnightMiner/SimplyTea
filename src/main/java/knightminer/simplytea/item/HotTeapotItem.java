@@ -1,6 +1,6 @@
 package knightminer.simplytea.item;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class HotTeapotItem extends TooltipItem {
 	public HotTeapotItem(Properties props) {
@@ -10,8 +10,8 @@ public class HotTeapotItem extends TooltipItem {
 	@Override
 	public ItemStack getContainerItem(ItemStack stack) {
 		stack = stack.copy();
-		stack.setDamage(stack.getDamage()+1);
-		if (stack.getDamage() >= stack.getMaxDamage()) {
+		stack.setDamageValue(stack.getDamageValue()+1);
+		if (stack.getDamageValue() >= stack.getMaxDamage()) {
 			return super.getContainerItem(stack);
 		}
 		return stack;

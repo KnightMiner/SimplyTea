@@ -9,7 +9,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
 import org.apache.commons.lang3.tuple.Pair;
 
-//@Mod.EventBusSubscriber(modid=SimplyTea.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
 
 	public static class Server {

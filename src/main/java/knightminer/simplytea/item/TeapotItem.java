@@ -2,95 +2,107 @@ package knightminer.simplytea.item;
 
 import knightminer.simplytea.core.Config;
 import knightminer.simplytea.core.Registration;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CauldronBlock;
-import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.DrinkHelper;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class TeapotItem extends TooltipItem {
+
 	public TeapotItem(Properties props) {
 		super(props);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-		ItemStack stack = player.getHeldItem(hand);
-		BlockRayTraceResult rayTrace = rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
-		if (rayTrace.getType() == Type.BLOCK) {
-			BlockPos pos = rayTrace.getPos();
-			BlockState state = world.getBlockState(pos);
-			Block block = state.getBlock();
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+		ItemStack stack = player.getItemInHand(hand);
+		BlockHitResult rayTrace = getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
+		if(rayTrace.getType() == HitResult.Type.MISS || rayTrace.getType() != HitResult.Type.BLOCK) {
+			return InteractionResultHolder.pass(stack);
+		}
 
-			// try filling from the cauldron
-			if (Config.SERVER.teapot.fillFromCauldron() && block == Blocks.CAULDRON && state.get(CauldronBlock.LEVEL) == 3) {
-				((CauldronBlock)Blocks.CAULDRON).setWaterLevel(world, pos, state, 0);
-				stack = DrinkHelper.fill(stack, player, new ItemStack(Registration.teapot_water));
-				return new ActionResult<>(ActionResultType.SUCCESS, stack);
-			}
+		BlockPos blockpos = rayTrace.getBlockPos();
+		Direction direction = rayTrace.getDirection();
+		BlockPos nearPos = blockpos.relative(direction);
 
-			// we use name for lookup to prevent default fluid conflicts
-			Fluid fluid = state.getFluidState().getFluid();
-			if(fluid != Fluids.EMPTY) {
-				// try for water or milk using the config lists
-				Item item = null;
-				if (fluid.isIn(FluidTags.WATER)) {
-					item = Registration.teapot_water;
-				} // TODO: milk when mods make a standard
+		if(world.mayInteract(player, blockpos) && player.mayUseItemAt(nearPos, direction, stack)) {
+			BlockState blockstate = world.getBlockState(blockpos);
 
-				// if either one is found, update the stack
-				if(item != null) {
-					// water is considered infinite unless disabled in the config
-					if(!Config.SERVER.teapot.infiniteWater()) {
-						Direction side = rayTrace.getFace();
-						// unable to modify the block, fail
-						if (!world.isBlockModifiable(player, pos) || !player.canPlayerEdit(pos.offset(side), side, stack) || !(state.getBlock() instanceof IBucketPickupHandler)) {
-							return new ActionResult<>(ActionResultType.FAIL, stack);
-						}
-						((IBucketPickupHandler)state.getBlock()).pickupFluid(world, pos, state);
+			if(blockstate.getBlock() instanceof BucketPickup) {
+				Fluid fluid = blockstate.getFluidState().getType();
+				if(fluid == Fluids.EMPTY) {
+					return InteractionResultHolder.fail(stack);
+				}
+
+				BucketPickup bucketpickup = (BucketPickup) blockstate.getBlock();
+
+				boolean isWater = ForgeRegistries.FLUIDS.tags().getTag(FluidTags.WATER).contains(fluid);
+				boolean isMilk = ForgeRegistries.FLUIDS.tags().getTag(Tags.Fluids.MILK).contains(fluid);
+
+				if(!isWater && !isMilk) {
+					return InteractionResultHolder.fail(stack);
+				}
+
+				boolean blockHasFluid = true;
+				if(!Config.SERVER.teapot.infiniteWater()) {
+					ItemStack filledBucket = bucketpickup.pickupBlock(world, blockpos, blockstate);
+					blockHasFluid = !filledBucket.isEmpty();
+				}
+
+				if(blockHasFluid) {
+					player.awardStat(Stats.ITEM_USED.get(this));
+					bucketpickup.getPickupSound(blockstate).ifPresent((sound) -> {
+						player.playSound(sound, 1.0F, 1.0F);
+					});
+					world.gameEvent(player, GameEvent.FLUID_PICKUP, blockpos);
+
+					ItemStack filledTeapot;
+					if(isWater) {
+						filledTeapot = ItemUtils.createFilledResult(stack, player, new ItemStack(Registration.teapot_water.get()));
+					}else {
+						// TODO: test
+						filledTeapot = ItemUtils.createFilledResult(stack, player, new ItemStack(Registration.teapot_milk.get()));
 					}
 
-					stack = DrinkHelper.fill(stack, player, new ItemStack(item));
-
-					// TODO: fluid sound based on fluid
-					player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0f, 1.0f);
-					return new ActionResult<>(ActionResultType.SUCCESS, stack);
+					return InteractionResultHolder.sidedSuccess(filledTeapot, world.isClientSide());
 				}
 			}
 		}
-		return new ActionResult<>(ActionResultType.FAIL, stack);
+
+		return InteractionResultHolder.fail(stack);
 	}
 
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
+	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
 		// only work if the teapot is empty and right clicking a cow
-		if(Config.SERVER.teapot.canMilkCows() && target instanceof CowEntity) {
+		if(Config.SERVER.teapot.canMilkCows() && target instanceof Cow) {
 			// sound
-			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+			player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
 
 			// fill with milk
-			player.setHeldItem(hand, DrinkHelper.fill(stack.copy(), player, new ItemStack(Registration.teapot_milk)));
-			return ActionResultType.SUCCESS;
+			player.setItemInHand(hand, ItemUtils.createFilledResult(stack.copy(), player, new ItemStack(Registration.teapot_milk.get())));
+			return InteractionResult.SUCCESS;
 		}
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 }
