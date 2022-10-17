@@ -19,8 +19,8 @@
       ]
     },
     {
-      "condition": "simplytea:match_tool_type",
-      "type": "pickaxe"
+      "condition": "forge:can_tool_perform_action",
+      "type": "pickaxe_dig"
     },
     {
       "condition": "minecraft:inverted",

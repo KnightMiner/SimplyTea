@@ -7,17 +7,17 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -60,7 +60,7 @@ public class RecipeGenerator extends RecipeProvider {
 	}
 
 	@Override
-	protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
+	protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
 		// ingredients
 		SimpleCookingRecipeBuilder.cooking(Ingredient.of(SimplyTags.Items.TEA_CROP), black_tea, 0.35f, 200, RecipeSerializer.SMOKING_RECIPE)
 												.unlockedBy("has_item", has(SimplyTags.Items.TEA_CROP))
@@ -181,7 +181,7 @@ public class RecipeGenerator extends RecipeProvider {
 		ResourceLocation advancementId = new ResourceLocation(recipeId.getNamespace(), "recipes/" + Objects.requireNonNull(tea.asItem().getItemCategory()).getRecipeFolderName() + "/" + recipeId.getPath());
 
 		// build final recipe
-		consumer.accept(new ShapelessHoneyRecipe.FinishedRecipe(recipeId, "simplytea:" + tag, tea, Ingredient.of(honey), tag, advancementId, builder));
+		consumer.accept(new ShapelessHoneyRecipe.Finished(recipeId, "simplytea:" + tag, tea, Ingredient.of(honey), tag, advancementId, builder));
 	}
 
 	/** Adds a recipe to pour tea and make tea bags */

@@ -1,25 +1,23 @@
 package knightminer.simplytea.item;
 
 import knightminer.simplytea.core.config.TeaDrink;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class TeaCupItem extends Item {
 	public static final String HONEY_TAG = "with_honey";
@@ -36,7 +34,7 @@ public class TeaCupItem extends Item {
 	}
 
 	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
+	public boolean isBarVisible(ItemStack stack) {
 		return stack.getDamageValue() > 0;
 	}
 
@@ -58,9 +56,9 @@ public class TeaCupItem extends Item {
 			living.curePotionEffects(stack); /// remove conflicting teas
 			living.eat(worldIn, stack);
 			// we handle effects directly so it can be stack sensitive
-			FoodProperties food = getFoodProperties();
-			if (food instanceof TeaDrink) {
-				MobEffectInstance effectInstance = ((TeaDrink) food).getEffect(hasHoney);
+			FoodProperties food = getFoodProperties(stack, living);
+			if (food instanceof TeaDrink drink) {
+				MobEffectInstance effectInstance = drink.getEffect(hasHoney);
 				if (effectInstance != null) {
 					living.addEffect(effectInstance);
 				}

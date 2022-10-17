@@ -2,18 +2,16 @@ package knightminer.simplytea.block;
 
 import knightminer.simplytea.block.TeaTrunkBlock.TrunkType;
 import knightminer.simplytea.core.Registration;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.SaplingBlock;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class TeaSaplingBlock extends SaplingBlock {
 
@@ -37,7 +35,7 @@ public class TeaSaplingBlock extends SaplingBlock {
 		for(int i = 1; i <= 3; i++) {
 			// TODO: use state.isReplaceable?
 			BlockState up = world.getBlockState(pos.above(i));
-			if(!up.isAir(world, pos) && !up.getMaterial().isReplaceable()) {
+			if(!up.isAir() && !up.getMaterial().isReplaceable()) {
 				return false;
 			}
 		}
@@ -86,7 +84,7 @@ public class TeaSaplingBlock extends SaplingBlock {
 	 */
 	private static void setBlockSafe(LevelAccessor world, BlockPos pos, BlockState state) {
 		BlockState old = world.getBlockState(pos);
-		if(old.isAir(world, pos) || old.getMaterial().isReplaceable() || old.getBlock().is(BlockTags.LEAVES)) {
+		if(old.isAir() || old.getMaterial().isReplaceable() || old.is(BlockTags.LEAVES)) {
 			world.setBlock(pos, state, 3);
 		}
 	}

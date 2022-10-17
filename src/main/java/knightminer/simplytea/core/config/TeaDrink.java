@@ -3,11 +3,13 @@ package knightminer.simplytea.core.config;
 import com.mojang.datafixers.util.Pair;
 import knightminer.simplytea.core.Registration;
 import knightminer.simplytea.data.SimplyTags;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nullable;
@@ -66,7 +68,7 @@ public class TeaDrink extends Drink {
       // teas conflict with each other, add other teas as curative items
       List<ItemStack> curativeEffects = effect.getCurativeItems();
       curativeEffects.clear();
-      for (Item tea : SimplyTags.Items.EXCLUSIVE_TEAS.getValues()) {
+      for (Holder<Item> tea : Registry.ITEM.getTagOrEmpty(SimplyTags.Items.EXCLUSIVE_TEAS)) {
         curativeEffects.add(new ItemStack(tea));
       }
 

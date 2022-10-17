@@ -5,21 +5,21 @@ import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.block.TeaTrunkBlock;
 import knightminer.simplytea.core.Registration;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTable.Builder;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -66,6 +66,7 @@ public class BlockLootTableGenerator extends BlockLoot {
 			throw new IllegalStateException("Created block loot tables for non-blocks: " + this.map.keySet());
 		}
 	}
+
 	@Override
 	protected void addTables() {
 		// basic

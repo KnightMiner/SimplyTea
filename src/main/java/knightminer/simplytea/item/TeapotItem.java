@@ -2,32 +2,30 @@ package knightminer.simplytea.item;
 
 import knightminer.simplytea.core.Config;
 import knightminer.simplytea.core.Registration;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CauldronBlock;
-import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemUtils;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.level.Level;
-
-import net.minecraft.world.item.Item.Properties;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult.Type;
 
 public class TeapotItem extends TooltipItem {
 	public TeapotItem(Properties props) {
@@ -44,8 +42,9 @@ public class TeapotItem extends TooltipItem {
 			Block block = state.getBlock();
 
 			// try filling from the cauldron
-			if (Config.SERVER.teapot.fillFromCauldron() && block == Blocks.CAULDRON && state.getValue(CauldronBlock.LEVEL) == 3) {
-				((CauldronBlock)Blocks.CAULDRON).setWaterLevel(world, pos, state, 0);
+			// TODO: move to new cauldron logic
+			if (Config.SERVER.teapot.fillFromCauldron() && block == Blocks.CAULDRON && state.getValue(LayeredCauldronBlock.LEVEL) == 3) {
+				world.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), Block.UPDATE_ALL);
 				stack = ItemUtils.createFilledResult(stack, player, new ItemStack(Registration.teapot_water));
 				return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
 			}
@@ -68,7 +67,7 @@ public class TeapotItem extends TooltipItem {
 						if (!world.mayInteract(player, pos) || !player.mayUseItemAt(pos.relative(side), side, stack) || !(state.getBlock() instanceof BucketPickup)) {
 							return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
 						}
-						((BucketPickup)state.getBlock()).takeLiquid(world, pos, state);
+						((BucketPickup)state.getBlock()).pickupBlock(world, pos, state);
 					}
 
 					stack = ItemUtils.createFilledResult(stack, player, new ItemStack(item));

@@ -4,7 +4,6 @@ import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.block.TeaSaplingBlock;
 import knightminer.simplytea.block.TeaTrunkBlock;
 import knightminer.simplytea.data.AddEntryLootModifier;
-import knightminer.simplytea.data.MatchToolTypeLootCondition;
 import knightminer.simplytea.data.gen.BlockTagGenerator;
 import knightminer.simplytea.data.gen.ItemTagGenerator;
 import knightminer.simplytea.data.gen.LootTableGenerator;
@@ -24,6 +23,19 @@ import knightminer.simplytea.potion.RelaxedEffect;
 import knightminer.simplytea.potion.RestfulEffect;
 import knightminer.simplytea.worldgen.TeaTreeFeature;
 import knightminer.simplytea.worldgen.TreeGenEnabledPlacement;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
@@ -32,40 +44,31 @@ import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.data.worldgen.Features.Decorators;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.placement.FrequencyWithExtraChanceDecoratorConfiguration;
-import net.minecraft.world.level.levelgen.placement.ChanceDecoratorConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneDecoratorConfiguration;
-import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
@@ -129,12 +132,12 @@ public class Registration {
   public static final Item cup_cocoa = injected();
 
   /* World Gen */
-  public static final FeatureDecorator<NoneDecoratorConfiguration> tree_gen_enabled = injected();
+  public static PlacementModifierType<TreeGenEnabledPlacement> tree_gen_enabled = injected();
   public static final Feature<NoneFeatureConfiguration> tea_tree = injected();
 
   public static final RecipeSerializer<?> shapeless_honey = injected();
-  public static ConfiguredFeature<?,?> configured_tea_tree;
-  public static LootItemConditionType matchToolType;
+  public static Holder<ConfiguredFeature<NoneFeatureConfiguration,?>> configured_tea_tree;
+  public static Holder<PlacedFeature> placed_tea_tree;
 
   @SubscribeEvent
   static void registerEffects(final RegistryEvent.Register<MobEffect> event) {
@@ -221,13 +224,6 @@ public class Registration {
   }
 
   @SubscribeEvent
-  static void registerPlacement(final RegistryEvent.Register<FeatureDecorator<?>> event) {
-    IForgeRegistry<FeatureDecorator<?>> r = event.getRegistry();
-
-    register(r, new TreeGenEnabledPlacement(), "tree_gen_enabled");
-  }
-
-  @SubscribeEvent
   static void registerFeatures(final RegistryEvent.Register<Feature<?>> event) {
     IForgeRegistry<Feature<?>> r = event.getRegistry();
 
@@ -246,7 +242,6 @@ public class Registration {
     IForgeRegistry<RecipeSerializer<?>> r = event.getRegistry();
 
     register(r, new ShapelessHoneyRecipe.Serializer(), "shapeless_honey");
-    matchToolType = Registry.register(Registry.LOOT_CONDITION_TYPE, MatchToolTypeLootCondition.ID, new LootItemConditionType(MatchToolTypeLootCondition.SERIALIZER));
   }
 
   @SubscribeEvent
@@ -271,12 +266,14 @@ public class Registration {
     });
 
     // configured features
-    configured_tea_tree = tea_tree.configured(FeatureConfiguration.NONE)
-                                  .decorated(Registration.tree_gen_enabled.configured(NoneDecoratorConfiguration.INSTANCE))
-                                  .decorated(FeatureDecorator.CHANCE.configured(new ChanceDecoratorConfiguration(50)))
-                                  .decorated(Decorators.HEIGHTMAP_SQUARE)
-                                  .decorated(FeatureDecorator.COUNT_EXTRA.configured(new FrequencyWithExtraChanceDecoratorConfiguration(2, 0.1F, 1)));
-    Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(SimplyTea.MOD_ID, "tea_tree"), configured_tea_tree);
+    tree_gen_enabled = Registry.register(Registry.PLACEMENT_MODIFIERS, new ResourceLocation(SimplyTea.MOD_ID, "tree_gen_enabled"), () -> TreeGenEnabledPlacement.CODEC);
+    configured_tea_tree = FeatureUtils.register(SimplyTea.MOD_ID + ":tea_tree", tea_tree, NoneFeatureConfiguration.INSTANCE);
+    placed_tea_tree = PlacementUtils.register(SimplyTea.MOD_ID + ":tea_tree", configured_tea_tree, List.of(
+        TreeGenEnabledPlacement.INSTANCE,
+        RarityFilter.onAverageOnceEvery(128), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(),
+        BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(tea_sapling.defaultBlockState(), BlockPos.ZERO)),
+        PlacementUtils.filteredByBlockSurvival(tea_sapling)
+    ));
   }
 
   @SubscribeEvent

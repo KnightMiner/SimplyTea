@@ -6,19 +6,19 @@ import knightminer.simplytea.core.Registration;
 import knightminer.simplytea.item.TeaCupItem;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.Advancement.Builder;
+import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -122,7 +122,7 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 	}
 
 	/** Finished recipe for datagen */
-	public static class FinishedRecipe implements FinishedRecipe {
+	public static class Finished implements FinishedRecipe {
 		private final ResourceLocation id;
 		private final String group;
 		private final Item tea;
@@ -131,7 +131,7 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 		private final ResourceLocation advancementId;
 		private final Advancement.Builder advancementBuilder;
 
-		public FinishedRecipe(ResourceLocation id, String group, ItemLike tea, Ingredient honey, String tag, @Nullable ResourceLocation advancementId, @Nullable Builder advancementBuilder) {
+		public Finished(ResourceLocation id, String group, ItemLike tea, Ingredient honey, String tag, @Nullable ResourceLocation advancementId, @Nullable Builder advancementBuilder) {
 			this.id = id;
 			this.group = group;
 			this.tea = tea.asItem();

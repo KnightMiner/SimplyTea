@@ -2,16 +2,16 @@ package knightminer.simplytea.core;
 
 import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.potion.RestfulEffect;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.biome.Biome.BiomeCategory;
 import net.minecraft.world.level.levelgen.GenerationStep.Decoration;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.event.entity.living.EntityTeleportEvent;
+import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -76,7 +76,7 @@ public class Events {
   @SubscribeEvent
   static void onBiomeLoad(BiomeLoadingEvent event) {
     if (validBiome(event)) {
-      event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, Registration.configured_tea_tree);
+      event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, Registration.placed_tea_tree);
     }
   }
 }

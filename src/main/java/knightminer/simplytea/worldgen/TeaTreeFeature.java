@@ -1,16 +1,12 @@
 package knightminer.simplytea.worldgen;
 
 import knightminer.simplytea.block.TeaSaplingBlock;
-import knightminer.simplytea.core.Registration;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-
-import java.util.Random;
 
 public class TeaTreeFeature extends Feature<NoneFeatureConfiguration> {
 	public TeaTreeFeature() {
@@ -18,12 +14,13 @@ public class TeaTreeFeature extends Feature<NoneFeatureConfiguration> {
 	}
 
 	@Override
-	public boolean place(WorldGenLevel world, ChunkGenerator generator, Random random, BlockPos pos, NoneFeatureConfiguration config) {
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		BlockPos pos = context.origin();
 		BlockPos down = pos.below();
+		WorldGenLevel world = context.level();
 		BlockState soil = world.getBlockState(down);
-		if(soil.canSustainPlant(world, down, Direction.UP, Registration.tea_sapling) && world.getBlockState(pos).isAir(world, pos)) {
-			TeaSaplingBlock.generateTree(world, pos, random);
-			return true;
+		if (world.getBlockState(pos).isAir()) {
+			TeaSaplingBlock.generateTree(world, pos, context.random());
 		}
 		return false;
 	}
