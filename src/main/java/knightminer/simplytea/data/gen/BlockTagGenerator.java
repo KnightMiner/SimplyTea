@@ -2,7 +2,7 @@ package knightminer.simplytea.data.gen;
 
 import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.core.Registration;
-import net.minecraft.data.BlockTagsProvider;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;

@@ -1,38 +1,38 @@
 package knightminer.simplytea.item;
 
 import knightminer.simplytea.core.config.TeaDrink;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class TeaCupItem extends Item {
 	public static final String HONEY_TAG = "with_honey";
-	private static final ITextComponent WITH_HONEY = new TranslationTextComponent("item.simplytea.cup.with_honey")
-			.withStyle(style -> style.withColor(Color.fromRgb(0xFF9116)));
+	private static final Component WITH_HONEY = new TranslatableComponent("item.simplytea.cup.with_honey")
+			.withStyle(style -> style.withColor(TextColor.fromRgb(0xFF9116)));
 
 	public TeaCupItem(Properties props) {
 		super(props);
 	}
 
 	@Override
-	public UseAction getUseAnimation(ItemStack stack) {
-		return stack.getItem().isEdible() ? UseAction.DRINK : UseAction.NONE;
+	public UseAnim getUseAnimation(ItemStack stack) {
+		return stack.getItem().isEdible() ? UseAnim.DRINK : UseAnim.NONE;
 	}
 
 	@Override
@@ -51,16 +51,16 @@ public class TeaCupItem extends Item {
 	}
 
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity living) {
+	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity living) {
 		if (this.isEdible()) {
 			ItemStack result = stack.getContainerItem();
 			boolean hasHoney = hasHoney(stack, HONEY_TAG);
 			living.curePotionEffects(stack); /// remove conflicting teas
 			living.eat(worldIn, stack);
 			// we handle effects directly so it can be stack sensitive
-			Food food = getFoodProperties();
+			FoodProperties food = getFoodProperties();
 			if (food instanceof TeaDrink) {
-				EffectInstance effectInstance = ((TeaDrink) food).getEffect(hasHoney);
+				MobEffectInstance effectInstance = ((TeaDrink) food).getEffect(hasHoney);
 				if (effectInstance != null) {
 					living.addEffect(effectInstance);
 				}
@@ -72,7 +72,7 @@ public class TeaCupItem extends Item {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		if (hasHoney(stack, HONEY_TAG)) {
 			tooltip.add(WITH_HONEY);
 		}
@@ -86,7 +86,7 @@ public class TeaCupItem extends Item {
 
 	/** Checks if the given tea contains honey */
 	public static boolean hasHoney(ItemStack stack, String tag) {
-		CompoundNBT nbt = stack.getTag();
+		CompoundTag nbt = stack.getTag();
 		return nbt != null && nbt.getBoolean(tag);
 	}
 }

@@ -4,37 +4,37 @@ import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.core.Config;
 import knightminer.simplytea.core.Registration;
 import knightminer.simplytea.core.Util;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShearsItem;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class TeaTrunkBlock extends Block {
 	public static final EnumProperty<TrunkType> TYPE = EnumProperty.create("type", TrunkType.class);
@@ -69,7 +69,7 @@ public class TeaTrunkBlock extends Block {
 
 	@Deprecated
 	@Override
-	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
 		super.tick(state, world, pos, random);
 		if(state.getBlock() == this && state.getValue(CLIPPED)) {
 			if (random.nextFloat() < Config.SERVER.tree.regrowthChance()) {
@@ -80,14 +80,14 @@ public class TeaTrunkBlock extends Block {
 	}
 
 	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+	public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
 		return new ItemStack(Registration.tea_sapling);
 	}
 
 	@Deprecated
-	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
 		if(state.getBlock() != this || state.getValue(CLIPPED) || state.getValue(TYPE) == TrunkType.STUMP) {
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 
 		ItemStack heldItem = player.getItemInHand(hand);
@@ -99,8 +99,8 @@ public class TeaTrunkBlock extends Block {
 			});
 			player.setItemInHand(hand, stack);
 
-			if (world instanceof ServerWorld) {
-				List<ItemStack> drops = Util.getBlockLoot(state, (ServerWorld)world, pos, player, heldItem, LEAVES_DROPS);
+			if (world instanceof ServerLevel) {
+				List<ItemStack> drops = Util.getBlockLoot(state, (ServerLevel)world, pos, player, heldItem, LEAVES_DROPS);
 				for (ItemStack drop : drops) {
 					popResource(world, pos, drop);
 				}
@@ -108,15 +108,15 @@ public class TeaTrunkBlock extends Block {
 
 			world.setBlock(pos, state.setValue(CLIPPED, true), 8);
 			world.sendBlockUpdated(pos, state, state.setValue(CLIPPED, true), 8);
-			world.playSound(player, pos, SoundEvents.SHEEP_SHEAR, SoundCategory.BLOCKS, 1.0F, 1.0F);
-			return ActionResultType.SUCCESS;
+			world.playSound(player, pos, SoundEvents.SHEEP_SHEAR, SoundSource.BLOCKS, 1.0F, 1.0F);
+			return InteractionResult.SUCCESS;
 		}
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 
 	@Deprecated
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		if(state.getBlock() != this) {
 			return BOUNDS_STUMP;
 		}
@@ -129,14 +129,14 @@ public class TeaTrunkBlock extends Block {
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(TYPE, CLIPPED);
 	}
 
 	@Override
-	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {}
+	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {}
 
-	public static enum TrunkType implements IStringSerializable {
+	public static enum TrunkType implements StringRepresentable {
 		STUMP,
 		BOTTOM,
 		MIDDLE,

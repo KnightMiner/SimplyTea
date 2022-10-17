@@ -24,36 +24,36 @@ import knightminer.simplytea.potion.RelaxedEffect;
 import knightminer.simplytea.potion.RestfulEffect;
 import knightminer.simplytea.worldgen.TeaTreeFeature;
 import knightminer.simplytea.worldgen.TreeGenEnabledPlacement;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ComposterBlock;
-import net.minecraft.block.FenceBlock;
-import net.minecraft.block.FenceGateBlock;
-import net.minecraft.block.FireBlock;
-import net.minecraft.block.FlowerPotBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ComposterBlock;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.FireBlock;
+import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.loot.LootConditionType;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.Features.Placements;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.NoPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.data.worldgen.Features.Decorators;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.placement.FrequencyWithExtraChanceDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.placement.ChanceDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
@@ -73,7 +73,7 @@ import java.util.Objects;
 @EventBusSubscriber(modid = SimplyTea.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class Registration {
   /* Creative tab */
-  public static ItemGroup group = new ItemGroup("simplytea") {
+  public static CreativeModeTab group = new CreativeModeTab("simplytea") {
     @Override
     public ItemStack makeIcon() {
       return new ItemStack(tea_leaf);
@@ -81,11 +81,11 @@ public class Registration {
   };
 
   /* Potions */
-  public static final Effect restful = injected();
-  public static final Effect relaxed = injected();
-  public static final Effect caffeinated = injected();
-  public static final Effect invigorated = injected();
-  public static final Effect enderfalling = injected();
+  public static final MobEffect restful = injected();
+  public static final MobEffect relaxed = injected();
+  public static final MobEffect caffeinated = injected();
+  public static final MobEffect invigorated = injected();
+  public static final MobEffect enderfalling = injected();
 
   /* Blocks */
   public static final TeaSaplingBlock tea_sapling = injected();
@@ -129,20 +129,20 @@ public class Registration {
   public static final Item cup_cocoa = injected();
 
   /* World Gen */
-  public static final Placement<NoPlacementConfig> tree_gen_enabled = injected();
-  public static final Feature<NoFeatureConfig> tea_tree = injected();
+  public static final FeatureDecorator<NoneDecoratorConfiguration> tree_gen_enabled = injected();
+  public static final Feature<NoneFeatureConfiguration> tea_tree = injected();
 
-  public static final IRecipeSerializer<?> shapeless_honey = injected();
+  public static final RecipeSerializer<?> shapeless_honey = injected();
   public static ConfiguredFeature<?,?> configured_tea_tree;
-  public static LootConditionType matchToolType;
+  public static LootItemConditionType matchToolType;
 
   @SubscribeEvent
-  static void registerEffects(final RegistryEvent.Register<Effect> event) {
-    IForgeRegistry<Effect> r = event.getRegistry();
+  static void registerEffects(final RegistryEvent.Register<MobEffect> event) {
+    IForgeRegistry<MobEffect> r = event.getRegistry();
 
     register(r, new RestfulEffect(), "restful");
     register(r, new RelaxedEffect(), "relaxed");
-    Effect caffeinated = register(r, new CaffeinatedEffect(), "caffeinated");
+    MobEffect caffeinated = register(r, new CaffeinatedEffect(), "caffeinated");
     register(r, new InvigoratedEffect(), "invigorated");
     register(r, new EnderfallingEffect(), "enderfalling");
   }
@@ -221,8 +221,8 @@ public class Registration {
   }
 
   @SubscribeEvent
-  static void registerPlacement(final RegistryEvent.Register<Placement<?>> event) {
-    IForgeRegistry<Placement<?>> r = event.getRegistry();
+  static void registerPlacement(final RegistryEvent.Register<FeatureDecorator<?>> event) {
+    IForgeRegistry<FeatureDecorator<?>> r = event.getRegistry();
 
     register(r, new TreeGenEnabledPlacement(), "tree_gen_enabled");
   }
@@ -242,11 +242,11 @@ public class Registration {
   }
 
   @SubscribeEvent
-  static void registerRecipeSerializers(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
-    IForgeRegistry<IRecipeSerializer<?>> r = event.getRegistry();
+  static void registerRecipeSerializers(final RegistryEvent.Register<RecipeSerializer<?>> event) {
+    IForgeRegistry<RecipeSerializer<?>> r = event.getRegistry();
 
     register(r, new ShapelessHoneyRecipe.Serializer(), "shapeless_honey");
-    matchToolType = Registry.register(Registry.LOOT_CONDITION_TYPE, MatchToolTypeLootCondition.ID, new LootConditionType(MatchToolTypeLootCondition.SERIALIZER));
+    matchToolType = Registry.register(Registry.LOOT_CONDITION_TYPE, MatchToolTypeLootCondition.ID, new LootItemConditionType(MatchToolTypeLootCondition.SERIALIZER));
   }
 
   @SubscribeEvent
@@ -271,12 +271,12 @@ public class Registration {
     });
 
     // configured features
-    configured_tea_tree = tea_tree.configured(IFeatureConfig.NONE)
-                                  .decorated(Registration.tree_gen_enabled.configured(NoPlacementConfig.INSTANCE))
-                                  .decorated(Placement.CHANCE.configured(new ChanceConfig(50)))
-                                  .decorated(Placements.HEIGHTMAP_SQUARE)
-                                  .decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
-    Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(SimplyTea.MOD_ID, "tea_tree"), configured_tea_tree);
+    configured_tea_tree = tea_tree.configured(FeatureConfiguration.NONE)
+                                  .decorated(Registration.tree_gen_enabled.configured(NoneDecoratorConfiguration.INSTANCE))
+                                  .decorated(FeatureDecorator.CHANCE.configured(new ChanceDecoratorConfiguration(50)))
+                                  .decorated(Decorators.HEIGHTMAP_SQUARE)
+                                  .decorated(FeatureDecorator.COUNT_EXTRA.configured(new FrequencyWithExtraChanceDecoratorConfiguration(2, 0.1F, 1)));
+    Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(SimplyTea.MOD_ID, "tea_tree"), configured_tea_tree);
   }
 
   @SubscribeEvent

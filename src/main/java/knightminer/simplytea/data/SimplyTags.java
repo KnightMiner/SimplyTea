@@ -1,9 +1,9 @@
 package knightminer.simplytea.data;
 
 import knightminer.simplytea.SimplyTea;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.Tags.IOptionalNamedTag;
 
 public class SimplyTags {

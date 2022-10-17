@@ -4,22 +4,22 @@ import com.google.common.collect.Sets;
 import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.block.TeaTrunkBlock;
 import knightminer.simplytea.core.Registration;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
-import net.minecraft.block.Block;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.loot.ItemLootEntry;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTable.Builder;
-import net.minecraft.loot.LootTables;
-import net.minecraft.loot.TableLootEntry;
-import net.minecraft.loot.conditions.BlockStateProperty;
-import net.minecraft.loot.conditions.SurvivesExplosion;
-import net.minecraft.loot.conditions.TableBonus;
-import net.minecraft.loot.functions.ApplyBonus;
-import net.minecraft.loot.functions.ExplosionDecay;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTable.Builder;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-public class BlockLootTableGenerator extends BlockLootTables {
+public class BlockLootTableGenerator extends BlockLoot {
 	private final ResourceLocation LEAVES_ID = new ResourceLocation(SimplyTea.MOD_ID, "blocks/tea_leaves");
 
 	@Nonnull
@@ -45,7 +45,7 @@ public class BlockLootTableGenerator extends BlockLootTables {
 		Set<ResourceLocation> set = Sets.newHashSet();
 		for (Block block : getKnownBlocks()) {
 			ResourceLocation name = block.getLootTable();
-			if (name != LootTables.EMPTY && set.add(name)) {
+			if (name != BuiltInLootTables.EMPTY && set.add(name)) {
 				LootTable.Builder builder = this.map.remove(name);
 				if (builder == null) {
 					throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", name, block.getRegistryName()));
@@ -77,27 +77,27 @@ public class BlockLootTableGenerator extends BlockLootTables {
 		this.map.put(
 				LEAVES_ID,
 				LootTable.lootTable()
-								 .apply(ExplosionDecay.explosionDecay())
-								 .withPool(LootPool.lootPool().add(ItemLootEntry.lootTableItem(Registration.tea_leaf)))
+								 .apply(ApplyExplosionDecay.explosionDecay())
+								 .withPool(LootPool.lootPool().add(LootItem.lootTableItem(Registration.tea_leaf)))
 								 .withPool(LootPool.lootPool()
-																			.add(ItemLootEntry.lootTableItem(Registration.tea_leaf)
-																														 .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.55f, 2))))
+																			.add(LootItem.lootTableItem(Registration.tea_leaf)
+																														 .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.55f, 2))))
 								 .withPool(LootPool.lootPool()
-																			.when(SurvivesExplosion.survivesExplosion())
-																			.when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05f, 0.0625f, 0.083333336f, 0.1f))
-																			.add(ItemLootEntry.lootTableItem(Registration.tea_sapling))));
+																			.when(ExplosionCondition.survivesExplosion())
+																			.when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05f, 0.0625f, 0.083333336f, 0.1f))
+																			.add(LootItem.lootTableItem(Registration.tea_sapling))));
 		// then register the trunk table
 		add(Registration.tea_trunk, block ->
 				LootTable.lootTable()
-								 .apply(ExplosionDecay.explosionDecay())
-								 .withPool(LootPool.lootPool().add(ItemLootEntry.lootTableItem(Registration.tea_stick)))
+								 .apply(ApplyExplosionDecay.explosionDecay())
+								 .withPool(LootPool.lootPool().add(LootItem.lootTableItem(Registration.tea_stick)))
 								 .withPool(LootPool.lootPool()
-																			.add(ItemLootEntry.lootTableItem(Registration.tea_stick)
-																														 .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.55f, 2))))
+																			.add(LootItem.lootTableItem(Registration.tea_stick)
+																														 .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.55f, 2))))
 								 .withPool(LootPool.lootPool()
-																			.when(BlockStateProperty.hasBlockStateProperties(block)
+																			.when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
 																																				 .setProperties(StatePropertiesPredicate.Builder.properties()
 																																																												 .hasProperty(TeaTrunkBlock.CLIPPED, false)))
-																			.add(TableLootEntry.lootTableReference(LEAVES_ID))));
+																			.add(LootTableReference.lootTableReference(LEAVES_ID))));
 	}
 }

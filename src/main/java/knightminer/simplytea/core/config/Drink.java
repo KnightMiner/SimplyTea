@@ -1,12 +1,12 @@
 package knightminer.simplytea.core.config;
 
-import net.minecraft.item.Food;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.Collections;
 
 /** Extension of vanilla food to allow linking stats to config */
-public class Drink extends Food {
+public class Drink extends FoodProperties {
   private ForgeConfigSpec.IntValue hunger;
   private ForgeConfigSpec.DoubleValue saturation;
 

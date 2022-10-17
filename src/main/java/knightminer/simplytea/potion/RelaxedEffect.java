@@ -1,13 +1,13 @@
 package knightminer.simplytea.potion;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
 /** Effectively just slow regeneration */
-public class RelaxedEffect extends Effect {
+public class RelaxedEffect extends MobEffect {
 	public RelaxedEffect() {
-		super(EffectType.BENEFICIAL, 0xA0E8A7);
+		super(MobEffectCategory.BENEFICIAL, 0xA0E8A7);
 	}
 
 	@Override

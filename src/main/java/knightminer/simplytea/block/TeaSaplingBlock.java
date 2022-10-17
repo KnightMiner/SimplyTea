@@ -2,18 +2,18 @@ package knightminer.simplytea.block;
 
 import knightminer.simplytea.block.TeaTrunkBlock.TrunkType;
 import knightminer.simplytea.core.Registration;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SaplingBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class TeaSaplingBlock extends SaplingBlock {
 
@@ -23,7 +23,7 @@ public class TeaSaplingBlock extends SaplingBlock {
 	}
 
 	@Override
-	public void advanceTree(ServerWorld world, BlockPos pos, BlockState state, Random rand) {
+	public void advanceTree(ServerLevel world, BlockPos pos, BlockState state, Random rand) {
 		if (state.getValue(STAGE) == 0) {
 			world.setBlock(pos, state.cycle(STAGE), 4);
 		} else if (ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
@@ -32,7 +32,7 @@ public class TeaSaplingBlock extends SaplingBlock {
 	}
 
 	@Override
-	public boolean isValidBonemealTarget(IBlockReader world, BlockPos pos, BlockState state, boolean b) {
+	public boolean isValidBonemealTarget(BlockGetter world, BlockPos pos, BlockState state, boolean b) {
 		// tree minimum is 4 blocks tall (sapling position plus 3)
 		for(int i = 1; i <= 3; i++) {
 			// TODO: use state.isReplaceable?
@@ -47,7 +47,7 @@ public class TeaSaplingBlock extends SaplingBlock {
 	/**
 	 * Creates a new tea tree
 	 */
-	public static void generateTree(IWorld world, BlockPos pos, Random random) {
+	public static void generateTree(LevelAccessor world, BlockPos pos, Random random) {
 		// TODO: move to tree?
 		BlockState trunk = Registration.tea_trunk.defaultBlockState().setValue(TeaTrunkBlock.CLIPPED, false);
 		// tree stump
@@ -84,7 +84,7 @@ public class TeaSaplingBlock extends SaplingBlock {
 	/**
 	 * Sets a block only if the block is replaceable
 	 */
-	private static void setBlockSafe(IWorld world, BlockPos pos, BlockState state) {
+	private static void setBlockSafe(LevelAccessor world, BlockPos pos, BlockState state) {
 		BlockState old = world.getBlockState(pos);
 		if(old.isAir(world, pos) || old.getMaterial().isReplaceable() || old.getBlock().is(BlockTags.LEAVES)) {
 			world.setBlock(pos, state, 3);

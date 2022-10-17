@@ -2,20 +2,20 @@ package knightminer.simplytea.worldgen;
 
 
 import knightminer.simplytea.core.Config;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.placement.NoPlacementConfig;
-import net.minecraft.world.gen.placement.SimplePlacement;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.placement.SimpleFeatureDecorator;
 
 import java.util.Random;
 import java.util.stream.Stream;
 
-public class TreeGenEnabledPlacement extends SimplePlacement<NoPlacementConfig> {
+public class TreeGenEnabledPlacement extends SimpleFeatureDecorator<NoneDecoratorConfiguration> {
 	public TreeGenEnabledPlacement() {
-		super(NoPlacementConfig.CODEC);
+		super(NoneDecoratorConfiguration.CODEC);
 	}
 
 	@Override
-	public Stream<BlockPos> place(Random random, NoPlacementConfig config, BlockPos pos) {
+	public Stream<BlockPos> place(Random random, NoneDecoratorConfiguration config, BlockPos pos) {
 		return Config.SERVER.tree.generate() ? Stream.of(pos) : Stream.empty();
 	}
 }

@@ -1,8 +1,8 @@
 package knightminer.simplytea.item;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class TeaStickItem extends TooltipItem {
 

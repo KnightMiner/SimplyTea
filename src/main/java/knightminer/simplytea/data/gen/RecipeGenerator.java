@@ -5,19 +5,19 @@ import knightminer.simplytea.item.CocoaItem;
 import knightminer.simplytea.item.TeaCupItem;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.data.CookingRecipeBuilder;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -60,9 +60,9 @@ public class RecipeGenerator extends RecipeProvider {
 	}
 
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
 		// ingredients
-		CookingRecipeBuilder.cooking(Ingredient.of(SimplyTags.Items.TEA_CROP), black_tea, 0.35f, 200, IRecipeSerializer.SMOKING_RECIPE)
+		SimpleCookingRecipeBuilder.cooking(Ingredient.of(SimplyTags.Items.TEA_CROP), black_tea, 0.35f, 200, RecipeSerializer.SMOKING_RECIPE)
 												.unlockedBy("has_item", has(SimplyTags.Items.TEA_CROP))
 												.save(consumer);
 
@@ -129,33 +129,33 @@ public class RecipeGenerator extends RecipeProvider {
 	}
 
 	/** Suffixes the item ID location with the given text */
-	private static ResourceLocation suffix(IItemProvider item, String suffix) {
+	private static ResourceLocation suffix(ItemLike item, String suffix) {
 		ResourceLocation name = Objects.requireNonNull(item.asItem().getRegistryName());
 		return new ResourceLocation(name.getNamespace(), name.getPath() + suffix);
 	}
 
 	/** Adds a recipe firing a raw clay item into a cooked one */
-	private static void fire(Consumer<IFinishedRecipe> consumer, IItemProvider unfired, IItemProvider fired) {
-		CookingRecipeBuilder.smelting(Ingredient.of(unfired), fired, 0.35f, 300)
+	private static void fire(Consumer<FinishedRecipe> consumer, ItemLike unfired, ItemLike fired) {
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(unfired), fired, 0.35f, 300)
 												.unlockedBy("has_unfired", has(unfired))
 												.save(consumer);
 	}
 
 	/** Adds a recipe to boil a teapot */
-	private static void boil(Consumer<IFinishedRecipe> consumer, IItemProvider cold, IItemProvider hot) {
-		CookingRecipeBuilder.cooking(Ingredient.of(cold), hot, 0.35f, 900, IRecipeSerializer.CAMPFIRE_COOKING_RECIPE)
+	private static void boil(Consumer<FinishedRecipe> consumer, ItemLike cold, ItemLike hot) {
+		SimpleCookingRecipeBuilder.cooking(Ingredient.of(cold), hot, 0.35f, 900, RecipeSerializer.CAMPFIRE_COOKING_RECIPE)
 												.unlockedBy("has_unfired", has(cold))
 												.save(consumer, suffix(hot, "_campfire"));
-		CookingRecipeBuilder.smelting(Ingredient.of(cold), hot, 0.35f, 300)
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(cold), hot, 0.35f, 300)
 												.unlockedBy("has_unfired", has(cold))
 												.save(consumer, suffix(hot, "_smelting"));
 	}
 
 	/** Adds a recipe to pour tea */
-	private static void addTea(Consumer<IFinishedRecipe> consumer, IItemProvider filledCup, IItemProvider... ingredients) {
+	private static void addTea(Consumer<FinishedRecipe> consumer, ItemLike filledCup, ItemLike... ingredients) {
 		ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(filledCup);
 		builder.requires(cup);
-		for (IItemProvider ingredient : ingredients) {
+		for (ItemLike ingredient : ingredients) {
 			builder.requires(ingredient);
 		}
 		builder.unlockedBy("has_bag", has(ingredients[0]));
@@ -163,12 +163,12 @@ public class RecipeGenerator extends RecipeProvider {
 	}
 
 	/** Creates a recipe to add honey to a tea */
-	public static void addHoney(Consumer<IFinishedRecipe> consumer, IItemProvider tea) {
+	public static void addHoney(Consumer<FinishedRecipe> consumer, ItemLike tea) {
 		addHoney(consumer, tea, Items.HONEY_BOTTLE, TeaCupItem.HONEY_TAG);
 	}
 
 	/** Creates a recipe to "honey" to a tea */
-	public static void addHoney(Consumer<IFinishedRecipe> consumer, IItemProvider tea, IItemProvider honey, String tag) {
+	public static void addHoney(Consumer<FinishedRecipe> consumer, ItemLike tea, ItemLike honey, String tag) {
 		ResourceLocation recipeId = suffix(tea, "_" + tag);
 
 		// advancement builder just like vanilla
@@ -177,7 +177,7 @@ public class RecipeGenerator extends RecipeProvider {
 					 .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId))
 					 .parent(new ResourceLocation("recipes/root"))
 					 .rewards(AdvancementRewards.Builder.recipe(recipeId))
-					 .requirements(IRequirementsStrategy.OR);
+					 .requirements(RequirementsStrategy.OR);
 		ResourceLocation advancementId = new ResourceLocation(recipeId.getNamespace(), "recipes/" + Objects.requireNonNull(tea.asItem().getItemCategory()).getRecipeFolderName() + "/" + recipeId.getPath());
 
 		// build final recipe
@@ -185,7 +185,7 @@ public class RecipeGenerator extends RecipeProvider {
 	}
 
 	/** Adds a recipe to pour tea and make tea bags */
-	private static void addTeaWithBag(Consumer<IFinishedRecipe> consumer, IItemProvider leaf, IItemProvider filledTeabag, IItemProvider filledCup) {
+	private static void addTeaWithBag(Consumer<FinishedRecipe> consumer, ItemLike leaf, ItemLike filledTeabag, ItemLike filledCup) {
 		ShapelessRecipeBuilder.shapeless(filledTeabag)
 													.group("simplytea:teabag")
 													.requires(teabag)

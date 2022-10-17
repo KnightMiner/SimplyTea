@@ -1,15 +1,15 @@
 package knightminer.simplytea.item;
 
 import knightminer.simplytea.core.Config;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,12 +19,12 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class CocoaItem extends TeaCupItem {
 	public static final String CINNAMON_TAG = "with_cinnamon";
-	private static final ITextComponent WITH_CINNAMON = new TranslationTextComponent("item.simplytea.cup.with_cinnamon")
-			.withStyle(style -> style.withColor(Color.fromRgb(0x805232)));
+	private static final Component WITH_CINNAMON = new TranslatableComponent("item.simplytea.cup.with_cinnamon")
+			.withStyle(style -> style.withColor(TextColor.fromRgb(0x805232)));
 
 	private static final ItemStack MILK_BUCKET = new ItemStack(Items.MILK_BUCKET);
 
@@ -33,16 +33,16 @@ public class CocoaItem extends TeaCupItem {
 	}
 
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity living) {
+	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity living) {
 		if (this.isEdible()) {
 			ItemStack result = getContainerItem(stack);
 			living.eat(worldIn, stack);
 			if (!worldIn.isClientSide && Config.SERVER.cocoa.clearsEffects()) {
 				// logic basically copied from living entity, so we can choose which effects to remove
-				Iterator<EffectInstance> itr = living.getActiveEffectsMap().values().iterator();
+				Iterator<MobEffectInstance> itr = living.getActiveEffectsMap().values().iterator();
 				boolean hasCinnamon = hasHoney(stack, CINNAMON_TAG);
 				while (itr.hasNext()) {
-					EffectInstance effect = itr.next();
+					MobEffectInstance effect = itr.next();
 					if ((Config.SERVER.cocoa.clearsPositive() || !effect.getEffect().isBeneficial())
 							&& effect.isCurativeItem(MILK_BUCKET) && !MinecraftForge.EVENT_BUS.post(new PotionRemoveEvent(living, effect))) {
 						living.onEffectRemoved(effect);
@@ -61,7 +61,7 @@ public class CocoaItem extends TeaCupItem {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		if (hasHoney(stack, CINNAMON_TAG)) {
 			tooltip.add(WITH_CINNAMON);
 		}

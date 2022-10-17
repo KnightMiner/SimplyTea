@@ -2,15 +2,15 @@ package knightminer.simplytea.data;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootEntry;
-import net.minecraft.loot.LootSerializers;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.functions.ILootFunction;
-import net.minecraft.loot.functions.LootFunctionManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.Deserializers;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
@@ -24,24 +24,24 @@ import java.util.function.Consumer;
  * Based on code from Mantle
  */
 public class AddEntryLootModifier extends LootModifier {
-	private static final Gson GSON = LootSerializers.createFunctionSerializer().create();
+	private static final Gson GSON = Deserializers.createFunctionSerializer().create();
 
-	private final LootEntry entry;
-	private final ILootFunction[] functions;
+	private final LootPoolEntryContainer entry;
+	private final LootItemFunction[] functions;
 	private final BiFunction<ItemStack, LootContext, ItemStack> combinedFunctions;
 	private final boolean requireEmpty;
-	protected AddEntryLootModifier(ILootCondition[] conditionsIn, LootEntry entry, ILootFunction[] functions, boolean requireEmpty) {
+	protected AddEntryLootModifier(LootItemCondition[] conditionsIn, LootPoolEntryContainer entry, LootItemFunction[] functions, boolean requireEmpty) {
 		super(conditionsIn);
 		this.entry = entry;
 		this.functions = functions;
-		this.combinedFunctions = LootFunctionManager.compose(functions);
+		this.combinedFunctions = LootItemFunctions.compose(functions);
 		this.requireEmpty = requireEmpty;
 	}
 
 	@Override
 	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
 		if (!requireEmpty || generatedLoot.isEmpty()) {
-			Consumer<ItemStack> consumer = ILootFunction.decorate(this.combinedFunctions, generatedLoot::add, context);
+			Consumer<ItemStack> consumer = LootItemFunction.decorate(this.combinedFunctions, generatedLoot::add, context);
 			entry.expand(context, generator -> generator.createItemStack(consumer, context));
 		}
 		return generatedLoot;
@@ -49,15 +49,15 @@ public class AddEntryLootModifier extends LootModifier {
 
 	public static class Serializer extends GlobalLootModifierSerializer<AddEntryLootModifier> {
 		@Override
-		public AddEntryLootModifier read(ResourceLocation location, JsonObject object, ILootCondition[] conditions) {
-			LootEntry entry = GSON.fromJson(JSONUtils.getAsJsonObject(object, "entry"), LootEntry.class);
-			ILootFunction[] functions;
+		public AddEntryLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] conditions) {
+			LootPoolEntryContainer entry = GSON.fromJson(GsonHelper.getAsJsonObject(object, "entry"), LootPoolEntryContainer.class);
+			LootItemFunction[] functions;
 			if (object.has("functions")) {
-				functions = GSON.fromJson(JSONUtils.getAsJsonArray(object, "functions"), ILootFunction[].class);
+				functions = GSON.fromJson(GsonHelper.getAsJsonArray(object, "functions"), LootItemFunction[].class);
 			} else {
-				functions = new ILootFunction[0];
+				functions = new LootItemFunction[0];
 			}
-			boolean requireEmpty = JSONUtils.getAsBoolean(object, "require_empty", false);
+			boolean requireEmpty = GsonHelper.getAsBoolean(object, "require_empty", false);
 			return new AddEntryLootModifier(conditions, entry, functions, requireEmpty);
 		}
 
@@ -65,8 +65,8 @@ public class AddEntryLootModifier extends LootModifier {
 		public JsonObject write(AddEntryLootModifier instance) {
 			JsonObject object = makeConditions(instance.conditions);
 			object.addProperty("require_empty", instance.requireEmpty);
-			object.add("entry", GSON.toJsonTree(instance.entry, LootEntry.class));
-			object.add("functions", GSON.toJsonTree(instance.functions, ILootFunction[].class));
+			object.add("entry", GSON.toJsonTree(instance.entry, LootPoolEntryContainer.class));
+			object.add("functions", GSON.toJsonTree(instance.functions, LootItemFunction[].class));
 			return object;
 		}
 	}
