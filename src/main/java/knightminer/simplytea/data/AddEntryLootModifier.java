@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * Based on code from Mantle
  */
 public class AddEntryLootModifier extends LootModifier {
-	private static final Gson GSON = LootSerializers.func_237387_b_().create();
+	private static final Gson GSON = LootSerializers.createFunctionSerializer().create();
 
 	private final LootEntry entry;
 	private final ILootFunction[] functions;
@@ -34,15 +34,15 @@ public class AddEntryLootModifier extends LootModifier {
 		super(conditionsIn);
 		this.entry = entry;
 		this.functions = functions;
-		this.combinedFunctions = LootFunctionManager.combine(functions);
+		this.combinedFunctions = LootFunctionManager.compose(functions);
 		this.requireEmpty = requireEmpty;
 	}
 
 	@Override
 	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
 		if (!requireEmpty || generatedLoot.isEmpty()) {
-			Consumer<ItemStack> consumer = ILootFunction.func_215858_a(this.combinedFunctions, generatedLoot::add, context);
-			entry.expand(context, generator -> generator.func_216188_a(consumer, context));
+			Consumer<ItemStack> consumer = ILootFunction.decorate(this.combinedFunctions, generatedLoot::add, context);
+			entry.expand(context, generator -> generator.createItemStack(consumer, context));
 		}
 		return generatedLoot;
 	}
@@ -50,14 +50,14 @@ public class AddEntryLootModifier extends LootModifier {
 	public static class Serializer extends GlobalLootModifierSerializer<AddEntryLootModifier> {
 		@Override
 		public AddEntryLootModifier read(ResourceLocation location, JsonObject object, ILootCondition[] conditions) {
-			LootEntry entry = GSON.fromJson(JSONUtils.getJsonObject(object, "entry"), LootEntry.class);
+			LootEntry entry = GSON.fromJson(JSONUtils.getAsJsonObject(object, "entry"), LootEntry.class);
 			ILootFunction[] functions;
 			if (object.has("functions")) {
-				functions = GSON.fromJson(JSONUtils.getJsonArray(object, "functions"), ILootFunction[].class);
+				functions = GSON.fromJson(JSONUtils.getAsJsonArray(object, "functions"), ILootFunction[].class);
 			} else {
 				functions = new ILootFunction[0];
 			}
-			boolean requireEmpty = JSONUtils.getBoolean(object, "require_empty", false);
+			boolean requireEmpty = JSONUtils.getAsBoolean(object, "require_empty", false);
 			return new AddEntryLootModifier(conditions, entry, functions, requireEmpty);
 		}
 

@@ -26,13 +26,13 @@ public class MatchToolTypeLootCondition implements ILootCondition {
 	}
 
 	@Override
-	public LootConditionType func_230419_b_() {
+	public LootConditionType getType() {
 		return Registration.matchToolType;
 	}
 
 	@Override
 	public boolean test(LootContext lootContext) {
-		ItemStack stack = lootContext.get(LootParameters.TOOL);
+		ItemStack stack = lootContext.getParamOrNull(LootParameters.TOOL);
 		if (stack != null && !stack.isEmpty()) {
 			return stack.getToolTypes().contains(toolType);
 		}
@@ -47,7 +47,7 @@ public class MatchToolTypeLootCondition implements ILootCondition {
 
 		@Override
 		public MatchToolTypeLootCondition deserialize(JsonObject json, JsonDeserializationContext context) {
-			ToolType toolType = ToolType.get(JSONUtils.getString(json, "type"));
+			ToolType toolType = ToolType.get(JSONUtils.getAsString(json, "type"));
 			return new MatchToolTypeLootCondition(toolType);
 		}
 	}

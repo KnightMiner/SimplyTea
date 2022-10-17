@@ -15,7 +15,7 @@ public class TreeGenEnabledPlacement extends SimplePlacement<NoPlacementConfig> 
 	}
 
 	@Override
-	public Stream<BlockPos> getPositions(Random random, NoPlacementConfig config, BlockPos pos) {
+	public Stream<BlockPos> place(Random random, NoPlacementConfig config, BlockPos pos) {
 		return Config.SERVER.tree.generate() ? Stream.of(pos) : Stream.empty();
 	}
 }

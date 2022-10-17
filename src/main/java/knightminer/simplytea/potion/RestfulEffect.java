@@ -26,8 +26,8 @@ public class RestfulEffect extends Effect {
 	public static boolean removeConflicts(LivingEntity entity) {
 		boolean hasConflicts = false;
 		for (Effect effect : CONFLICTING) {
-			if (entity.isPotionActive(effect)) {
-				entity.removePotionEffect(effect);
+			if (entity.hasEffect(effect)) {
+				entity.removeEffect(effect);
 				hasConflicts = true;
 			}
 		}

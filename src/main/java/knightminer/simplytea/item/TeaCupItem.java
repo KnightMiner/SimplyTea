@@ -19,48 +19,50 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class TeaCupItem extends Item {
 	public static final String HONEY_TAG = "with_honey";
 	private static final ITextComponent WITH_HONEY = new TranslationTextComponent("item.simplytea.cup.with_honey")
-			.modifyStyle(style -> style.setColor(Color.fromInt(0xFF9116)));
+			.withStyle(style -> style.withColor(Color.fromRgb(0xFF9116)));
 
 	public TeaCupItem(Properties props) {
 		super(props);
 	}
 
 	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return stack.getItem().isFood() ? UseAction.DRINK : UseAction.NONE;
+	public UseAction getUseAnimation(ItemStack stack) {
+		return stack.getItem().isEdible() ? UseAction.DRINK : UseAction.NONE;
 	}
 
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
-		return stack.getDamage() > 0;
+		return stack.getDamageValue() > 0;
 	}
 
 	@Override
 	public ItemStack getContainerItem(ItemStack stack) {
-		if (stack.getDamage() + 1 >= stack.getMaxDamage()) {
+		if (stack.getDamageValue() + 1 >= stack.getMaxDamage()) {
 			return super.getContainerItem(stack);
 		}
 		stack = stack.copy();
-		stack.setDamage(stack.getDamage()+1);
+		stack.setDamageValue(stack.getDamageValue()+1);
 		return stack;
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity living) {
-		if (this.isFood()) {
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity living) {
+		if (this.isEdible()) {
 			ItemStack result = stack.getContainerItem();
 			boolean hasHoney = hasHoney(stack, HONEY_TAG);
 			living.curePotionEffects(stack); /// remove conflicting teas
-			living.onFoodEaten(worldIn, stack);
+			living.eat(worldIn, stack);
 			// we handle effects directly so it can be stack sensitive
-			Food food = getFood();
+			Food food = getFoodProperties();
 			if (food instanceof TeaDrink) {
 				EffectInstance effectInstance = ((TeaDrink) food).getEffect(hasHoney);
 				if (effectInstance != null) {
-					living.addPotionEffect(effectInstance);
+					living.addEffect(effectInstance);
 				}
 			}
 			return result;
@@ -70,7 +72,7 @@ public class TeaCupItem extends Item {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		if (hasHoney(stack, HONEY_TAG)) {
 			tooltip.add(WITH_HONEY);
 		}

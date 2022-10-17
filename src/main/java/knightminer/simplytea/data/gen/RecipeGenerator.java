@@ -60,38 +60,38 @@ public class RecipeGenerator extends RecipeProvider {
 	}
 
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
 		// ingredients
-		CookingRecipeBuilder.cookingRecipe(Ingredient.fromTag(SimplyTags.Items.TEA_CROP), black_tea, 0.35f, 200, IRecipeSerializer.SMOKING)
-												.addCriterion("has_item", hasItem(SimplyTags.Items.TEA_CROP))
-												.build(consumer);
+		CookingRecipeBuilder.cooking(Ingredient.of(SimplyTags.Items.TEA_CROP), black_tea, 0.35f, 200, IRecipeSerializer.SMOKING_RECIPE)
+												.unlockedBy("has_item", has(SimplyTags.Items.TEA_CROP))
+												.save(consumer);
 
 		// wood
-		ShapedRecipeBuilder.shapedRecipe(tea_fence, 2)
-											 .patternLine("sss").patternLine("sss")
-											 .key('s', tea_stick)
-											 .addCriterion("has_stick", hasItem(tea_stick))
-											 .build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(tea_fence_gate)
-											 .patternLine("sss").patternLine(" s ").patternLine("sss")
-											 .key('s', tea_stick)
-											 .addCriterion("has_stick", hasItem(tea_stick))
-											 .build(consumer);
+		ShapedRecipeBuilder.shaped(tea_fence, 2)
+											 .pattern("sss").pattern("sss")
+											 .define('s', tea_stick)
+											 .unlockedBy("has_stick", has(tea_stick))
+											 .save(consumer);
+		ShapedRecipeBuilder.shaped(tea_fence_gate)
+											 .pattern("sss").pattern(" s ").pattern("sss")
+											 .define('s', tea_stick)
+											 .unlockedBy("has_stick", has(tea_stick))
+											 .save(consumer);
 
 		// ceramics
-		ShapedRecipeBuilder.shapedRecipe(unfired_cup, 2)
-											 .patternLine("CBC").patternLine(" C ")
-											 .key('C', Items.CLAY_BALL)
-											 .key('B', Items.BONE_MEAL)
-											 .addCriterion("has_item", hasItem(Items.CLAY_BALL))
-											 .build(consumer);
+		ShapedRecipeBuilder.shaped(unfired_cup, 2)
+											 .pattern("CBC").pattern(" C ")
+											 .define('C', Items.CLAY_BALL)
+											 .define('B', Items.BONE_MEAL)
+											 .unlockedBy("has_item", has(Items.CLAY_BALL))
+											 .save(consumer);
 		fire(consumer, unfired_cup, cup);
-		ShapedRecipeBuilder.shapedRecipe(unfired_teapot)
-											 .patternLine("CBC").patternLine("CC ")
-											 .key('C', Items.CLAY_BALL)
-											 .key('B', Items.BONE_MEAL)
-											 .addCriterion("has_item", hasItem(Items.CLAY_BALL))
-											 .build(consumer);
+		ShapedRecipeBuilder.shaped(unfired_teapot)
+											 .pattern("CBC").pattern("CC ")
+											 .define('C', Items.CLAY_BALL)
+											 .define('B', Items.BONE_MEAL)
+											 .unlockedBy("has_item", has(Items.CLAY_BALL))
+											 .save(consumer);
 		fire(consumer, unfired_teapot, teapot);
 
 		// teapots
@@ -99,13 +99,13 @@ public class RecipeGenerator extends RecipeProvider {
 		boil(consumer, teapot_milk, teapot_frothed);
 
 		// teabags
-		ShapedRecipeBuilder.shapedRecipe(teabag, 4)
-											 .patternLine("  S").patternLine("PP ").patternLine("PP ")
-											 .key('S', Items.STRING)
-											 .key('P', Items.PAPER)
-											 .addCriterion("has_floral", hasItem(Items.DANDELION))
-											 .addCriterion("has_leaf", hasItem(tea_leaf))
-											 .build(consumer);
+		ShapedRecipeBuilder.shaped(teabag, 4)
+											 .pattern("  S").pattern("PP ").pattern("PP ")
+											 .define('S', Items.STRING)
+											 .define('P', Items.PAPER)
+											 .unlockedBy("has_floral", has(Items.DANDELION))
+											 .unlockedBy("has_leaf", has(tea_leaf))
+											 .save(consumer);
 
 		// basic tea
 		addTeaWithBag(consumer, Items.DANDELION, teabag_floral, cup_tea_floral);
@@ -118,13 +118,13 @@ public class RecipeGenerator extends RecipeProvider {
 		addHoney(consumer, cup_cocoa, tea_stick, CocoaItem.CINNAMON_TAG);
 		addTea(consumer, cup_tea_chai, teabag_black, tea_stick, teapot_frothed);
 		addHoney(consumer, cup_tea_chai);
-		ShapelessRecipeBuilder.shapelessRecipe(cup_tea_iced)
-													.addIngredient(cup)
-													.addIngredient(teabag_green)
-													.addIngredient(Items.APPLE)
-													.addIngredient(SimplyTags.Items.ICE_CUBES)
-													.addCriterion("has_ice", hasItem(SimplyTags.Items.ICE_CUBES))
-													.build(consumer);
+		ShapelessRecipeBuilder.shapeless(cup_tea_iced)
+													.requires(cup)
+													.requires(teabag_green)
+													.requires(Items.APPLE)
+													.requires(SimplyTags.Items.ICE_CUBES)
+													.unlockedBy("has_ice", has(SimplyTags.Items.ICE_CUBES))
+													.save(consumer);
 		addHoney(consumer, cup_tea_iced);
 	}
 
@@ -136,30 +136,30 @@ public class RecipeGenerator extends RecipeProvider {
 
 	/** Adds a recipe firing a raw clay item into a cooked one */
 	private static void fire(Consumer<IFinishedRecipe> consumer, IItemProvider unfired, IItemProvider fired) {
-		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(unfired), fired, 0.35f, 300)
-												.addCriterion("has_unfired", hasItem(unfired))
-												.build(consumer);
+		CookingRecipeBuilder.smelting(Ingredient.of(unfired), fired, 0.35f, 300)
+												.unlockedBy("has_unfired", has(unfired))
+												.save(consumer);
 	}
 
 	/** Adds a recipe to boil a teapot */
 	private static void boil(Consumer<IFinishedRecipe> consumer, IItemProvider cold, IItemProvider hot) {
-		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(cold), hot, 0.35f, 900, IRecipeSerializer.CAMPFIRE_COOKING)
-												.addCriterion("has_unfired", hasItem(cold))
-												.build(consumer, suffix(hot, "_campfire"));
-		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(cold), hot, 0.35f, 300)
-												.addCriterion("has_unfired", hasItem(cold))
-												.build(consumer, suffix(hot, "_smelting"));
+		CookingRecipeBuilder.cooking(Ingredient.of(cold), hot, 0.35f, 900, IRecipeSerializer.CAMPFIRE_COOKING_RECIPE)
+												.unlockedBy("has_unfired", has(cold))
+												.save(consumer, suffix(hot, "_campfire"));
+		CookingRecipeBuilder.smelting(Ingredient.of(cold), hot, 0.35f, 300)
+												.unlockedBy("has_unfired", has(cold))
+												.save(consumer, suffix(hot, "_smelting"));
 	}
 
 	/** Adds a recipe to pour tea */
 	private static void addTea(Consumer<IFinishedRecipe> consumer, IItemProvider filledCup, IItemProvider... ingredients) {
-		ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapelessRecipe(filledCup);
-		builder.addIngredient(cup);
+		ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(filledCup);
+		builder.requires(cup);
 		for (IItemProvider ingredient : ingredients) {
-			builder.addIngredient(ingredient);
+			builder.requires(ingredient);
 		}
-		builder.addCriterion("has_bag", hasItem(ingredients[0]));
-		builder.build(consumer);
+		builder.unlockedBy("has_bag", has(ingredients[0]));
+		builder.save(consumer);
 	}
 
 	/** Creates a recipe to add honey to a tea */
@@ -172,27 +172,27 @@ public class RecipeGenerator extends RecipeProvider {
 		ResourceLocation recipeId = suffix(tea, "_" + tag);
 
 		// advancement builder just like vanilla
-		Advancement.Builder builder = Advancement.Builder.builder();
-		builder.withCriterion("has_item", hasItem(honey))
-					 .withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(recipeId))
-					 .withParentId(new ResourceLocation("recipes/root"))
-					 .withRewards(AdvancementRewards.Builder.recipe(recipeId))
-					 .withRequirementsStrategy(IRequirementsStrategy.OR);
-		ResourceLocation advancementId = new ResourceLocation(recipeId.getNamespace(), "recipes/" + Objects.requireNonNull(tea.asItem().getGroup()).getPath() + "/" + recipeId.getPath());
+		Advancement.Builder builder = Advancement.Builder.advancement();
+		builder.addCriterion("has_item", has(honey))
+					 .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId))
+					 .parent(new ResourceLocation("recipes/root"))
+					 .rewards(AdvancementRewards.Builder.recipe(recipeId))
+					 .requirements(IRequirementsStrategy.OR);
+		ResourceLocation advancementId = new ResourceLocation(recipeId.getNamespace(), "recipes/" + Objects.requireNonNull(tea.asItem().getItemCategory()).getRecipeFolderName() + "/" + recipeId.getPath());
 
 		// build final recipe
-		consumer.accept(new ShapelessHoneyRecipe.FinishedRecipe(recipeId, "simplytea:" + tag, tea, Ingredient.fromItems(honey), tag, advancementId, builder));
+		consumer.accept(new ShapelessHoneyRecipe.FinishedRecipe(recipeId, "simplytea:" + tag, tea, Ingredient.of(honey), tag, advancementId, builder));
 	}
 
 	/** Adds a recipe to pour tea and make tea bags */
 	private static void addTeaWithBag(Consumer<IFinishedRecipe> consumer, IItemProvider leaf, IItemProvider filledTeabag, IItemProvider filledCup) {
-		ShapelessRecipeBuilder.shapelessRecipe(filledTeabag)
-													.setGroup("simplytea:teabag")
-													.addIngredient(teabag)
-													.addIngredient(leaf)
-													.addIngredient(leaf)
-													.addCriterion("has_leaf", hasItem(leaf))
-													.build(consumer);
+		ShapelessRecipeBuilder.shapeless(filledTeabag)
+													.group("simplytea:teabag")
+													.requires(teabag)
+													.requires(leaf)
+													.requires(leaf)
+													.unlockedBy("has_leaf", has(leaf))
+													.save(consumer);
 		addTea(consumer, filledCup, filledTeabag, teapot_hot);
 		addHoney(consumer, filledCup);
 	}

@@ -75,7 +75,7 @@ public class Registration {
   /* Creative tab */
   public static ItemGroup group = new ItemGroup("simplytea") {
     @Override
-    public ItemStack createIcon() {
+    public ItemStack makeIcon() {
       return new ItemStack(tea_leaf);
     }
   };
@@ -153,17 +153,17 @@ public class Registration {
 
     Block.Properties props;
 
-    props = Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD);
+    props = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
     register(r, new FenceBlock(props), "tea_fence");
     register(r, new FenceGateBlock(props), "tea_fence_gate");
 
-    props = Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT);
+    props = Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS);
     register(r, new TeaSaplingBlock(props), "tea_sapling");
 
-    props = Block.Properties.create(Material.WOOD, MaterialColor.BROWN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).tickRandomly();
+    props = Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD).randomTicks();
     register(r, new TeaTrunkBlock(props), "tea_trunk");
 
-    props = Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0f).notSolid();
+    props = Block.Properties.of(Material.DECORATION).strength(0f).noOcclusion();
     register(r, new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> tea_sapling, props), "potted_tea_sapling");
     ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(new ResourceLocation(SimplyTea.MOD_ID, "tea_sapling"), () -> potted_tea_sapling);
   }
@@ -172,7 +172,7 @@ public class Registration {
   static void registerItems(final RegistryEvent.Register<Item> event) {
     IForgeRegistry<Item> r = event.getRegistry();
 
-    Item.Properties props = new Item.Properties().group(group);
+    Item.Properties props = new Item.Properties().tab(group);
 
     // crafting
     register(r, new TooltipItem(props), "tea_leaf");
@@ -194,7 +194,7 @@ public class Registration {
     registerBlockItem(r, new BlockItem(tea_sapling, props));
 
     // teapots
-    props = new Item.Properties().group(group).maxStackSize(16);
+    props = new Item.Properties().tab(group).stacksTo(16);
     register(r, new Item(props), "unfired_teapot");
     Item teapot = register(r, new TeapotItem(props), "teapot");
     // teacups
@@ -202,15 +202,15 @@ public class Registration {
     Item cup = register(r, new Item(props), "cup");
 
     // filled teapots
-    props.containerItem(teapot).maxStackSize(1);
+    props.craftRemainder(teapot).stacksTo(1);
     register(r, new TooltipItem(props), "teapot_water");
     register(r, new TooltipItem(props), "teapot_milk");
-    props.setNoRepair().maxDamage(4);
+    props.setNoRepair().durability(4);
     register(r, new HotTeapotItem(props), "teapot_hot");
     register(r, new HotTeapotItem(props), "teapot_frothed");
 
     // drinks
-    props = new Item.Properties().group(group).maxStackSize(1).maxDamage(2).setNoRepair().containerItem(cup);
+    props = new Item.Properties().tab(group).stacksTo(1).durability(2).setNoRepair().craftRemainder(cup);
     register(r, new TeaCupItem(props.food(Config.SERVER.black_tea)), "cup_tea_black");
     register(r, new TeaCupItem(props.food(Config.SERVER.green_tea)), "cup_tea_green");
     register(r, new TeaCupItem(props.food(Config.SERVER.floral_tea)), "cup_tea_floral");
@@ -255,15 +255,15 @@ public class Registration {
       // flamability
       if (Blocks.FIRE instanceof FireBlock) {
         FireBlock fire = (FireBlock)Blocks.FIRE;
-        fire.setFireInfo(tea_fence, 5, 20);
-        fire.setFireInfo(tea_fence_gate, 5, 20);
-        fire.setFireInfo(tea_trunk, 15, 30);
+        fire.setFlammable(tea_fence, 5, 20);
+        fire.setFlammable(tea_fence_gate, 5, 20);
+        fire.setFlammable(tea_trunk, 15, 30);
       }
 
-      ComposterBlock.registerCompostable(0.3f, tea_leaf);
-      ComposterBlock.registerCompostable(0.4f, black_tea);
-      ComposterBlock.registerCompostable(0.5f, chorus_petal);
-      ComposterBlock.registerCompostable(0.3f, tea_sapling);
+      ComposterBlock.add(0.3f, tea_leaf);
+      ComposterBlock.add(0.4f, black_tea);
+      ComposterBlock.add(0.5f, chorus_petal);
+      ComposterBlock.add(0.3f, tea_sapling);
 
       // too much caffiene to sleep
       RestfulEffect.addConflict(caffeinated);
@@ -271,11 +271,11 @@ public class Registration {
     });
 
     // configured features
-    configured_tea_tree = tea_tree.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
-                                  .withPlacement(Registration.tree_gen_enabled.configure(NoPlacementConfig.INSTANCE))
-                                  .withPlacement(Placement.CHANCE.configure(new ChanceConfig(50)))
-                                  .withPlacement(Placements.HEIGHTMAP_PLACEMENT)
-                                  .withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
+    configured_tea_tree = tea_tree.configured(IFeatureConfig.NONE)
+                                  .decorated(Registration.tree_gen_enabled.configured(NoPlacementConfig.INSTANCE))
+                                  .decorated(Placement.CHANCE.configured(new ChanceConfig(50)))
+                                  .decorated(Placements.HEIGHTMAP_SQUARE)
+                                  .decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(2, 0.1F, 1)));
     Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(SimplyTea.MOD_ID, "tea_tree"), configured_tea_tree);
   }
 

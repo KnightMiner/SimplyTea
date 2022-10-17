@@ -30,12 +30,12 @@ public class Drink extends Food {
   }
 
   @Override
-  public int getHealing() {
+  public int getNutrition() {
     return hunger.get();
   }
 
   @Override
-  public float getSaturation() {
+  public float getSaturationModifier() {
     return saturation.get().floatValue();
   }
 }

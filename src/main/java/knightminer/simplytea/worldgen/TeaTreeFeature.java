@@ -14,12 +14,12 @@ import java.util.Random;
 
 public class TeaTreeFeature extends Feature<NoFeatureConfig> {
 	public TeaTreeFeature() {
-		super(NoFeatureConfig.field_236558_a_);
+		super(NoFeatureConfig.CODEC);
 	}
 
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, NoFeatureConfig config) {
-		BlockPos down = pos.down();
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, NoFeatureConfig config) {
+		BlockPos down = pos.below();
 		BlockState soil = world.getBlockState(down);
 		if(soil.canSustainPlant(world, down, Direction.UP, Registration.tea_sapling) && world.getBlockState(pos).isAir(world, pos)) {
 			TeaSaplingBlock.generateTree(world, pos, random);

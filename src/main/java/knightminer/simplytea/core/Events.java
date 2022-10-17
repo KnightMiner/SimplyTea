@@ -32,13 +32,13 @@ public class Events {
     // if caffeinated, remove that with no restful benefits
     PlayerEntity player = event.getPlayer();
     if (RestfulEffect.removeConflicts(player)) {
-      player.removePotionEffect(Registration.restful);
+      player.removeEffect(Registration.restful);
     } else {
-      EffectInstance effect = player.getActivePotionEffect(Registration.restful);
+      EffectInstance effect = player.getEffect(Registration.restful);
       // if restful, heal based on the potion level and remove it
       if (effect != null) {
         player.heal((effect.getAmplifier()+1)*2);
-        player.removePotionEffect(Registration.restful);
+        player.removeEffect(Registration.restful);
       }
     }
 
@@ -47,7 +47,7 @@ public class Events {
   @SubscribeEvent
   static void entityFall(LivingFallEvent event) {
     LivingEntity entity = event.getEntityLiving();
-    EffectInstance effect = entity.getActivePotionEffect(Registration.enderfalling);
+    EffectInstance effect = entity.getEffect(Registration.enderfalling);
     if (effect != null) {
       // every level halves the damage of the previous, but start at 1/4
       event.setDamageMultiplier(event.getDamageMultiplier() * (float)Math.pow(2, -effect.getAmplifier()-3));
@@ -56,7 +56,7 @@ public class Events {
 
   @SubscribeEvent
   static void throwEnderPearl(EntityTeleportEvent.EnderPearl event) {
-    if (event.getPlayer().isPotionActive(Registration.enderfalling)) {
+    if (event.getPlayer().hasEffect(Registration.enderfalling)) {
       event.setAttackDamage(0);
     }
   }
@@ -70,13 +70,13 @@ public class Events {
     if (event.getName() == null) {
       return event.getCategory() == Category.FOREST;
     }
-    return BiomeDictionary.hasType(RegistryKey.getOrCreateKey(Registry.BIOME_KEY, event.getName()), Type.FOREST);
+    return BiomeDictionary.hasType(RegistryKey.create(Registry.BIOME_REGISTRY, event.getName()), Type.FOREST);
   }
 
   @SubscribeEvent
   static void onBiomeLoad(BiomeLoadingEvent event) {
     if (validBiome(event)) {
-      event.getGeneration().withFeature(Decoration.VEGETAL_DECORATION, Registration.configured_tea_tree);
+      event.getGeneration().addFeature(Decoration.VEGETAL_DECORATION, Registration.configured_tea_tree);
     }
   }
 }

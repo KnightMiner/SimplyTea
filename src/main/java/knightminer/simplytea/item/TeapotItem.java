@@ -27,33 +27,35 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
+import net.minecraft.item.Item.Properties;
+
 public class TeapotItem extends TooltipItem {
 	public TeapotItem(Properties props) {
 		super(props);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-		ItemStack stack = player.getHeldItem(hand);
-		BlockRayTraceResult rayTrace = rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
+	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+		ItemStack stack = player.getItemInHand(hand);
+		BlockRayTraceResult rayTrace = getPlayerPOVHitResult(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
 		if (rayTrace.getType() == Type.BLOCK) {
-			BlockPos pos = rayTrace.getPos();
+			BlockPos pos = rayTrace.getBlockPos();
 			BlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
 
 			// try filling from the cauldron
-			if (Config.SERVER.teapot.fillFromCauldron() && block == Blocks.CAULDRON && state.get(CauldronBlock.LEVEL) == 3) {
+			if (Config.SERVER.teapot.fillFromCauldron() && block == Blocks.CAULDRON && state.getValue(CauldronBlock.LEVEL) == 3) {
 				((CauldronBlock)Blocks.CAULDRON).setWaterLevel(world, pos, state, 0);
-				stack = DrinkHelper.fill(stack, player, new ItemStack(Registration.teapot_water));
+				stack = DrinkHelper.createFilledResult(stack, player, new ItemStack(Registration.teapot_water));
 				return new ActionResult<>(ActionResultType.SUCCESS, stack);
 			}
 
 			// we use name for lookup to prevent default fluid conflicts
-			Fluid fluid = state.getFluidState().getFluid();
+			Fluid fluid = state.getFluidState().getType();
 			if(fluid != Fluids.EMPTY) {
 				// try for water or milk using the config lists
 				Item item = null;
-				if (fluid.isIn(FluidTags.WATER)) {
+				if (fluid.is(FluidTags.WATER)) {
 					item = Registration.teapot_water;
 				} // TODO: milk when mods make a standard
 
@@ -61,18 +63,18 @@ public class TeapotItem extends TooltipItem {
 				if(item != null) {
 					// water is considered infinite unless disabled in the config
 					if(!Config.SERVER.teapot.infiniteWater()) {
-						Direction side = rayTrace.getFace();
+						Direction side = rayTrace.getDirection();
 						// unable to modify the block, fail
-						if (!world.isBlockModifiable(player, pos) || !player.canPlayerEdit(pos.offset(side), side, stack) || !(state.getBlock() instanceof IBucketPickupHandler)) {
+						if (!world.mayInteract(player, pos) || !player.mayUseItemAt(pos.relative(side), side, stack) || !(state.getBlock() instanceof IBucketPickupHandler)) {
 							return new ActionResult<>(ActionResultType.FAIL, stack);
 						}
-						((IBucketPickupHandler)state.getBlock()).pickupFluid(world, pos, state);
+						((IBucketPickupHandler)state.getBlock()).takeLiquid(world, pos, state);
 					}
 
-					stack = DrinkHelper.fill(stack, player, new ItemStack(item));
+					stack = DrinkHelper.createFilledResult(stack, player, new ItemStack(item));
 
 					// TODO: fluid sound based on fluid
-					player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0f, 1.0f);
+					player.playSound(SoundEvents.BUCKET_FILL, 1.0f, 1.0f);
 					return new ActionResult<>(ActionResultType.SUCCESS, stack);
 				}
 			}
@@ -81,14 +83,14 @@ public class TeapotItem extends TooltipItem {
 	}
 
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
+	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
 		// only work if the teapot is empty and right clicking a cow
 		if(Config.SERVER.teapot.canMilkCows() && target instanceof CowEntity) {
 			// sound
-			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+			player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
 
 			// fill with milk
-			player.setHeldItem(hand, DrinkHelper.fill(stack.copy(), player, new ItemStack(Registration.teapot_milk)));
+			player.setItemInHand(hand, DrinkHelper.createFilledResult(stack.copy(), player, new ItemStack(Registration.teapot_milk)));
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;

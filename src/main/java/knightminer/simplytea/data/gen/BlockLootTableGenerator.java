@@ -46,7 +46,7 @@ public class BlockLootTableGenerator extends BlockLootTables {
 		for (Block block : getKnownBlocks()) {
 			ResourceLocation name = block.getLootTable();
 			if (name != LootTables.EMPTY && set.add(name)) {
-				LootTable.Builder builder = this.lootTables.remove(name);
+				LootTable.Builder builder = this.map.remove(name);
 				if (builder == null) {
 					throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", name, block.getRegistryName()));
 				}
@@ -56,48 +56,48 @@ public class BlockLootTableGenerator extends BlockLootTables {
 		}
 
 		// special case leaves builder
-		LootTable.Builder leavesBuilder = this.lootTables.remove(LEAVES_ID);
+		LootTable.Builder leavesBuilder = this.map.remove(LEAVES_ID);
 		if (leavesBuilder == null) {
 			throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", LEAVES_ID, Registration.tea_tree.getRegistryName()));
 		}
 		consumer.accept(LEAVES_ID, leavesBuilder);
 
-		if (!this.lootTables.isEmpty()) {
-			throw new IllegalStateException("Created block loot tables for non-blocks: " + this.lootTables.keySet());
+		if (!this.map.isEmpty()) {
+			throw new IllegalStateException("Created block loot tables for non-blocks: " + this.map.keySet());
 		}
 	}
 	@Override
 	protected void addTables() {
 		// basic
-		registerDropSelfLootTable(Registration.tea_fence);
-		registerDropSelfLootTable(Registration.tea_fence_gate);
-		registerDropSelfLootTable(Registration.tea_sapling);
-		registerFlowerPot(Registration.potted_tea_sapling);
+		dropSelf(Registration.tea_fence);
+		dropSelf(Registration.tea_fence_gate);
+		dropSelf(Registration.tea_sapling);
+		dropPottedContents(Registration.potted_tea_sapling);
 		// first register internal leaves loot table
-		this.lootTables.put(
+		this.map.put(
 				LEAVES_ID,
-				LootTable.builder()
-								 .acceptFunction(ExplosionDecay.builder())
-								 .addLootPool(LootPool.builder().addEntry(ItemLootEntry.builder(Registration.tea_leaf)))
-								 .addLootPool(LootPool.builder()
-																			.addEntry(ItemLootEntry.builder(Registration.tea_leaf)
-																														 .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.55f, 2))))
-								 .addLootPool(LootPool.builder()
-																			.acceptCondition(SurvivesExplosion.builder())
-																			.acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.05f, 0.0625f, 0.083333336f, 0.1f))
-																			.addEntry(ItemLootEntry.builder(Registration.tea_sapling))));
+				LootTable.lootTable()
+								 .apply(ExplosionDecay.explosionDecay())
+								 .withPool(LootPool.lootPool().add(ItemLootEntry.lootTableItem(Registration.tea_leaf)))
+								 .withPool(LootPool.lootPool()
+																			.add(ItemLootEntry.lootTableItem(Registration.tea_leaf)
+																														 .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.55f, 2))))
+								 .withPool(LootPool.lootPool()
+																			.when(SurvivesExplosion.survivesExplosion())
+																			.when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05f, 0.0625f, 0.083333336f, 0.1f))
+																			.add(ItemLootEntry.lootTableItem(Registration.tea_sapling))));
 		// then register the trunk table
-		registerLootTable(Registration.tea_trunk, block ->
-				LootTable.builder()
-								 .acceptFunction(ExplosionDecay.builder())
-								 .addLootPool(LootPool.builder().addEntry(ItemLootEntry.builder(Registration.tea_stick)))
-								 .addLootPool(LootPool.builder()
-																			.addEntry(ItemLootEntry.builder(Registration.tea_stick)
-																														 .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.55f, 2))))
-								 .addLootPool(LootPool.builder()
-																			.acceptCondition(BlockStateProperty.builder(block)
-																																				 .fromProperties(StatePropertiesPredicate.Builder.newBuilder()
-																																																												 .withBoolProp(TeaTrunkBlock.CLIPPED, false)))
-																			.addEntry(TableLootEntry.builder(LEAVES_ID))));
+		add(Registration.tea_trunk, block ->
+				LootTable.lootTable()
+								 .apply(ExplosionDecay.explosionDecay())
+								 .withPool(LootPool.lootPool().add(ItemLootEntry.lootTableItem(Registration.tea_stick)))
+								 .withPool(LootPool.lootPool()
+																			.add(ItemLootEntry.lootTableItem(Registration.tea_stick)
+																														 .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.55f, 2))))
+								 .withPool(LootPool.lootPool()
+																			.when(BlockStateProperty.hasBlockStateProperties(block)
+																																				 .setProperties(StatePropertiesPredicate.Builder.properties()
+																																																												 .hasProperty(TeaTrunkBlock.CLIPPED, false)))
+																			.add(TableLootEntry.lootTableReference(LEAVES_ID))));
 	}
 }

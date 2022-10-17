@@ -66,7 +66,7 @@ public class TeaDrink extends Drink {
       // teas conflict with each other, add other teas as curative items
       List<ItemStack> curativeEffects = effect.getCurativeItems();
       curativeEffects.clear();
-      for (Item tea : SimplyTags.Items.EXCLUSIVE_TEAS.getAllElements()) {
+      for (Item tea : SimplyTags.Items.EXCLUSIVE_TEAS.getValues()) {
         curativeEffects.add(new ItemStack(tea));
       }
 

@@ -32,13 +32,13 @@ public final class Util {
      */
     public static List<ItemStack> getBlockLoot(BlockState state, ServerWorld world, BlockPos pos, @Nullable PlayerEntity player, ItemStack tool, ResourceLocation location) {
         LootContext.Builder builder = new LootContext.Builder(world)
-            .withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos))
+            .withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(pos))
             .withParameter(LootParameters.BLOCK_STATE, state)
-            .withNullableParameter(LootParameters.BLOCK_ENTITY, world.getTileEntity(pos))
-            .withNullableParameter(LootParameters.THIS_ENTITY, player)
+            .withOptionalParameter(LootParameters.BLOCK_ENTITY, world.getBlockEntity(pos))
+            .withOptionalParameter(LootParameters.THIS_ENTITY, player)
             .withParameter(LootParameters.TOOL, tool);
-        LootContext context = builder.build(LootParameterSets.BLOCK);
-        LootTable table = world.getServer().getLootTableManager().getLootTableFromLocation(location);
-        return table.generate(context);
+        LootContext context = builder.create(LootParameterSets.BLOCK);
+        LootTable table = world.getServer().getLootTables().get(location);
+        return table.getRandomItems(context);
     }
 }

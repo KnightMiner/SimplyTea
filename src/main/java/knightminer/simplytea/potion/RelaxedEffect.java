@@ -11,14 +11,14 @@ public class RelaxedEffect extends Effect {
 	}
 
 	@Override
-	public void performEffect(LivingEntity entityLivingBaseIn, int amplifier) {
+	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier) {
 		if (entityLivingBaseIn.getHealth() < entityLivingBaseIn.getMaxHealth()) {
 			entityLivingBaseIn.heal(1.0F);
 		}
 	}
 
 	@Override
-	public boolean isReady(int duration, int amplifier) {
+	public boolean isDurationEffectTick(int duration, int amplifier) {
 		// at level 1, 1 half heart every 60 seconds
 		// level 2, every 30 seconds
 		// level 3, every 20 seconds

@@ -34,45 +34,47 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class TeaTrunkBlock extends Block {
 	public static final EnumProperty<TrunkType> TYPE = EnumProperty.create("type", TrunkType.class);
 	public static final BooleanProperty CLIPPED = BooleanProperty.create("clipped");
 
 	public static final ResourceLocation LEAVES_DROPS = new ResourceLocation(SimplyTea.MOD_ID, "blocks/tea_leaves");
-	public static final VoxelShape BOUNDS_STUMP = Block.makeCuboidShape(6, 0, 6, 10, 16, 10);
+	public static final VoxelShape BOUNDS_STUMP = Block.box(6, 0, 6, 10, 16, 10);
 	public static final VoxelShape[] BOUNDS_UNCLIPPED = {
-			Block.makeCuboidShape(2, 0, 2, 14, 16, 14), // Bottom
-			Block.makeCuboidShape(0, 0, 0, 16, 16, 16), // Middle
-			Block.makeCuboidShape(2, 0, 2, 14, 12, 14), // Top
-			Block.makeCuboidShape(2, 2, 0, 14, 14, 12), // North
-			Block.makeCuboidShape(4, 2, 2, 16, 14, 14), // East
-			Block.makeCuboidShape(2, 2, 4, 14, 14, 16), // South
-			Block.makeCuboidShape(0, 2, 2, 12, 14, 14)  // West
+			Block.box(2, 0, 2, 14, 16, 14), // Bottom
+			Block.box(0, 0, 0, 16, 16, 16), // Middle
+			Block.box(2, 0, 2, 14, 12, 14), // Top
+			Block.box(2, 2, 0, 14, 14, 12), // North
+			Block.box(4, 2, 2, 16, 14, 14), // East
+			Block.box(2, 2, 4, 14, 14, 16), // South
+			Block.box(0, 2, 2, 12, 14, 14)  // West
 	};
 	public static final VoxelShape[] BOUNDS_CLIPPED = {
-			Block.makeCuboidShape(6.5, 0, 6.5, 9.5, 16, 9.5), // Bottom
-			Block.makeCuboidShape(6.5, 0, 6.5, 9.5, 16, 9.5), // Middle
-			Block.makeCuboidShape(6.5, 0, 6.5, 9.5, 8, 9.5), // Top
-			Block.makeCuboidShape(6.5, 6.5, 0, 9.5, 9.5, 8), // North
-			Block.makeCuboidShape(8, 6.5, 6.5, 16, 9.5, 9.5), // East
-			Block.makeCuboidShape(6.5, 6.5, 8, 9.5, 9.5, 16), // South
-			Block.makeCuboidShape(0, 6.5, 6.5, 8, 9.5, 9.5) // West
+			Block.box(6.5, 0, 6.5, 9.5, 16, 9.5), // Bottom
+			Block.box(6.5, 0, 6.5, 9.5, 16, 9.5), // Middle
+			Block.box(6.5, 0, 6.5, 9.5, 8, 9.5), // Top
+			Block.box(6.5, 6.5, 0, 9.5, 9.5, 8), // North
+			Block.box(8, 6.5, 6.5, 16, 9.5, 9.5), // East
+			Block.box(6.5, 6.5, 8, 9.5, 9.5, 16), // South
+			Block.box(0, 6.5, 6.5, 8, 9.5, 9.5) // West
 	};
 
 	public TeaTrunkBlock(Properties props) {
 		super(props);
 
-		this.setDefaultState(this.stateContainer.getBaseState().with(TYPE, TrunkType.STUMP).with(CLIPPED, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(TYPE, TrunkType.STUMP).setValue(CLIPPED, false));
 	}
 
 	@Deprecated
 	@Override
 	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		super.tick(state, world, pos, random);
-		if(state.getBlock() == this && state.get(CLIPPED)) {
+		if(state.getBlock() == this && state.getValue(CLIPPED)) {
 			if (random.nextFloat() < Config.SERVER.tree.regrowthChance()) {
-				world.setBlockState(pos, state.with(CLIPPED, false));
-				world.notifyBlockUpdate(pos, state, state.with(CLIPPED, false), 8);
+				world.setBlockAndUpdate(pos, state.setValue(CLIPPED, false));
+				world.sendBlockUpdated(pos, state, state.setValue(CLIPPED, false), 8);
 			}
 		}
 	}
@@ -83,30 +85,30 @@ public class TeaTrunkBlock extends Block {
 	}
 
 	@Deprecated
-	public ActionResultType func_225533_a_(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-		if(state.getBlock() != this || state.get(CLIPPED) || state.get(TYPE) == TrunkType.STUMP) {
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+		if(state.getBlock() != this || state.getValue(CLIPPED) || state.getValue(TYPE) == TrunkType.STUMP) {
 			return ActionResultType.PASS;
 		}
 
-		ItemStack heldItem = player.getHeldItem(hand);
+		ItemStack heldItem = player.getItemInHand(hand);
 		Item item = heldItem.getItem();
 		if(item instanceof ShearsItem || item.getToolTypes(heldItem).contains(SimplyTea.SHEAR_TYPE)) {
 			ItemStack stack = heldItem.copy();
-			stack.damageItem(1, player, (playerEntity) -> {
-				playerEntity.sendBreakAnimation(hand);
+			stack.hurtAndBreak(1, player, (playerEntity) -> {
+				playerEntity.broadcastBreakEvent(hand);
 			});
-			player.setHeldItem(hand, stack);
+			player.setItemInHand(hand, stack);
 
 			if (world instanceof ServerWorld) {
 				List<ItemStack> drops = Util.getBlockLoot(state, (ServerWorld)world, pos, player, heldItem, LEAVES_DROPS);
 				for (ItemStack drop : drops) {
-					spawnAsEntity(world, pos, drop);
+					popResource(world, pos, drop);
 				}
 			}
 
-			world.setBlockState(pos, state.with(CLIPPED, true), 8);
-			world.notifyBlockUpdate(pos, state, state.with(CLIPPED, true), 8);
-			world.playSound(player, pos, SoundEvents.ENTITY_SHEEP_SHEAR, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.setBlock(pos, state.setValue(CLIPPED, true), 8);
+			world.sendBlockUpdated(pos, state, state.setValue(CLIPPED, true), 8);
+			world.playSound(player, pos, SoundEvents.SHEEP_SHEAR, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
@@ -118,21 +120,21 @@ public class TeaTrunkBlock extends Block {
 		if(state.getBlock() != this) {
 			return BOUNDS_STUMP;
 		}
-		TrunkType type = state.get(TYPE);
+		TrunkType type = state.getValue(TYPE);
 		if (type == TrunkType.STUMP) {
 			return BOUNDS_STUMP;
 		}
 
-		return (state.get(CLIPPED) ? BOUNDS_CLIPPED : BOUNDS_UNCLIPPED)[type.getIndex() - 1];
+		return (state.getValue(CLIPPED) ? BOUNDS_CLIPPED : BOUNDS_UNCLIPPED)[type.getIndex() - 1];
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(TYPE, CLIPPED);
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {}
+	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {}
 
 	public static enum TrunkType implements IStringSerializable {
 		STUMP,
@@ -154,7 +156,7 @@ public class TeaTrunkBlock extends Block {
 		}
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return this.name().toLowerCase(Locale.US);
 		}
 

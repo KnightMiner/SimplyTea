@@ -1,19 +1,26 @@
 buildscript {
   repositories {
-    maven { url = 'https://files.minecraftforge.net/maven' }
+    maven { url = 'https://maven.minecraftforge.net' }
     jcenter()
     mavenCentral()
+    maven {
+      name "Parchment"
+      url "https://maven.parchmentmc.org"
+    }
   }
   dependencies {
-    classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+    classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+    classpath 'org.parchmentmc:librarian:1.+'
   }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 group = 'knightminer'
 archivesBaseName = 'simplytea'
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 configurations {
     deployerJars
@@ -30,7 +37,7 @@ sourceSets {
 }
 
 minecraft {
-  mappings channel: 'snapshot', version: mappings_version
+  mappings channel: 'official', version: minecraft_version
   accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
   
   runs {
@@ -84,12 +91,6 @@ minecraft {
       }
     }
   }
-}
-
-// Need this here so eclipse task generates correctly.
-sourceCompatibility = targetCompatibility = "1.8"
-compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
 }
 
 dependencies {

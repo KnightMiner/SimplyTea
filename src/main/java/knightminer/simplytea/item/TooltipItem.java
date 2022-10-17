@@ -14,16 +14,18 @@ import net.minecraftforge.common.util.Lazy;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class TooltipItem extends Item {
     private final Lazy<ITextComponent> tooltipLine;
     public TooltipItem(Properties props) {
         super(props);
-        tooltipLine = Lazy.of(()->new TranslationTextComponent(this.getTranslationKey() + ".tooltip").mergeStyle(TextFormatting.GRAY));
+        tooltipLine = Lazy.of(()->new TranslationTextComponent(this.getDescriptionId() + ".tooltip").withStyle(TextFormatting.GRAY));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(tooltipLine.get());
     }
 }

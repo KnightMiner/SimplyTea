@@ -10,7 +10,7 @@ public class CaffeinatedEffect extends Effect {
 	public CaffeinatedEffect() {
 		super(EffectType.BENEFICIAL, 0x66300E);
 
-		this.addAttributesModifier(Attributes.MOVEMENT_SPEED, "7BB42B36-75AC-448D-9BE2-B318E42D6898", 0.06, Operation.MULTIPLY_TOTAL);
-		this.addAttributesModifier(Attributes.ATTACK_SPEED, "C3B3B80D-B94D-4C67-83FC-5A893EB98230", 0.05, Operation.MULTIPLY_TOTAL);
+		this.addAttributeModifier(Attributes.MOVEMENT_SPEED, "7BB42B36-75AC-448D-9BE2-B318E42D6898", 0.06, Operation.MULTIPLY_TOTAL);
+		this.addAttributeModifier(Attributes.ATTACK_SPEED, "C3B3B80D-B94D-4C67-83FC-5A893EB98230", 0.05, Operation.MULTIPLY_TOTAL);
 	}
 }
