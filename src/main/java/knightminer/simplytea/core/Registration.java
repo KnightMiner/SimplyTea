@@ -1,7 +1,6 @@
 package knightminer.simplytea.core;
 
 import knightminer.simplytea.SimplyTea;
-import knightminer.simplytea.block.TeaSaplingBlock;
 import knightminer.simplytea.block.TeaTrunkBlock;
 import knightminer.simplytea.data.AddEntryLootModifier;
 import knightminer.simplytea.data.gen.BlockTagGenerator;
@@ -22,6 +21,7 @@ import knightminer.simplytea.potion.InvigoratedEffect;
 import knightminer.simplytea.potion.RelaxedEffect;
 import knightminer.simplytea.potion.RestfulEffect;
 import knightminer.simplytea.worldgen.TeaTreeFeature;
+import knightminer.simplytea.worldgen.TeaTreeGrower;
 import knightminer.simplytea.worldgen.TreeGenEnabledPlacement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -43,6 +43,7 @@ import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -91,7 +92,7 @@ public class Registration {
   public static final MobEffect enderfalling = injected();
 
   /* Blocks */
-  public static final TeaSaplingBlock tea_sapling = injected();
+  public static final SaplingBlock tea_sapling = injected();
   public static final Block tea_trunk = injected();
   public static final Block tea_fence = injected();
   public static final Block tea_fence_gate = injected();
@@ -161,7 +162,7 @@ public class Registration {
     register(r, new FenceGateBlock(props), "tea_fence_gate");
 
     props = Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS);
-    register(r, new TeaSaplingBlock(props), "tea_sapling");
+    register(r, new SaplingBlock(new TeaTreeGrower(), props), "tea_sapling");
 
     props = Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD).randomTicks();
     register(r, new TeaTrunkBlock(props), "tea_trunk");
