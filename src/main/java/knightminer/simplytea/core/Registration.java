@@ -26,10 +26,13 @@ import knightminer.simplytea.worldgen.TreeGenEnabledPlacement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -44,6 +47,7 @@ import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -264,6 +268,13 @@ public class Registration {
       // too much caffiene to sleep
       RestfulEffect.addConflict(caffeinated);
       RestfulEffect.addConflict(invigorated);
+
+      CauldronInteraction.WATER.put(teapot, (state, level, pos, player, hand, stack) -> {
+        if (Config.SERVER.teapot.fillFromCauldron()) {
+          return CauldronInteraction.fillBucket(state, level, pos, player, hand, stack, new ItemStack(teapot_water), s -> s.getValue(LayeredCauldronBlock.LEVEL) == 3, SoundEvents.BUCKET_FILL);
+        }
+        return InteractionResult.PASS;
+      });
     });
 
     // configured features

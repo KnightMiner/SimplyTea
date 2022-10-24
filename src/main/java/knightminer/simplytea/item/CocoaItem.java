@@ -1,25 +1,21 @@
 package knightminer.simplytea.item;
 
 import knightminer.simplytea.core.Config;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.PotionEvent.PotionRemoveEvent;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class CocoaItem extends TeaCupItem {
 	public static final String CINNAMON_TAG = "with_cinnamon";
@@ -59,7 +55,6 @@ public class CocoaItem extends TeaCupItem {
 		return stack;
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		if (hasHoney(stack, CINNAMON_TAG)) {

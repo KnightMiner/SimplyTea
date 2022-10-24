@@ -17,10 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
-import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -39,15 +36,6 @@ public class TeapotItem extends TooltipItem {
 		if (rayTrace.getType() == Type.BLOCK) {
 			BlockPos pos = rayTrace.getBlockPos();
 			BlockState state = world.getBlockState(pos);
-			Block block = state.getBlock();
-
-			// try filling from the cauldron
-			// TODO: move to new cauldron logic
-			if (Config.SERVER.teapot.fillFromCauldron() && block == Blocks.CAULDRON && state.getValue(LayeredCauldronBlock.LEVEL) == 3) {
-				world.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), Block.UPDATE_ALL);
-				stack = ItemUtils.createFilledResult(stack, player, new ItemStack(Registration.teapot_water));
-				return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
-			}
 
 			// we use name for lookup to prevent default fluid conflicts
 			Fluid fluid = state.getFluidState().getType();
