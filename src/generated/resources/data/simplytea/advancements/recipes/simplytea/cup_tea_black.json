@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "simplytea:teabag_black"
+            "items": [
+              "simplytea:teabag_black"
+            ]
           }
         ]
       }
