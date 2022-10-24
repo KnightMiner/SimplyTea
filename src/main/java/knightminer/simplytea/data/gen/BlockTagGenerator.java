@@ -2,8 +2,8 @@ package knightminer.simplytea.data.gen;
 
 import knightminer.simplytea.SimplyTea;
 import knightminer.simplytea.core.Registration;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -28,5 +28,7 @@ public class BlockTagGenerator extends BlockTagsProvider {
 		this.tag(Tags.Blocks.FENCES_WOODEN).add(Registration.tea_fence);
 		this.tag(BlockTags.FENCE_GATES).add(Registration.tea_fence_gate);
 		this.tag(Tags.Blocks.FENCE_GATES_WOODEN).add(Registration.tea_fence_gate);
+
+		this.tag(BlockTags.MINEABLE_WITH_AXE).add(Registration.tea_trunk, Registration.tea_fence, Registration.tea_fence_gate);
 	}
 }

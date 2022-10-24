@@ -7,6 +7,7 @@ cd28e778c1f3ad04fda5b24471724ecf92ad2c0a data/forge/tags/items/ice_cubes.json
 fa481b225c4bc6e37112a04a501dcb7fa5e36638 data/forge/tags/items/rods/wooden.json
 972dcbfbbce4b47cd223f5a2b677b63bbabd7dc9 data/minecraft/tags/blocks/fence_gates.json
 22a494ec41cd76dafdb73877f14d0f0a412a22dd data/minecraft/tags/blocks/flower_pots.json
+fa0753612874341feaf7690b74e178db5020fbf1 data/minecraft/tags/blocks/mineable/axe.json
 fc58d7df4989d523883c28617d89c90d6000f218 data/minecraft/tags/blocks/saplings.json
 1c7fc7063e430f6ce9671c42e9a7804b70d9f2e5 data/minecraft/tags/blocks/wooden_fences.json
 fc58d7df4989d523883c28617d89c90d6000f218 data/minecraft/tags/items/saplings.json
