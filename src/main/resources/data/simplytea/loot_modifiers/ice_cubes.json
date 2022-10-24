@@ -20,7 +20,7 @@
     },
     {
       "condition": "forge:can_tool_perform_action",
-      "type": "pickaxe_dig"
+      "action": "pickaxe_dig"
     },
     {
       "condition": "minecraft:inverted",
