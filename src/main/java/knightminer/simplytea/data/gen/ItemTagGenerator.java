@@ -23,14 +23,14 @@ public class ItemTagGenerator extends ItemTagsProvider {
 
 	@Override
 	protected void addTags() {
-		this.tag(Tags.Items.RODS_WOODEN).add(Registration.tea_stick);
-		this.tag(SimplyTags.Items.ICE_CUBES).add(Registration.ice_cube);
+		this.tag(Tags.Items.RODS_WOODEN).add(Registration.tea_stick.get());
+		this.tag(SimplyTags.Items.ICE_CUBES).add(Registration.ice_cube.get());
 		this.tag(SimplyTags.Items.EXCLUSIVE_TEAS).add(
-				Registration.cup_tea_green, Registration.cup_tea_black,
-				Registration.cup_tea_iced, Registration.cup_tea_chai, Registration.cup_tea_chorus);
-		this.tag(SimplyTags.Items.TEAS).add(Registration.cup_tea_floral).addTag(SimplyTags.Items.EXCLUSIVE_TEAS);
+				Registration.cup_tea_green.get(), Registration.cup_tea_black.get(),
+				Registration.cup_tea_iced.get(), Registration.cup_tea_chai.get(), Registration.cup_tea_chorus.get());
+		this.tag(SimplyTags.Items.TEAS).add(Registration.cup_tea_floral.get()).addTag(SimplyTags.Items.EXCLUSIVE_TEAS);
 
-		this.tag(SimplyTags.Items.TEA_CROP).add(Registration.tea_leaf);
+		this.tag(SimplyTags.Items.TEA_CROP).add(Registration.tea_leaf.get());
 
 		// saplings
 		copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);

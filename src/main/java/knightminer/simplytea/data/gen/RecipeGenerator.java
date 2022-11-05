@@ -18,6 +18,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -62,75 +63,75 @@ public class RecipeGenerator extends RecipeProvider {
 	@Override
 	protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
 		// ingredients
-		SimpleCookingRecipeBuilder.cooking(Ingredient.of(SimplyTags.Items.TEA_CROP), black_tea, 0.35f, 200, RecipeSerializer.SMOKING_RECIPE)
+		SimpleCookingRecipeBuilder.cooking(Ingredient.of(SimplyTags.Items.TEA_CROP), black_tea.get(), 0.35f, 200, RecipeSerializer.SMOKING_RECIPE)
 												.unlockedBy("has_item", has(SimplyTags.Items.TEA_CROP))
 												.save(consumer);
 
 		// wood
-		ShapedRecipeBuilder.shaped(tea_fence, 2)
+		ShapedRecipeBuilder.shaped(tea_fence.get(), 2)
 											 .pattern("sss").pattern("sss")
-											 .define('s', tea_stick)
-											 .unlockedBy("has_stick", has(tea_stick))
+											 .define('s', tea_stick.get())
+											 .unlockedBy("has_stick", has(tea_stick.get()))
 											 .save(consumer);
-		ShapedRecipeBuilder.shaped(tea_fence_gate)
+		ShapedRecipeBuilder.shaped(tea_fence_gate.get())
 											 .pattern("sss").pattern(" s ").pattern("sss")
-											 .define('s', tea_stick)
-											 .unlockedBy("has_stick", has(tea_stick))
+											 .define('s', tea_stick.get())
+											 .unlockedBy("has_stick", has(tea_stick.get()))
 											 .save(consumer);
 
 		// ceramics
-		ShapedRecipeBuilder.shaped(unfired_cup, 2)
+		ShapedRecipeBuilder.shaped(unfired_cup.get(), 2)
 											 .pattern("CBC").pattern(" C ")
 											 .define('C', Items.CLAY_BALL)
 											 .define('B', Items.BONE_MEAL)
 											 .unlockedBy("has_item", has(Items.CLAY_BALL))
 											 .save(consumer);
-		fire(consumer, unfired_cup, cup);
-		ShapedRecipeBuilder.shaped(unfired_teapot)
+		fire(consumer, unfired_cup.get(), cup.get());
+		ShapedRecipeBuilder.shaped(unfired_teapot.get())
 											 .pattern("CBC").pattern("CC ")
 											 .define('C', Items.CLAY_BALL)
 											 .define('B', Items.BONE_MEAL)
 											 .unlockedBy("has_item", has(Items.CLAY_BALL))
 											 .save(consumer);
-		fire(consumer, unfired_teapot, teapot);
+		fire(consumer, unfired_teapot.get(), teapot.get());
 
 		// teapots
-		boil(consumer, teapot_water, teapot_hot);
-		boil(consumer, teapot_milk, teapot_frothed);
+		boil(consumer, teapot_water.get(), teapot_hot.get());
+		boil(consumer, teapot_milk.get(), teapot_frothed.get());
 
 		// teabags
-		ShapedRecipeBuilder.shaped(teabag, 4)
+		ShapedRecipeBuilder.shaped(teabag.get(), 4)
 											 .pattern("  S").pattern("PP ").pattern("PP ")
 											 .define('S', Items.STRING)
 											 .define('P', Items.PAPER)
 											 .unlockedBy("has_floral", has(Items.DANDELION))
-											 .unlockedBy("has_leaf", has(tea_leaf))
+											 .unlockedBy("has_leaf", has(tea_leaf.get()))
 											 .save(consumer);
 
 		// basic tea
-		addTeaWithBag(consumer, Items.DANDELION, teabag_floral, cup_tea_floral);
-		addTeaWithBag(consumer, tea_leaf, teabag_green, cup_tea_green);
-		addTeaWithBag(consumer, black_tea, teabag_black, cup_tea_black);
-		addTeaWithBag(consumer, chorus_petal, teabag_chorus, cup_tea_chorus);
+		addTeaWithBag(consumer, Items.DANDELION, teabag_floral.get(), cup_tea_floral.get());
+		addTeaWithBag(consumer, tea_leaf.get(), teabag_green.get(), cup_tea_green.get());
+		addTeaWithBag(consumer, black_tea.get(), teabag_black.get(), cup_tea_black.get());
+		addTeaWithBag(consumer, chorus_petal.get(), teabag_chorus.get(), cup_tea_chorus.get());
 
 		// advanced tea
-		addTea(consumer, cup_cocoa, Items.COCOA_BEANS, Items.COCOA_BEANS, teapot_frothed);
-		addHoney(consumer, cup_cocoa, tea_stick, CocoaItem.CINNAMON_TAG);
-		addTea(consumer, cup_tea_chai, teabag_black, tea_stick, teapot_frothed);
-		addHoney(consumer, cup_tea_chai);
-		ShapelessRecipeBuilder.shapeless(cup_tea_iced)
-													.requires(cup)
-													.requires(teabag_green)
+		addTea(consumer, cup_cocoa.get(), Items.COCOA_BEANS, Items.COCOA_BEANS, teapot_frothed.get());
+		addHoney(consumer, cup_cocoa.get(), tea_stick.get(), CocoaItem.CINNAMON_TAG);
+		addTea(consumer, cup_tea_chai.get(), teabag_black.get(), tea_stick.get(), teapot_frothed.get());
+		addHoney(consumer, cup_tea_chai.get());
+		ShapelessRecipeBuilder.shapeless(cup_tea_iced.get())
+													.requires(cup.get())
+													.requires(teabag_green.get())
 													.requires(Items.APPLE)
 													.requires(SimplyTags.Items.ICE_CUBES)
 													.unlockedBy("has_ice", has(SimplyTags.Items.ICE_CUBES))
 													.save(consumer);
-		addHoney(consumer, cup_tea_iced);
+		addHoney(consumer, cup_tea_iced.get());
 	}
 
 	/** Suffixes the item ID location with the given text */
 	private static ResourceLocation suffix(ItemLike item, String suffix) {
-		ResourceLocation name = Objects.requireNonNull(item.asItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem()));
 		return new ResourceLocation(name.getNamespace(), name.getPath() + suffix);
 	}
 
@@ -154,7 +155,7 @@ public class RecipeGenerator extends RecipeProvider {
 	/** Adds a recipe to pour tea */
 	private static void addTea(Consumer<FinishedRecipe> consumer, ItemLike filledCup, ItemLike... ingredients) {
 		ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(filledCup);
-		builder.requires(cup);
+		builder.requires(cup.get());
 		for (ItemLike ingredient : ingredients) {
 			builder.requires(ingredient);
 		}
@@ -188,12 +189,12 @@ public class RecipeGenerator extends RecipeProvider {
 	private static void addTeaWithBag(Consumer<FinishedRecipe> consumer, ItemLike leaf, ItemLike filledTeabag, ItemLike filledCup) {
 		ShapelessRecipeBuilder.shapeless(filledTeabag)
 													.group("simplytea:teabag")
-													.requires(teabag)
+													.requires(teabag.get())
 													.requires(leaf)
 													.requires(leaf)
 													.unlockedBy("has_leaf", has(leaf))
 													.save(consumer);
-		addTea(consumer, filledCup, filledTeabag, teapot_hot);
+		addTea(consumer, filledCup, filledTeabag, teapot_hot.get());
 		addHoney(consumer, filledCup);
 	}
 }
