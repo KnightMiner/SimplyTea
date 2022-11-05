@@ -25,8 +25,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 /**
- * Loot modifier to inject an additional loot entry into an existing table Based
- * on code from Mantle
+ * Loot modifier to inject an additional loot entry into an existing table
+ * Based on code from Mantle
  */
 public class AddEntryLootModifier extends LootModifier {
 
