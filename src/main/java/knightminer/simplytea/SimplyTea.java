@@ -17,7 +17,6 @@ public class SimplyTea {
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
 		MinecraftForge.EVENT_BUS.register(this);
-		
 		SimplyTags.init();
 	}
 }
