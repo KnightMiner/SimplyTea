@@ -84,11 +84,11 @@ public class TeaDrink extends Drink {
 
   /** Tea effect types */
   public enum TeaEffect {
-    RESTFUL(true, () -> Registration.restful.get(), "Heals one heart after sleeping per level"),
-    RELAXED(true, () -> Registration.relaxed.get(), "Heals 0.5 hearts every (60 / level) seconds"),
-    CAFFEINATED(false, () -> Registration.caffeinated.get(), "Grants +6% movement and +5% attack speed"),
-    INVIGORATED(false, () -> Registration.invigorated.get(), "Grants +1 attack damage and 0.5 knockback"),
-    ENDERFALLING(false, () -> Registration.enderfalling.get(), "Grants immunity to ender pearl damage and reduces fall damage"),
+    RESTFUL(true, () -> Registration.restful, "Heals one heart after sleeping per level"),
+    RELAXED(true, () -> Registration.relaxed, "Heals 0.5 hearts every (60 / level) seconds"),
+    CAFFEINATED(false, () -> Registration.caffeinated, "Grants +6% movement and +5% attack speed"),
+    INVIGORATED(false, () -> Registration.invigorated, "Grants +1 attack damage and 0.5 knockback"),
+    ENDERFALLING(false, () -> Registration.enderfalling, "Grants immunity to ender pearl damage and reduces fall damage"),
     ABSORPTION(true, () -> MobEffects.ABSORPTION, "Grants 2 temporary absorption hearts per level for a short time");
 
     private final Supplier<MobEffect> effectSupplier;

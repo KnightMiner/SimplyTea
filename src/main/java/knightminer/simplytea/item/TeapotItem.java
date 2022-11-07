@@ -43,7 +43,7 @@ public class TeapotItem extends TooltipItem {
 				// try for water or milk using the config lists
 				Item item = null;
 				if (fluid.is(FluidTags.WATER)) {
-					item = Registration.teapot_water.get();
+					item = Registration.teapot_water;
 				} // TODO: milk when mods make a standard
 
 				// if either one is found, update the stack
@@ -77,7 +77,7 @@ public class TeapotItem extends TooltipItem {
 			player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
 
 			// fill with milk
-			player.setItemInHand(hand, ItemUtils.createFilledResult(stack.copy(), player, new ItemStack(Registration.teapot_milk.get())));
+			player.setItemInHand(hand, ItemUtils.createFilledResult(stack.copy(), player, new ItemStack(Registration.teapot_milk)));
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;

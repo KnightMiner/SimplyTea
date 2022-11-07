@@ -27,7 +27,7 @@ public class TeaTreeFeature extends Feature<NoneFeatureConfiguration> {
 		RandomSource random = context.random();
 		if (world.getBlockState(pos).isAir()) {
 			// TODO: move to tree?
-			BlockState trunk = Registration.tea_trunk.get().defaultBlockState().setValue(TeaTrunkBlock.CLIPPED, false);
+			BlockState trunk = Registration.tea_trunk.defaultBlockState().setValue(TeaTrunkBlock.CLIPPED, false);
 			// tree stump
 			world.setBlock(pos, trunk.setValue(TeaTrunkBlock.TYPE, TrunkType.STUMP), 3);
 			world.setBlock(pos.above(), trunk.setValue(TeaTrunkBlock.TYPE, TrunkType.BOTTOM), 3);

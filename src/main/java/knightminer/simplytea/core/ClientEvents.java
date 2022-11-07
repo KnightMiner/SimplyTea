@@ -21,15 +21,15 @@ public class ClientEvents {
         return FoliageColor.getDefaultColor();
       }
       return BiomeColors.getAverageFoliageColor(world, pos);
-    }, Registration.tea_trunk.get());
+    }, Registration.tea_trunk);
   }
 
   @SubscribeEvent
   public static void registerMisc(FMLClientSetupEvent event) {
     // set render types
     RenderType cutout_mipped = RenderType.cutoutMipped();
-    ItemBlockRenderTypes.setRenderLayer(Registration.tea_sapling.get(), cutout_mipped);
-    ItemBlockRenderTypes.setRenderLayer(Registration.potted_tea_sapling.get(), cutout_mipped);
-    ItemBlockRenderTypes.setRenderLayer(Registration.tea_trunk.get(), cutout_mipped);
+    ItemBlockRenderTypes.setRenderLayer(Registration.tea_sapling, cutout_mipped);
+    ItemBlockRenderTypes.setRenderLayer(Registration.potted_tea_sapling, cutout_mipped);
+    ItemBlockRenderTypes.setRenderLayer(Registration.tea_trunk, cutout_mipped);
   }
 }

@@ -79,7 +79,7 @@ public class TeaTrunkBlock extends Block {
 
 	@Override
 	public ItemStack getCloneItemStack(BlockGetter pLevel, BlockPos pPos, BlockState pState) {
-		return new ItemStack(Registration.tea_sapling.get());
+		return new ItemStack(Registration.tea_sapling);
 	}
 
 	@Override

@@ -39,7 +39,7 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return Registration.shapeless_honey.get();
+		return Registration.shapeless_honey;
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 
 		@Override
 		public RecipeSerializer<?> getType() {
-			return Registration.shapeless_honey.get();
+			return Registration.shapeless_honey;
 		}
 
 		@Override

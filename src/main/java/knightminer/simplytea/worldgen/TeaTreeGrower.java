@@ -10,7 +10,7 @@ public class TeaTreeGrower extends AbstractTreeGrower {
 
 	@Override
 	protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource pRandom, boolean pLargeHive) {
-		return Registration.configured_tea_tree.getHolder().get();
+		return Registration.configured_tea_tree;
 	}
 
 }

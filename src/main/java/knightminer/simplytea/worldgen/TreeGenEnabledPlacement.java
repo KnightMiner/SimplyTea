@@ -23,6 +23,6 @@ public class TreeGenEnabledPlacement extends PlacementFilter {
 
 	@Override
 	public PlacementModifierType<?> type() {
-		return Registration.tree_gen_enabled.get();
+		return Registration.tree_gen_enabled;
 	}
 }

@@ -28,13 +28,13 @@ public class Events {
     // if caffeinated, remove that with no restful benefits
     Player player = event.getEntity();
     if (RestfulEffect.removeConflicts(player)) {
-      player.removeEffect(Registration.restful.get());
+      player.removeEffect(Registration.restful);
     } else {
-      MobEffectInstance effect = player.getEffect(Registration.restful.get());
+      MobEffectInstance effect = player.getEffect(Registration.restful);
       // if restful, heal based on the potion level and remove it
       if (effect != null) {
         player.heal((effect.getAmplifier()+1)*2);
-        player.removeEffect(Registration.restful.get());
+        player.removeEffect(Registration.restful);
       }
     }
 
@@ -43,7 +43,7 @@ public class Events {
   @SubscribeEvent
   static void entityFall(LivingFallEvent event) {
     LivingEntity entity = event.getEntity();
-    MobEffectInstance effect = entity.getEffect(Registration.enderfalling.get());
+    MobEffectInstance effect = entity.getEffect(Registration.enderfalling);
     if (effect != null) {
       // every level halves the damage of the previous, but start at 1/4
       event.setDamageMultiplier(event.getDamageMultiplier() * (float)Math.pow(2, -effect.getAmplifier()-3));
@@ -52,7 +52,7 @@ public class Events {
 
   @SubscribeEvent
   static void throwEnderPearl(EntityTeleportEvent.EnderPearl event) {
-    if (event.getPlayer().hasEffect(Registration.enderfalling.get())) {
+    if (event.getPlayer().hasEffect(Registration.enderfalling)) {
       event.setAttackDamage(0);
     }
   }
