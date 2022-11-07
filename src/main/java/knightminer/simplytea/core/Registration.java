@@ -89,95 +89,89 @@ public class Registration {
   };
 
   /* Potions */
-  public static MobEffect restful = injected();
-  public static MobEffect relaxed = injected();
-  public static MobEffect caffeinated = injected();
-  public static MobEffect invigorated = injected();
-  public static MobEffect enderfalling = injected();
+  public static MobEffect restful;
+  public static MobEffect relaxed;
+  public static MobEffect caffeinated;
+  public static MobEffect invigorated;
+  public static MobEffect enderfalling;
 
   /* Blocks */
-  public static SaplingBlock tea_sapling = injected();
-  public static Block tea_trunk = injected();
-  public static Block tea_fence = injected();
-  public static Block tea_fence_gate = injected();
-  public static Block potted_tea_sapling = injected();
+  public static SaplingBlock tea_sapling;
+  public static Block tea_trunk;
+  public static Block tea_fence;
+  public static Block tea_fence_gate;
+  public static Block potted_tea_sapling;
 
   /* Items */
   /* Crafting */
-  public static Item tea_leaf = injected();
-  public static Item black_tea = injected();
-  public static Item tea_stick = injected();
-  public static Item ice_cube = injected();
-  public static Item chorus_petal = injected();
+  public static Item tea_leaf;
+  public static Item black_tea;
+  public static Item tea_stick;
+  public static Item ice_cube;
+  public static Item chorus_petal;
 
   /* Tea bags */
-  public static Item teabag = injected();
-  public static Item teabag_black = injected();
-  public static Item teabag_floral = injected();
-  public static Item teabag_chorus = injected();
-  public static Item teabag_green = injected();
+  public static Item teabag;
+  public static Item teabag_black;
+  public static Item teabag_floral;
+  public static Item teabag_chorus;
+  public static Item teabag_green;
 
   /* Tea pots */
-  public static Item unfired_teapot = injected();
-  public static Item teapot = injected();
-  public static Item teapot_water = injected();
-  public static Item teapot_milk = injected();
-  public static Item teapot_hot = injected();
-  public static Item teapot_frothed = injected();
+  public static Item unfired_teapot;
+  public static Item teapot;
+  public static Item teapot_water;
+  public static Item teapot_milk;
+  public static Item teapot_hot;
+  public static Item teapot_frothed;
 
   /* Drinks */
-  public static Item unfired_cup = injected();
-  public static Item cup = injected();
-  public static Item cup_tea_black = injected();
-  public static Item cup_tea_green = injected();
-  public static Item cup_tea_floral = injected();
-  public static Item cup_tea_chai = injected();
-  public static Item cup_tea_iced = injected();
-  public static Item cup_tea_chorus = injected();
-  public static Item cup_cocoa = injected();
+  public static Item unfired_cup;
+  public static Item cup;
+  public static Item cup_tea_black;
+  public static Item cup_tea_green;
+  public static Item cup_tea_floral;
+  public static Item cup_tea_chai;
+  public static Item cup_tea_iced;
+  public static Item cup_tea_chorus;
+  public static Item cup_cocoa;
 
   /* World Gen */
-  public static PlacementModifierType<TreeGenEnabledPlacement> tree_gen_enabled = injected();
-  public static Feature<NoneFeatureConfiguration> tea_tree = injected();
+  public static PlacementModifierType<TreeGenEnabledPlacement> tree_gen_enabled;
+  public static Feature<NoneFeatureConfiguration> tea_tree;
 
-  public static RecipeSerializer<?> shapeless_honey = injected();
+  public static RecipeSerializer<?> shapeless_honey;
   public static Holder<ConfiguredFeature<NoneFeatureConfiguration,?>> configured_tea_tree;
   public static Holder<PlacedFeature> placed_tea_tree;
 
   @SubscribeEvent
-  static void registerEffects(final RegisterEvent event) {    
+  static void registerObjects(final RegisterEvent event) {    
     event.register(ForgeRegistries.Keys.MOB_EFFECTS, r -> {
-    	restful = register(r, new RestfulEffect(), "restful");
-    	relaxed = register(r, new RelaxedEffect(), "relaxed");
-    	caffeinated = register(r, new CaffeinatedEffect(), "caffeinated");
-    	invigorated = register(r, new InvigoratedEffect(), "invigorated");
-    	enderfalling = register(r, new EnderfallingEffect(), "enderfalling");
+      restful = register(r, new RestfulEffect(), "restful");
+      relaxed = register(r, new RelaxedEffect(), "relaxed");
+      caffeinated = register(r, new CaffeinatedEffect(), "caffeinated");
+      invigorated = register(r, new InvigoratedEffect(), "invigorated");
+      enderfalling = register(r, new EnderfallingEffect(), "enderfalling");
     });
-  }
+    
+    event.register(ForgeRegistries.Keys.BLOCKS, r -> {
+	  Block.Properties props;
 
-  @SubscribeEvent
-  static void registerBlocks(final RegisterEvent event) {
-	event.register(ForgeRegistries.Keys.BLOCKS, r -> {
-		Block.Properties props;
+	  props = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
+	  tea_fence = register(r, new FenceBlock(props), "tea_fence");
+	  tea_fence_gate = register(r, new FenceGateBlock(props), "tea_fence_gate");
 
-	    props = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
-	    tea_fence = register(r, new FenceBlock(props), "tea_fence");
-	    tea_fence_gate = register(r, new FenceGateBlock(props), "tea_fence_gate");
+	  props = Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS);
+	  tea_sapling = register(r, new SaplingBlock(new TeaTreeGrower(), props), "tea_sapling");
 
-	    props = Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS);
-	    tea_sapling = register(r, new SaplingBlock(new TeaTreeGrower(), props), "tea_sapling");
+	  props = Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD).randomTicks();
+	  tea_trunk = register(r, new TeaTrunkBlock(props), "tea_trunk");
 
-	    props = Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD).randomTicks();
-	    tea_trunk = register(r, new TeaTrunkBlock(props), "tea_trunk");
-
-	    props = Block.Properties.of(Material.DECORATION).strength(0f).noOcclusion();
-	    potted_tea_sapling = register(r, new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> tea_sapling, props), "potted_tea_sapling");
-	    ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(new ResourceLocation(SimplyTea.MOD_ID, "tea_sapling"), () -> potted_tea_sapling);
+	  props = Block.Properties.of(Material.DECORATION).strength(0f).noOcclusion();
+	  potted_tea_sapling = register(r, new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> tea_sapling, props), "potted_tea_sapling");
+	  ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(new ResourceLocation(SimplyTea.MOD_ID, "tea_sapling"), () -> potted_tea_sapling);
 	});
-  }
-
-  @SubscribeEvent
-  static void registerItems(final RegisterEvent event) {
+    
     event.register(ForgeRegistries.Keys.ITEMS, r -> {
       Item.Properties props = new Item.Properties().tab(group);
 
@@ -226,26 +220,17 @@ public class Registration {
       cup_tea_chorus = register(r, new TeaCupItem(props.food(Config.SERVER.chorus_tea)), "cup_tea_chorus");
       cup_cocoa = register(r, new CocoaItem(props.food(Config.SERVER.cocoa)), "cup_cocoa");
     });
-  }
-
-  @SubscribeEvent
-  static void registerFeatures(final RegisterEvent event) {
-	event.register(ForgeRegistries.Keys.FEATURES, r -> {
-		tea_tree = register(r, new TeaTreeFeature(), "tea_tree");
+    
+    event.register(ForgeRegistries.Keys.FEATURES, r -> {
+	  tea_tree = register(r, new TeaTreeFeature(), "tea_tree");
 	});
-  }
-
-  @SubscribeEvent
-  static void registerGlobalLootTables(final RegisterEvent event) {
-	event.register(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, r -> {
-		register(r, AddEntryLootModifier.CODEC, "add_loot_entry");
+    
+    event.register(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, r -> {
+	  register(r, AddEntryLootModifier.CODEC, "add_loot_entry");
 	});
-  }
-
-  @SubscribeEvent
-  static void registerRecipeSerializers(final RegisterEvent event) {
-	event.register(ForgeRegistries.Keys.RECIPE_SERIALIZERS, r -> {
-		shapeless_honey = register(r, new ShapelessHoneyRecipe.Serializer(), "shapeless_honey");
+    
+    event.register(ForgeRegistries.Keys.RECIPE_SERIALIZERS, r -> {
+	  shapeless_honey = register(r, new ShapelessHoneyRecipe.Serializer(), "shapeless_honey");
 	});
   }
 
@@ -336,12 +321,5 @@ public class Registration {
   private static void registerBlockItem(RegisterHelper<Item> helper, BlockItem item) {
     ResourceLocation rl = ForgeRegistries.BLOCKS.getKey(item.getBlock());
     register(helper, item, Objects.requireNonNull(rl));
-  }
-
-  /** Helper function to fix IDEA warnings on injected fields */
-  @SuppressWarnings("ConstantConditions")
-  @Nonnull
-  private static <T> T injected() {
-    return null;
   }
 }
