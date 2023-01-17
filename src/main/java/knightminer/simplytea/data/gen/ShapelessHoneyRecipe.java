@@ -22,7 +22,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -76,15 +75,15 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 		NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 		for(int i = 0; i < list.size(); ++i) {
 			ItemStack item = inv.getItem(i);
-			if (item.hasContainerItem() && item.getItem() != tea) {
-				list.set(i, item.getContainerItem());
+			if (item.hasCraftingRemainingItem() && item.getItem() != tea) {
+				list.set(i, item.getCraftingRemainingItem());
 			}
 		}
 
 		return list;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapelessHoneyRecipe> {
+	public static class Serializer implements RecipeSerializer<ShapelessHoneyRecipe> {
 		@Override
 		public ShapelessHoneyRecipe fromJson(ResourceLocation id, JsonObject json) {
 			String group = GsonHelper.getAsString(json, "group");
@@ -156,7 +155,7 @@ public class ShapelessHoneyRecipe extends ShapelessRecipe {
 			if (!group.isEmpty()) {
 				json.addProperty("group", group);
 			}
-			json.addProperty("tea", Objects.requireNonNull(tea.getRegistryName()).toString());
+			json.addProperty("tea", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(tea)).toString());
 			json.add("honey", honey.toJson());
 			json.addProperty("tag", tag);
 		}

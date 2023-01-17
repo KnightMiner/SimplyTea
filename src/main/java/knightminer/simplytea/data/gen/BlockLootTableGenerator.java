@@ -35,8 +35,8 @@ public class BlockLootTableGenerator extends BlockLoot {
 	@Override
 	protected Iterable<Block> getKnownBlocks() {
 		return ForgeRegistries.BLOCKS.getValues().stream()
-																 .filter(block -> SimplyTea.MOD_ID.equals(Objects.requireNonNull(block.getRegistryName()).getNamespace()))
-																 .collect(Collectors.toList());
+			.filter(block -> SimplyTea.MOD_ID.equals(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getNamespace()))
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -48,7 +48,8 @@ public class BlockLootTableGenerator extends BlockLoot {
 			if (name != BuiltInLootTables.EMPTY && set.add(name)) {
 				LootTable.Builder builder = this.map.remove(name);
 				if (builder == null) {
-					throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", name, block.getRegistryName()));
+					ResourceLocation blockName = ForgeRegistries.BLOCKS.getKey(block);
+					throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", name, blockName));
 				}
 
 				consumer.accept(name, builder);
@@ -58,7 +59,8 @@ public class BlockLootTableGenerator extends BlockLoot {
 		// special case leaves builder
 		LootTable.Builder leavesBuilder = this.map.remove(LEAVES_ID);
 		if (leavesBuilder == null) {
-			throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", LEAVES_ID, Registration.tea_tree.getRegistryName()));
+			ResourceLocation rl = ForgeRegistries.FEATURES.getKey(Registration.tea_tree);
+			throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", LEAVES_ID, rl));
 		}
 		consumer.accept(LEAVES_ID, leavesBuilder);
 

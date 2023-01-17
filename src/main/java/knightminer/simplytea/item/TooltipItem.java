@@ -2,7 +2,6 @@ package knightminer.simplytea.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -16,7 +15,7 @@ public class TooltipItem extends Item {
     private final Lazy<Component> tooltipLine;
     public TooltipItem(Properties props) {
         super(props);
-        tooltipLine = Lazy.of(()->new TranslatableComponent(this.getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
+        tooltipLine = Lazy.of(()->Component.translatable(this.getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
     }
 
     @Override

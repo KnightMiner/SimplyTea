@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -32,7 +33,6 @@ import net.minecraftforge.common.ToolActions;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 public class TeaTrunkBlock extends Block {
 	public static final EnumProperty<TrunkType> TYPE = EnumProperty.create("type", TrunkType.class);
@@ -67,7 +67,7 @@ public class TeaTrunkBlock extends Block {
 
 	@Deprecated
 	@Override
-	public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(state, world, pos, random);
 		if(state.getBlock() == this && state.getValue(CLIPPED)) {
 			if (random.nextFloat() < Config.SERVER.tree.regrowthChance()) {

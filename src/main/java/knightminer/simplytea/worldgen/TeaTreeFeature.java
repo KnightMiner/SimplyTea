@@ -1,12 +1,11 @@
 package knightminer.simplytea.worldgen;
 
-import java.util.Random;
-
 import knightminer.simplytea.block.TeaTrunkBlock;
 import knightminer.simplytea.block.TeaTrunkBlock.TrunkType;
 import knightminer.simplytea.core.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,7 +24,7 @@ public class TeaTreeFeature extends Feature<NoneFeatureConfiguration> {
 		BlockPos down = pos.below();
 		WorldGenLevel world = context.level();
 		BlockState soil = world.getBlockState(down);
-		Random random = context.random();
+		RandomSource random = context.random();
 		if (world.getBlockState(pos).isAir()) {
 			// TODO: move to tree?
 			BlockState trunk = Registration.tea_trunk.defaultBlockState().setValue(TeaTrunkBlock.CLIPPED, false);

@@ -18,6 +18,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -130,7 +131,7 @@ public class RecipeGenerator extends RecipeProvider {
 
 	/** Suffixes the item ID location with the given text */
 	private static ResourceLocation suffix(ItemLike item, String suffix) {
-		ResourceLocation name = Objects.requireNonNull(item.asItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem()));
 		return new ResourceLocation(name.getNamespace(), name.getPath() + suffix);
 	}
 

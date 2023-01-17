@@ -4,7 +4,6 @@ import knightminer.simplytea.core.config.TeaDrink;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
@@ -19,7 +18,7 @@ import java.util.List;
 
 public class TeaCupItem extends Item {
 	public static final String HONEY_TAG = "with_honey";
-	private static final Component WITH_HONEY = new TranslatableComponent("item.simplytea.cup.with_honey")
+	private static final Component WITH_HONEY = Component.translatable("item.simplytea.cup.with_honey")
 			.withStyle(style -> style.withColor(TextColor.fromRgb(0xFF9116)));
 
 	public TeaCupItem(Properties props) {
@@ -37,9 +36,9 @@ public class TeaCupItem extends Item {
 	}
 
 	@Override
-	public ItemStack getContainerItem(ItemStack stack) {
+	public ItemStack getCraftingRemainingItem(ItemStack stack) {
 		if (stack.getDamageValue() + 1 >= stack.getMaxDamage()) {
-			return super.getContainerItem(stack);
+			return super.getCraftingRemainingItem(stack);
 		}
 		stack = stack.copy();
 		stack.setDamageValue(stack.getDamageValue()+1);
@@ -49,7 +48,7 @@ public class TeaCupItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity living) {
 		if (this.isEdible()) {
-			ItemStack result = stack.getContainerItem();
+			ItemStack result = stack.getCraftingRemainingItem();
 			boolean hasHoney = hasHoney(stack, HONEY_TAG);
 			living.curePotionEffects(stack); /// remove conflicting teas
 			living.eat(worldIn, stack);
