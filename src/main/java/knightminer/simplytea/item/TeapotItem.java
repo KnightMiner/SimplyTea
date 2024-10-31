@@ -55,7 +55,7 @@ public class TeapotItem extends TooltipItem {
 		ItemStack filledStack = ItemStack.EMPTY;
 		if (state.getBlock() instanceof BucketPickup bucketPickup) {
 			// special case for infinite water
-			if (FluidTeapotWrapper.isWater(state.getFluidState().getType()) && !Config.SERVER.teapot.infiniteWater()) {
+			if (FluidTeapotWrapper.isWater(state.getFluidState().getType()) && Config.SERVER.teapot.infiniteWater()) {
 				filledStack = new ItemStack(Registration.teapot_water);
 				Optional<SoundEvent> sound = bucketPickup.getPickupSound(state);
 				if (sound.isPresent()) {
