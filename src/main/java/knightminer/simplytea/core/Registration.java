@@ -35,13 +35,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -53,8 +58,10 @@ import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -265,9 +272,21 @@ public class Registration {
       RestfulEffect.addConflict(caffeinated);
       RestfulEffect.addConflict(invigorated);
 
+      // Lowers the cauldron by a variable amound depending on configured teapot size
+      // Based on GLASS_BOTTLE interaction and LayeredCauldronBlock.lowerFillLevel()
       CauldronInteraction.WATER.put(teapot, (state, level, pos, player, hand, stack) -> {
-        if (Config.SERVER.teapot.fillFromCauldron()) {
-          return CauldronInteraction.fillBucket(state, level, pos, player, hand, stack, new ItemStack(teapot_water), s -> s.getValue(LayeredCauldronBlock.LEVEL) == 3, SoundEvents.BUCKET_FILL);
+        // always consume at least one cauldron level, even for tiny teapots
+        int teapotLevels = Math.max(1, Math.round(Config.SERVER.teapot.teapotCapacity() / 333.0f));
+        if (Config.SERVER.teapot.fillFromCauldron() && state.getValue(LayeredCauldronBlock.LEVEL) >= teapotLevels && !level.isClientSide()) {
+          player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, new ItemStack(teapot_water)));
+          player.awardStat(Stats.USE_CAULDRON);
+          player.awardStat(Stats.ITEM_USED.get(teapot_water));
+          int cauldronLevel = state.getValue(LayeredCauldronBlock.LEVEL) - teapotLevels;
+          BlockState cauldronstate = cauldronLevel == 0 ? Blocks.CAULDRON.defaultBlockState() : state.setValue(LayeredCauldronBlock.LEVEL, Integer.valueOf(cauldronLevel));
+          level.setBlockAndUpdate(pos, cauldronstate);
+          level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(cauldronstate));
+          level.playSound((Player)null, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+          level.gameEvent((Entity)null, GameEvent.FLUID_PICKUP, pos);
         }
         return InteractionResult.PASS;
       });
