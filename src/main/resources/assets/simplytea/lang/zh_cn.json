@@ -14,6 +14,8 @@
   "item.simplytea.tea_stick.tooltip": "§8§o散发着肉桂般的香气§r",
   "item.simplytea.chorus_petal": "紫颂花瓣",
   "item.simplytea.chorus_petal.tooltip": "§8§o神秘之花§r",
+  "item.simplytea.ice_cube": "冰块",
+  "item.simplytea.ice_cube.tooltip": "冷",
 
   "item.simplytea.unfired_cup": "未烧制的茶杯",
   "item.simplytea.cup": "茶杯",
@@ -22,9 +24,12 @@
   "item.simplytea.cup_tea_black": "红茶",
   "item.simplytea.cup_tea_floral": "蒲公英花茶",
   "item.simplytea.cup_tea_chai": "印度奶茶",
+  "item.simplytea.cup_tea_iced": "苹果冰茶",
   "item.simplytea.cup_tea_chamomile": "黄春菊花茶",
   "item.simplytea.cup_tea_chorus": "紫颂花茶",
   "item.simplytea.cup_cocoa": "热可可",
+  "item.simplytea.cup.with_honey": "加蜂蜜",
+  "item.simplytea.cup.with_cinnamon": "加肉桂",
 
   "item.simplytea.teabag": "茶包",
   "item.simplytea.teabag_green": "绿茶包",
@@ -46,6 +51,8 @@
   "item.simplytea.teapot_frothed.tooltip": "§8§o表层漂浮着温热的奶泡§r",
 
   "effect.simplytea.restful": "安宁",
+  "effect.simplytea.relaxed": "放松",
   "effect.simplytea.caffeinated": "精力充沛",
+  "effect.simplytea.invigorated": "活力四射",
   "effect.simplytea.enderfalling": "末影护盾"
 }
