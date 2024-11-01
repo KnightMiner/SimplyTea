@@ -111,9 +111,10 @@ public class RecipeGenerator extends RecipeProvider {
 		addTeaWithBag(consumer, black_tea, teabag_black, cup_tea_black);
 		addTeaWithBag(consumer, chorus_petal, teabag_chorus, cup_tea_chorus);
 		addTea(consumer, cup_water_hot, "teapot", teapot_hot);
-		addTea(consumer, cup_frothed, "teapot", teapot_frothed);
 
 		// advanced tea
+		addTea(consumer, cup_frothed, "teapot", teapot_frothed);
+		addHoney(consumer, RecipeCategory.FOOD, cup_frothed, tea_stick, CocoaItem.CINNAMON_TAG);
 		addTea(consumer, cup_cocoa, "teapot", Items.COCOA_BEANS, Items.COCOA_BEANS, teapot_frothed);
 		addTea(consumer, cup_cocoa, "cup", Items.COCOA_BEANS, Items.COCOA_BEANS, cup_frothed);
 		addHoney(consumer, RecipeCategory.FOOD, cup_cocoa, tea_stick, CocoaItem.CINNAMON_TAG);
