@@ -1,6 +1,7 @@
 package knightminer.simplytea.core;
 
 import knightminer.simplytea.core.config.CocoaDrink;
+import knightminer.simplytea.core.config.CocoaDrink.ClearType;
 import knightminer.simplytea.core.config.TeaDrink;
 import knightminer.simplytea.core.config.TeaDrink.TeaEffect;
 import knightminer.simplytea.core.config.Teapot;
@@ -14,7 +15,7 @@ public class Config {
 
 	public static class Server {
 		public TeaDrink black_tea, green_tea, floral_tea, chai_tea, chorus_tea, iced_tea;
-		public CocoaDrink cocoa;
+		public CocoaDrink cocoa, frothed_milk;
 		public Teapot teapot;
 		public Tree tree;
 		public Server(Builder builder) {
@@ -27,7 +28,8 @@ public class Config {
 			chai_tea   = new TeaDrink("chai", builder, TeaEffect.INVIGORATED, 5, 0.6, 150, 1);
 			chorus_tea = new TeaDrink("chorus", builder, TeaEffect.ENDERFALLING, 3, 0.9, 150, 1);
 			iced_tea = new TeaDrink("iced", builder, TeaEffect.ABSORPTION, 3, 0.9, 90, 1);
-			cocoa = new CocoaDrink(builder, 4, 0.6);
+			cocoa = new CocoaDrink("cocoa", builder, ClearType.NEGATIVE, 4, 0.6);
+			frothed_milk = new CocoaDrink("frothed_milk", builder, ClearType.ALL, 1, 0.2);
 			builder.pop();
 
 			// other categories

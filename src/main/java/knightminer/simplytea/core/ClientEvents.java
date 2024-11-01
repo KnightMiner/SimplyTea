@@ -4,9 +4,11 @@ import knightminer.simplytea.SimplyTea;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.world.level.FoliageColor;
+import net.minecraft.client.particle.SplashParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -22,6 +24,11 @@ public class ClientEvents {
       }
       return BiomeColors.getAverageFoliageColor(world, pos);
     }, Registration.tea_trunk);
+  }
+
+  @SubscribeEvent
+  static void registerParticleFactories(RegisterParticleProvidersEvent event) {
+    event.registerSpriteSet(Registration.milk_splash, SplashParticle.Provider::new);
   }
 
   @SubscribeEvent

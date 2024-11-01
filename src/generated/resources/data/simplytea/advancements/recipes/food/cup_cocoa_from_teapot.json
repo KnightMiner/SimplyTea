@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simplytea:cup_cocoa"
+        "recipe": "simplytea:cup_cocoa_from_teapot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "simplytea:cup_cocoa"
+      "simplytea:cup_cocoa_from_teapot"
     ]
   },
   "sends_telemetry_event": false

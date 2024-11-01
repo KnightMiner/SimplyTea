@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_bag": {
+    "has_item": {
       "conditions": {
         "items": [
           {
             "items": [
-              "simplytea:teabag_black"
+              "simplytea:tea_stick"
             ]
           }
         ]
@@ -15,21 +15,21 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simplytea:cup_tea_black"
+        "recipe": "simplytea:cup_frothed_with_cinnamon"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_bag",
+      "has_item",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "simplytea:cup_tea_black"
+      "simplytea:cup_frothed_with_cinnamon"
     ]
   },
-  "sends_telemetry_event": false
+  "sends_telemetry_event": true
 }

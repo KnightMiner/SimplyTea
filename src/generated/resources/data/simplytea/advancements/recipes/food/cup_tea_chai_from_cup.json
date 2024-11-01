@@ -6,7 +6,7 @@
         "items": [
           {
             "items": [
-              "simplytea:teabag_chorus"
+              "simplytea:teabag_black"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "simplytea:cup_tea_chorus"
+        "recipe": "simplytea:cup_tea_chai_from_cup"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "simplytea:cup_tea_chorus"
+      "simplytea:cup_tea_chai_from_cup"
     ]
   },
   "sends_telemetry_event": false

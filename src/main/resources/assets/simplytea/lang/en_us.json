@@ -20,6 +20,7 @@
   "item.simplytea.unfired_cup": "Unfired Tea Cup",
   "item.simplytea.cup": "Tea Cup",
   "item.simplytea.cup_water": "Cup of Water",
+  "item.simplytea.cup_water_hot": "Cup of Hot Water",
   "item.simplytea.cup_tea_green": "Cup of Green Tea",
   "item.simplytea.cup_tea_black": "Cup of Black Tea",
   "item.simplytea.cup_tea_floral": "Cup of Dandelion Tea",
@@ -28,6 +29,7 @@
   "item.simplytea.cup_tea_chamomile": "Cup of Chamomile Tea",
   "item.simplytea.cup_tea_chorus": "Cup of Chorus Tea",
   "item.simplytea.cup_cocoa": "Cup of Hot Chocolate",
+  "item.simplytea.cup_frothed": "Cup of Frothed Milk",
   "item.simplytea.cup.with_honey": "With Honey",
   "item.simplytea.cup.with_cinnamon": "With Cinnamon",
 

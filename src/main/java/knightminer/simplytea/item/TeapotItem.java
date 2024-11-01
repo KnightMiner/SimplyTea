@@ -27,7 +27,6 @@ import net.minecraft.world.phys.HitResult.Type;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.Optional;
 

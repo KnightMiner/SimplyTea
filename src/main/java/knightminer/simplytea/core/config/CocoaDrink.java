@@ -11,11 +11,11 @@ public class CocoaDrink extends Drink {
    * @param hunger         Default hunger value
    * @param saturation     Default saturation value
    */
-  public CocoaDrink(ForgeConfigSpec.Builder builder, int hunger, double saturation) {
-    super("cocoa", builder, hunger, saturation);
-    this.clear_effects = builder.comment("If ALL, drinking cocoa clears status effects like milk", "If NEGATIVE, clears only negative effects (default)", "If NONE, does not clear effects", "For all values, regular cocoa clears just the first effect, while cocoa with cinnamon clears all")
+  public CocoaDrink(String name, ForgeConfigSpec.Builder builder, ClearType defaultClearEffects, int hunger, double saturation) {
+    super(name, builder, hunger, saturation);
+    this.clear_effects = builder.comment("If ALL, drinking clears status effects like milk", "If NEGATIVE, clears only negative effects (default)", "If NONE, does not clear effects", "For all values, regular cocoa or frothed milk clears just the first effect, while cocoa with cinnamon clears all")
                                 .translation("simplytea.config.tea.clear_effects")
-                                .defineEnum("clear_effects", ClearType.NEGATIVE);
+                                .defineEnum("clear_effects", defaultClearEffects);
     builder.pop();
   }
 

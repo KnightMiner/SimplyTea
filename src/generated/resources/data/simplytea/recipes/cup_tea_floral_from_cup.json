@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "simplytea:cup"
+    },
+    {
+      "item": "simplytea:teabag_floral"
+    },
+    {
+      "item": "simplytea:cup_water_hot"
+    }
+  ],
+  "result": {
+    "item": "simplytea:cup_tea_floral"
+  }
+}

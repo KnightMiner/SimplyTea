@@ -27,12 +27,14 @@ import static knightminer.simplytea.core.Registration.black_tea;
 import static knightminer.simplytea.core.Registration.chorus_petal;
 import static knightminer.simplytea.core.Registration.cup;
 import static knightminer.simplytea.core.Registration.cup_cocoa;
+import static knightminer.simplytea.core.Registration.cup_frothed;
 import static knightminer.simplytea.core.Registration.cup_tea_black;
 import static knightminer.simplytea.core.Registration.cup_tea_chai;
 import static knightminer.simplytea.core.Registration.cup_tea_chorus;
 import static knightminer.simplytea.core.Registration.cup_tea_floral;
 import static knightminer.simplytea.core.Registration.cup_tea_green;
 import static knightminer.simplytea.core.Registration.cup_tea_iced;
+import static knightminer.simplytea.core.Registration.cup_water_hot;
 import static knightminer.simplytea.core.Registration.tea_fence;
 import static knightminer.simplytea.core.Registration.tea_fence_gate;
 import static knightminer.simplytea.core.Registration.tea_leaf;
@@ -108,11 +110,16 @@ public class RecipeGenerator extends RecipeProvider {
 		addTeaWithBag(consumer, tea_leaf, teabag_green, cup_tea_green);
 		addTeaWithBag(consumer, black_tea, teabag_black, cup_tea_black);
 		addTeaWithBag(consumer, chorus_petal, teabag_chorus, cup_tea_chorus);
+		addTea(consumer, cup_water_hot, "teapot", teapot_hot);
 
 		// advanced tea
-		addTea(consumer, cup_cocoa, Items.COCOA_BEANS, Items.COCOA_BEANS, teapot_frothed);
+		addTea(consumer, cup_frothed, "teapot", teapot_frothed);
+		addHoney(consumer, RecipeCategory.FOOD, cup_frothed, tea_stick, CocoaItem.CINNAMON_TAG);
+		addTea(consumer, cup_cocoa, "teapot", Items.COCOA_BEANS, Items.COCOA_BEANS, teapot_frothed);
+		addTea(consumer, cup_cocoa, "cup", Items.COCOA_BEANS, Items.COCOA_BEANS, cup_frothed);
 		addHoney(consumer, RecipeCategory.FOOD, cup_cocoa, tea_stick, CocoaItem.CINNAMON_TAG);
-		addTea(consumer, cup_tea_chai, teabag_black, tea_stick, teapot_frothed);
+		addTea(consumer, cup_tea_chai, "teapot", teabag_black, tea_stick, teapot_frothed);
+		addTea(consumer, cup_tea_chai, "cup", teabag_black, tea_stick, cup_frothed);
 		addHoney(consumer, cup_tea_chai);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, cup_tea_iced)
 													.requires(cup)
@@ -148,14 +155,14 @@ public class RecipeGenerator extends RecipeProvider {
 	}
 
 	/** Adds a recipe to pour tea */
-	private static void addTea(Consumer<FinishedRecipe> consumer, ItemLike filledCup, ItemLike... ingredients) {
+	private static void addTea(Consumer<FinishedRecipe> consumer, ItemLike filledCup, String suffix, ItemLike... ingredients) {
 		ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, filledCup);
 		builder.requires(cup);
 		for (ItemLike ingredient : ingredients) {
 			builder.requires(ingredient);
 		}
 		builder.unlockedBy("has_bag", has(ingredients[0]));
-		builder.save(consumer);
+		builder.save(consumer, suffix(filledCup, "_from_" + suffix).toString());
 	}
 
 	/** Creates a recipe to add honey to a tea */
@@ -189,7 +196,8 @@ public class RecipeGenerator extends RecipeProvider {
 													.requires(leaf)
 													.unlockedBy("has_leaf", has(leaf))
 													.save(consumer);
-		addTea(consumer, filledCup, filledTeabag, teapot_hot);
+		addTea(consumer, filledCup, "teapot", filledTeabag, teapot_hot);
+		addTea(consumer, filledCup, "cup", filledTeabag, cup_water_hot);
 		addHoney(consumer, filledCup);
 	}
 }
